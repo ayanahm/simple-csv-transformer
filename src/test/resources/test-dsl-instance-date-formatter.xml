@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy:LL:dd</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-3</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd:HH</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3:$5</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd:HH</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy-dd-mm:hh</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-3</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-5</name>
+            <constructorPosition>5</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd zz</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3 $4</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd zz</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy-MM-dd VV</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-3</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-4</name>
+            <constructorPosition>4</constructorPosition>
+        </sourceColumn>
+    </transformation>
+
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd:HH zz</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3:$5 $4</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd:HH zz</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy-MM-dd:HH VV</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+                
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-3</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-4</name>
+            <constructorPosition>4</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-5</name>
+            <constructorPosition>5</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd:HH:mm zz</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3:$5:$6:$6 $4</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd:HH:mm:ss VV</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy-MM-dd:HH VV</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-3</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-4</name>
+            <constructorPosition>4</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-5</name>
+            <constructorPosition>5</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-6</name>
+            <constructorPosition>6</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+</csv-transformation-config>

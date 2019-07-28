@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           attributeFormDefault="unqualified" elementFormDefault="qualified"
+           targetNamespace="http://www.ayanahmedov.com/CsvTransform"
+           xmlns="http://www.ayanahmedov.com/CsvTransform">
+
+    <xs:element name="csv-transformation-config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="transformation" maxOccurs="unbounded" minOccurs="0" type="SourceTransformation">
+                    <xs:annotation>
+                        <xs:documentation>when source columns are missing indicating a default value to be used for the
+                            target column
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+
+        </xs:complexType>
+
+    </xs:element>
+
+    <xs:complexType name="CustomConstructor">
+        <xs:sequence>
+            <xs:element name="className" type="JavaClassName"/>
+            <xs:element name="parameter" type="ConstructorParameter" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ConstructorParameter">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="value" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="JavaClassName">
+        <xs:restriction base="xs:string">
+            <!--            pattern is taken from-->
+            <!--            see https://stackoverflow.com/questions/5205339/regular-expression-matching-fully-qualified-class-names-->
+            <!--            for complete regex pattern for qualified java class names-->
+            <xs:pattern value="([\p{L}_$][\p{L}\p{N}_$]*\.)*[\p{L}_$][\p{L}\p{N}_$]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:complexType name="DateValueConstructor">
+        <xs:sequence>
+            <xs:element type="xs:string" name="sourceFormatPattern">
+                <xs:annotation>
+                    <xs:documentation>
+                        see com.ayanahmedov.etl.api.objectconstructor.DateByDateTimePatternConstructor
+                        for constraints.
+
+                        defaulting to zero for all missing fields. Meaning 0 is used for chrono fields not present(such
+                        that, second, minute etc.).
+                        And using Zone of the System default.
+                        consider to extend element constructors with a LocalDate, ZonedDateTime, DateTime etc.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="TargetDateFormat" name="targetDateFormat">
+            </xs:element>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TargetDateFormat">
+        <xs:sequence>
+            <xs:element type="xs:string" name="formatPattern">
+                <xs:annotation>
+                    <xs:documentation>
+                        pattern per javadoc: see java.time.format.DateTimeFormatter
+                        defaulting to zero for all missing fields. Meaning 0 is used for chrono fields not present(such
+                        that, second, minute etc.).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element type="xs:string" name="zoneId" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        if not provided, System Default Zone is taken.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StringValueConstructor">
+    </xs:complexType>
+
+    <xs:complexType name="IntValueConstructor">
+    </xs:complexType>
+
+
+    <xs:simpleType name="SourceBindPattern">
+        <xs:annotation>
+            <xs:documentation>
+
+                Example: $1-$2-$3 where the parameters identified by $[0-9],
+                are bound from the enclosing element constructor.
+                sourceColumn/constructorPosition==1 maps to $1. And
+                sourceColumn/constructorPosition==3 maps to $3
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".*(\$\d)+.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="SourceCsvColumn">
+        <xs:sequence>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:int" name="constructorPosition">
+                <xs:annotation>
+                    <xs:documentation>
+                        By default this maps to $1. Unless a element constructor used which requires more then 1 backing
+                        csv column to be mapped,
+                        then provide the position to replace in the constructor pattern.
+
+                        Example pattern for the Value constructor:
+                        $1-$2:$3
+                        Passing for this element 2, will replace the bound value from CSV, in the position 2 and result
+                        in
+                        $1-valueFromCsvRecord:$3
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sourceValueMapper" type="JavaClassName" minOccurs="0" >
+                <xs:annotation>
+                    <xs:documentation>
+                        Custom mapper implementations, which are applied when the source csv value is read.
+                        The subsequent operations are provided with the output of those mapprs.
+                        Provided class must be fully qualified, and must be a subtype of
+                        com.ayanahmedov.etl.api.sourcemapper.SourceValueMapper.
+
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="SourceConstantValue">
+        <xs:sequence>
+            <xs:element type="xs:string" name="value"/>
+            <xs:element type="xs:int" name="constructorPosition" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        By default this maps to $1. Unless a element constructor used which requires more then 1 backing
+                        csv column to be mapped,
+                        then provide the position to replace in the constructor pattern.
+
+                        Example pattern for the Value constructor:
+                        $1-$2:$3
+                        Passing for this element 2, will replace the bound value from CSV, in the position 2 and result
+                        in
+                        $1-valueFromCsvRecord:$3
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SourceTransformation">
+        <xs:annotation>
+            <xs:documentation>
+                camel casing as described in the take-home test PDF,
+                is not really necessary.
+                Since we map simply to the name we want at the end.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="targetSchemaColumn" type="xs:string"/>
+            <xs:element name="elementConstructor" type="ElementConstructor"/>
+            <xs:choice>
+                <xs:element type="SourceCsvColumn" name="sourceColumn" maxOccurs="unbounded"/>
+                <xs:element type="SourceConstantValue" name="constantSource"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SourceCsv">
+        <xs:sequence>
+            <xs:element name="transformation" maxOccurs="unbounded" minOccurs="0" type="SourceTransformation">
+                <xs:annotation>
+                    <xs:documentation>when source columns are missing indicating a default value to be used for the
+                        target column
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+
+    </xs:complexType>
+
+    <xs:complexType name="ElementConstructor">
+        <xs:sequence>
+            <xs:element type="SourceBindPattern" name="sourceBindPattern">
+                <xs:annotation>
+                    <xs:documentation>
+                        Indicates the pattern, variables are interpolated by $1, $2 etc.
+                        The final string value is used for the actual creation of the target object.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="constructorClass" type="CustomConstructor">
+                    <xs:annotation>
+                        <xs:documentation>custom value constructor</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <!--                build in constructors-->
+                <xs:element name="dateValueConstructor" type="DateValueConstructor"/>
+                <xs:element name="stringValueConstructor" type="StringValueConstructor"/>
+                <xs:element name="intValueConstructor" type="IntValueConstructor"/>
+                <!--            extend as needed. and also make sure to extend backing java.-->
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
+

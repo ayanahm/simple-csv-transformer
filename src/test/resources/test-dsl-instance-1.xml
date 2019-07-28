@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+
+
+    <transformation>
+        <targetSchemaColumn>OrderId</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <intValueConstructor/>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Order Number</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>OrderDate</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>YYYY-MM-dd</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Year</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Month</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Day</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+
+    <transformation>
+        <targetSchemaColumn>ProductId</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <!-- camel casing as described in the take-home test PDF,-->
+            <!-- is not really necessary. Since we map simply to the name
+    <transformation>we want at the end.-->
+            <stringValueConstructor/>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Product Number</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>ProductName</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <stringValueConstructor/>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Product Name</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>Quantity</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <constructorClass>
+                <className>com.ayanahmedov.etl.api.objectconstructor.BigDecimalByLocaleConstructor</className>
+                <parameter>
+                    <name>locale</name>
+<!--                    see java.util.Locale#forLanguageTag for possible values-->
+                    <value>en-US</value>
+                </parameter>
+            </constructorClass>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Count</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>Unit</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <stringValueConstructor/>
+        </elementConstructor>
+        <constantSource>
+            <value>kg</value>
+            <constructorPosition>1</constructorPosition>
+        </constantSource>
+    </transformation>
+</csv-transformation-config>

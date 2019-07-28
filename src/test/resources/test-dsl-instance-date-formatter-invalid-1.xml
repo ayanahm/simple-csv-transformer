@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$1-$1</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>abc</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>yyyy:LL:dd</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Col-1</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+    </transformation>
+</csv-transformation-config>
