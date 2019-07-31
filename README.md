@@ -1,3 +1,13 @@
+##### Table of Contents  
+[Headers](#overview)
+  
+[Java-Api](#api-usage)
+
+[Dsl](#dsl)
+
+[Improvements](#improvements)      
+
+
 # Overview
 
 This repo, provides a simple CSV transformer, which can be configured by a DSL based on validatable XML,
@@ -248,3 +258,30 @@ Custom mappers can also have parameters defined in the DSL.
 Which is visible in this case, which is providing a list of `parameter` objects.
 Those parameters are passed as usual `java.util.Map` on source CSV row map time.
 see also: https://github.com/ayanahm/demo-etl/blob/master/src/main/java/com/ayanahmedov/etl/api/objectconstructor/MappedCsvValueStringConstructor.java
+
+# improvements
+
+## Alternative DSL sources
+
+Currently only DSL via XML is supported out of the box.
+Even though XML can be validated via an XSD, and mostly supported very well in Java world. 
+Also easy use tools to generated it(i.e a WebPage where the tranformation files are created via a GUI), 
+it is  not strictly necessary. 
+Client could get to chose to provide an DSL provider, 
+simply by including into the runtime.
+This can be made possible to define only a DSL dependency and ask for clients to provide runtime implementations,
+using standard `maven` | `gradle` functionalities.
+
+## More flexibility
+
+The library is opinionated. 
+More extensions can be enabled, per source CSV row basic,
+intermediate calculations and what more.
+
+## GC tuning
+
+running https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/BigCsvFilesTest.java
+with VM arguments `-gc:verbose -XX:+PrintGCDetails -Xmx32m`
+show that GC is struggling with 10megabyte of data to be transformed. Due to intermediate objects created
+during the mapping of individual CSV rows. Which can be mostly mitigated by optimizing the implementation
+to cache the instance.
