@@ -91,7 +91,7 @@ public class BigCsvFilesTest {
   }
 
   @Timeout(value = 2, unit = TimeUnit.MINUTES)
-  @DisplayName("transform big sourceCsv to targetCsv")
+  @DisplayName("transform big sourceCsv to targetCsv with same source and 3 transformers in parallel.")
   @RepeatedTest(50)
   public void concurrent_transformations_with_different_dsls() throws IOException {
     Path configFile1 = TestUtils.getFileFromResources("test-dsl-instance-concurrent-1.xml");
