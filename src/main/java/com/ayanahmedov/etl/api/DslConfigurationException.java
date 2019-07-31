@@ -23,6 +23,8 @@ public class DslConfigurationException extends RuntimeException {
       UNKNOWN_ELEMENT_CONSTRUCTOR_IN_DSL = new DslConfigurationException(
       "Unknown element constructor. Make sure configuration is correct. If so extend with new types as needed");
 
+  public static final DslConfigurationException INVALID_XML_INSTANCE_EXECPTION = new DslConfigurationException(
+      "Invalid DSL instance defined in XML which is violating the XSD validation.");;
 
   public DslConfigurationException(String message) {
     super(message);
@@ -31,7 +33,7 @@ public class DslConfigurationException extends RuntimeException {
 
   private String message;
 
-  public DslConfigurationException withException(Exception e) {
+  public DslConfigurationException withException(Throwable e) {
     return new DslConfigurationException(message + "See exception message:" + e.getMessage() );
   }
 }

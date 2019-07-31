@@ -1,6 +1,5 @@
 package com.ayanahmedov.etl.api;
 
-import com.ayanahmedov.etl.TestUtils;
 import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ public class InvalidRowsTest {
 
   @BeforeAll
   public static void createHugeCsv() {
-    csv = TestUtils.createTemporaryCsvFile(writer -> {
+    csv = FileSystemUtils.createTemporaryCsvFile(writer -> {
       writer.printf("Order Number,Year,Month,Day,Product Number,Product Name   ,Count     ,Extra Col1,Extra Col2,Empty Column%n");
 
       // some invalid records
@@ -44,7 +43,7 @@ public class InvalidRowsTest {
 
   @Test
   public void test_transformer_can_handle_invalid_records() throws IOException {
-    Path dsl = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
+    Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(dsl)
@@ -59,7 +58,7 @@ public class InvalidRowsTest {
       transformer.transform(csvReader, stringWriter);
       String csvTransformResult = stringWriter.toString();
 
-      String expected = TestUtils.createCsvAsString(
+      String expected = FileSystemUtils.createCsvAsString(
           Arrays.asList(
               new String[]{ "ProductName","Quantity","ProductId","OrderId","Unit","OrderDate" },
               new String[]{ "","2018-01-01","P-1000","Arugola","5250.5","kg" },

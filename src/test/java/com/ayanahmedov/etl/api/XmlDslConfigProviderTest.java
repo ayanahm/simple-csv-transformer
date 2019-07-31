@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class XmlDslConfigProviderTest {
 
   @DisplayName("Given a well formed DSL as xml-file, parsed object is as expected")
@@ -31,9 +33,16 @@ class XmlDslConfigProviderTest {
             .withName("source-csv-col-1")
             .withConstructorPosition(1)));
 
-    Path configFile = TestUtils.getFileFromResources("test-dsl-instance-2.xml");
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-2.xml");
     XmlDslConfigProvider xmlDslConfigProvider = new XmlDslConfigProvider(configFile);
 
     TestUtils.assertXmlEquals(expect, xmlDslConfigProvider.provide());
+  }
+
+  @Test
+  public void invalid_xml_instance_for_dsl_then_validation_exception_is_thrown() {
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-invalid-dsl-instance.xml");
+    XmlDslConfigProvider xmlDslConfigProvider = new XmlDslConfigProvider(configFile);
+    assertThrows(DslConfigurationException.class, xmlDslConfigProvider::provide);
   }
 }

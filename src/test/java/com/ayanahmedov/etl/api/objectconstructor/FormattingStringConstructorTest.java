@@ -1,9 +1,9 @@
 package com.ayanahmedov.etl.api.objectconstructor;
 
-import com.ayanahmedov.etl.TestUtils;
 import com.ayanahmedov.etl.api.CsvTransformer;
 import com.ayanahmedov.etl.api.CsvTransformerBuilder;
 import com.ayanahmedov.etl.api.DslConfigurationException;
+import com.ayanahmedov.etl.api.FileSystemUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +22,8 @@ public class FormattingStringConstructorTest {
   @DisplayName("Given a csv with 2 columns, then take format 2 colums and map into single target column")
   @Test
   public void source_columns_to_avarage_test() throws IOException {
-    Path testConfig = TestUtils.getFileFromResources("test-dsl-instance-string-formatter.xml");
-    Path testCsv = TestUtils.getFileFromResources("source-3.csv");
+    Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter.xml");
+    Path testCsv = FileSystemUtils.getFileFromResources("source-3.csv");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(testConfig)
@@ -36,7 +36,7 @@ public class FormattingStringConstructorTest {
 
       String outCsv = stringWriter.toString();
 
-      String expected = TestUtils.createCsvAsString(Arrays.asList(
+      String expected = FileSystemUtils.createCsvAsString(Arrays.asList(
           new String[]{"formatted"},
           new String[]{"    1:a.  1"},
           new String[]{"   10:b.  10"},
@@ -49,8 +49,8 @@ public class FormattingStringConstructorTest {
 
   @Test
   public void invalid_formatter_then_configException_is_thrown() throws IOException {
-    Path testConfig = TestUtils.getFileFromResources("test-dsl-instance-string-formatter-invalid.xml");
-    Path testCsv = TestUtils.getFileFromResources("source-3.csv");
+    Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter-invalid.xml");
+    Path testCsv = FileSystemUtils.getFileFromResources("source-3.csv");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(testConfig)

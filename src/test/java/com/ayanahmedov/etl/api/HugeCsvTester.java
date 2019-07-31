@@ -1,7 +1,5 @@
 package com.ayanahmedov.etl.api;
 
-import com.ayanahmedov.etl.TestUtils;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -19,7 +17,7 @@ public class HugeCsvTester {
   private static int NUM_CSV_ROWS = 1_000_000;
 
   public static void main(String[] args) throws IOException {
-    Path dsl = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
+    Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
     Path bigCsvFile1 = createTemporaryCsvFileAbout10Megabytes();
     Path bigCsvFile2 = createTemporaryCsvFileAbout10Megabytes();
     Path bigCsvFile3 = createTemporaryCsvFileAbout10Megabytes();
@@ -32,7 +30,7 @@ public class HugeCsvTester {
     Stream.of(bigCsvFile1, bigCsvFile2, bigCsvFile3, bigCsvFile4)
         .parallel()
         .forEach(path -> {
-          Path outputTemp = TestUtils.createTemporaryCsvFile(printer -> {
+          Path outputTemp = FileSystemUtils.createTemporaryCsvFile(printer -> {
 //      do nothing
           });
 
@@ -50,7 +48,7 @@ public class HugeCsvTester {
   }
 
   private static Path createTemporaryCsvFileAbout10Megabytes() {
-    return TestUtils.createTemporaryCsvFile(writer -> {
+    return FileSystemUtils.createTemporaryCsvFile(writer -> {
         writer.printf("Order Number,Year,Month,Day,Product Number,Product Name   ,Count     ,Extra Col1,Extra Col2,Empty Column%n");
 
         //an invalid record

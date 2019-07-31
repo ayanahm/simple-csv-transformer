@@ -30,7 +30,7 @@ public class BigCsvFilesTest {
 
   @BeforeAll
   public static void createHugeCsv() {
-    bigCsvPath = TestUtils.createTemporaryCsvFile(writer -> {
+    bigCsvPath = FileSystemUtils.createTemporaryCsvFile(writer -> {
       writer.printf("Order Number,Year,Month,Day,Product Number,Product Name   ,Count     ,Extra Col1,Extra Col2,Empty Column%n");
 
       // some invalid records
@@ -58,7 +58,7 @@ public class BigCsvFilesTest {
   @DisplayName("transform big sourceCsv to targetCsv")
   @RepeatedTest(50)
   public void transform_Big_Csv_to_targetCsvFile() throws IOException {
-    Path configFile = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
@@ -66,7 +66,7 @@ public class BigCsvFilesTest {
         .withObjectConstructors(Collections.emptyList())
         .build();
 
-    Path outputTemp = TestUtils.createTemporaryCsvFile(printer -> {
+    Path outputTemp = FileSystemUtils.createTemporaryCsvFile(printer -> {
 //      do nothing
     });
 
@@ -79,7 +79,7 @@ public class BigCsvFilesTest {
 
     BufferedReader reader = Files.newBufferedReader(outputTemp);
     String firstLine = reader.readLine();
-    String lastLine = TestUtils.readLastLineOfFile(outputTemp);
+    String lastLine = FileSystemUtils.readLastLineOfFile(outputTemp);
 
     TestUtils.assertStringEqualsCsv(firstLine, Collections.singletonList(
         new String[]{"ProductName", "Quantity", "ProductId", "OrderId", "Unit", "OrderDate"}
@@ -94,9 +94,9 @@ public class BigCsvFilesTest {
   @DisplayName("transform big sourceCsv to targetCsv with same source and 3 transformers in parallel.")
   @RepeatedTest(50)
   public void concurrent_transformations_with_different_dsls() throws IOException {
-    Path configFile1 = TestUtils.getFileFromResources("test-dsl-instance-concurrent-1.xml");
-    Path configFile2 = TestUtils.getFileFromResources("test-dsl-instance-concurrent-2.xml");
-    Path configFile3 = TestUtils.getFileFromResources("test-dsl-instance-concurrent-3.xml");
+    Path configFile1 = FileSystemUtils.getFileFromResources("test-dsl-instance-concurrent-1.xml");
+    Path configFile2 = FileSystemUtils.getFileFromResources("test-dsl-instance-concurrent-2.xml");
+    Path configFile3 = FileSystemUtils.getFileFromResources("test-dsl-instance-concurrent-3.xml");
 
     CsvTransformer transformer1 = new CsvTransformerBuilder()
         .withXmlDsl(configFile1)
@@ -114,15 +114,15 @@ public class BigCsvFilesTest {
         .build();
 
 
-    Path outputTemp1 = TestUtils.createTemporaryCsvFile(printer -> {
+    Path outputTemp1 = FileSystemUtils.createTemporaryCsvFile(printer -> {
 //      do nothing
     });
 
-    Path outputTemp2 = TestUtils.createTemporaryCsvFile(printer -> {
+    Path outputTemp2 = FileSystemUtils.createTemporaryCsvFile(printer -> {
 //      do nothing
     });
 
-    Path outputTemp3 = TestUtils.createTemporaryCsvFile(printer -> {
+    Path outputTemp3 = FileSystemUtils.createTemporaryCsvFile(printer -> {
 //      do nothing
     });
 
@@ -160,15 +160,15 @@ public class BigCsvFilesTest {
             new String[]{"Unit","OrderDate"}
         )),
 
-        () -> TestUtils.assertStringEqualsCsv(TestUtils.readLastLineOfFile(outputTemp1), Collections.singletonList(
+        () -> TestUtils.assertStringEqualsCsv(FileSystemUtils.readLastLineOfFile(outputTemp1), Collections.singletonList(
             new String[]{"01-01-2018","gram"}
         )),
 
-        () -> TestUtils.assertStringEqualsCsv(TestUtils.readLastLineOfFile(outputTemp2), Collections.singletonList(
+        () -> TestUtils.assertStringEqualsCsv(FileSystemUtils.readLastLineOfFile(outputTemp2), Collections.singletonList(
             new String[]{"01-01-2018","pound"}
         )),
 
-        () -> TestUtils.assertStringEqualsCsv(TestUtils.readLastLineOfFile(outputTemp3), Collections.singletonList(
+        () -> TestUtils.assertStringEqualsCsv(FileSystemUtils.readLastLineOfFile(outputTemp3), Collections.singletonList(
             new String[]{"01-01-2018","ton"}
         ))
     ));

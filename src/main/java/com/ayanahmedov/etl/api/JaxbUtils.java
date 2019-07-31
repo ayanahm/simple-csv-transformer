@@ -1,9 +1,12 @@
 package com.ayanahmedov.etl.api;
 
+import org.xml.sax.SAXParseException;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +24,22 @@ public abstract class JaxbUtils {
       throw new RuntimeException(e);
     }
   }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T parseObjectValidatingSchema(String xml, Class<T> type, Schema schema) {
+    try {
+      JAXBContext jaxbContext = getContext(type);
+      Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+      unmarshaller.setSchema(schema);
+      return (T) unmarshaller.unmarshal(new StringReader(xml));
+    } catch (JAXBException e) {
+      if (e.getCause() instanceof SAXParseException) {
+        throw DslConfigurationException.INVALID_XML_INSTANCE_EXECPTION.withException(e.getCause());
+      }
+      throw new RuntimeException(e);
+    }
+  }
+
 
   public static String parseXml(Object object) {
     try {

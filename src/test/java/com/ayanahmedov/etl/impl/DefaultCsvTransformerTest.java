@@ -3,6 +3,7 @@ package com.ayanahmedov.etl.impl;
 import com.ayanahmedov.etl.TestUtils;
 import com.ayanahmedov.etl.api.CsvTransformer;
 import com.ayanahmedov.etl.api.CsvTransformerBuilder;
+import com.ayanahmedov.etl.api.FileSystemUtils;
 import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,8 @@ class DefaultCsvTransformerTest {
   @DisplayName("given well formed csv, then output contains all rows correctly mapped by given dsl. ")
   @Test
   void transform_simple_csv_no_invalid_row() throws IOException {
-    Path configFile = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
-    Path csvFile = TestUtils.getFileFromResources("source-1.csv");
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
+    Path csvFile = FileSystemUtils.getFileFromResources("source-1.csv");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
@@ -48,9 +49,9 @@ class DefaultCsvTransformerTest {
   @DisplayName("given well formed csv, then output csv contains all rows correctly mapped by given dsl. ")
   @Test
   void well_formed_csv_bufferedWriter() throws IOException {
-    Path configFile = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
-    Path csvFile = TestUtils.getFileFromResources("source-1.csv");
-    Path outputFile = TestUtils.createTemporaryCsvFile(PrintWriter::flush/*do nothing*/);
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
+    Path csvFile = FileSystemUtils.getFileFromResources("source-1.csv");
+    Path outputFile = FileSystemUtils.createTemporaryCsvFile(PrintWriter::flush/*do nothing*/);
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
