@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DateTimeFormatNormalizerTest {
+class TwoDigitsNormalizerTest {
   TwoDigitsNormalizer normalizer = new TwoDigitsNormalizer();
 
   @ParameterizedTest

@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * Not meant as an automated build test.
  */
 public class HugeCsvTester {
-  private static int NUM_CSV_ROWS = 200_000;
+  private static int NUM_CSV_ROWS = 1_000_000;
 
   public static void main(String[] args) throws IOException {
     Path dsl = TestUtils.getFileFromResources("test-dsl-instance-1.xml");
