@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
  */
 public final class DefaultCsvTransformer implements CsvTransformer {
   private final static Logger log = Logger.getLogger(DefaultCsvTransformer.class.getName());
-  final static List<SourceValueMapper> builtInMappers = Arrays.asList(
+  private final static List<SourceValueMapper> builtInMappers = Arrays.asList(
       TwoDigitsNormalizer.of()
   );
 
-  final static List<MappedCsvValueStringConstructor> builtInConstructors = Arrays.asList(
+  private final static List<MappedCsvValueStringConstructor> builtInConstructors = Arrays.asList(
       BigDecimalByLocaleConstructor.get(),
       ColumnAverageConstructor.get(),
       FormattingStringConstructor.get()
