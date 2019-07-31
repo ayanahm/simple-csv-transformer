@@ -15,17 +15,6 @@ public abstract class JaxbUtils {
   private static ConcurrentHashMap<Class<?>, JAXBContext> JAXB_CONTEXTS = new ConcurrentHashMap<>();
 
   @SuppressWarnings("unchecked")
-  public static <T> T parseObject(String xml, Class<T> type) {
-    try {
-      JAXBContext jaxbContext = getContext(type);
-      Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-      return (T) unmarshaller.unmarshal(new StringReader(xml));
-    } catch (JAXBException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
   public static <T> T parseObjectValidatingSchema(String xml, Class<T> type, Schema schema) {
     try {
       JAXBContext jaxbContext = getContext(type);
