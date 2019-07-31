@@ -7,6 +7,7 @@ import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +27,9 @@ public final class XmlDslConfigProvider implements CsvTransformationDslConfigPro
       Path xsdFile = FileSystemUtils.getFileFromResources("csv-transform-schema.xsd");
       Schema schema = schemaFactory.newSchema(xsdFile.toFile());
       return JaxbUtils.parseObjectValidatingSchema(xml, CsvTransformationConfig.class, schema);
-    } catch (IOException | SAXException e) {
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    } catch (SAXException e) {
       throw new RuntimeException(e);
     }
   }

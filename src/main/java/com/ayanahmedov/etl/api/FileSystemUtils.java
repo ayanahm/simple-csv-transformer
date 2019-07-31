@@ -86,7 +86,7 @@ public abstract class FileSystemUtils {
         return temp;
       }
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
   }
 
