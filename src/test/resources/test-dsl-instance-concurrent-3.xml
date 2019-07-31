@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+
+    <transformation>
+        <targetSchemaColumn>OrderDate</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
+            <dateValueConstructor>
+                <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
+                <targetDateFormat>
+                    <formatPattern>MM-dd-YYYY</formatPattern>
+                    <zoneId>Europe/Vienna</zoneId>
+                </targetDateFormat>
+            </dateValueConstructor>
+        </elementConstructor>
+        <sourceColumn>
+            <name>Year</name>
+            <constructorPosition>1</constructorPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Month</name>
+            <constructorPosition>2</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Day</name>
+            <constructorPosition>3</constructorPosition>
+            <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
+        </sourceColumn>
+    </transformation>
+
+
+    <transformation>
+        <targetSchemaColumn>Unit</targetSchemaColumn>
+        <elementConstructor>
+            <sourceBindPattern>$1</sourceBindPattern>
+            <stringValueConstructor/>
+        </elementConstructor>
+        <constantSource>
+            <value>ton</value>
+            <constructorPosition>1</constructorPosition>
+        </constantSource>
+    </transformation>
+</csv-transformation-config>
