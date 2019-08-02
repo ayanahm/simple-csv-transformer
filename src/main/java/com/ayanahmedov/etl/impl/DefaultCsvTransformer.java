@@ -53,18 +53,21 @@ public final class DefaultCsvTransformer implements CsvTransformer {
                                 List<SourceValueMapper> mappers,
                                 List<MappedCsvValueStringConstructor> constructors) {
     this.csvTransformationDslConfig = config;
-    this.mappers = new ArrayList<>(mappers);
-    this.constructors = new ArrayList<>(constructors);
-
-    // include built-in implementations
-    this.constructors.addAll(builtInConstructors);
-    this.mappers.addAll(builtInMappers);
+    this.mappers = mappers;
+    this.constructors = constructors;
   }
 
   public static DefaultCsvTransformer newTransformer(CsvTransformationConfig config,
                                                      List<SourceValueMapper> mappers,
                                                      List<MappedCsvValueStringConstructor> constructors) {
-    return new DefaultCsvTransformer(config, mappers, constructors);
+
+    List<MappedCsvValueStringConstructor> constructorsWithBuiltIns = new ArrayList<>(constructors);
+    constructorsWithBuiltIns.addAll(builtInConstructors);
+
+    List<SourceValueMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
+    mappersWithBuiltIns.addAll(builtInMappers);
+
+    return new DefaultCsvTransformer(config, mappersWithBuiltIns, constructorsWithBuiltIns);
   }
 
 
