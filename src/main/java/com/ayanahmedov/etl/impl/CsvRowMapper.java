@@ -1,6 +1,5 @@
 package com.ayanahmedov.etl.impl;
 
-import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
 import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
 import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 

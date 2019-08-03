@@ -4,7 +4,6 @@ import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
 import com.ayanahmedov.etl.api.dsl.SourceCsvColumn;
 import com.ayanahmedov.etl.api.dsl.SourceTransformation;
-import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
 import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
 import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 

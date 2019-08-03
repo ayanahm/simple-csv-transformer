@@ -1,6 +1,7 @@
 package com.ayanahmedov.etl.api.tostringformatter;
 
 import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
+import com.ayanahmedov.etl.impl.CsvValueReducer;
 import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 
 import java.util.Map;
@@ -24,7 +25,7 @@ public interface ReducedCsvValueToStringFormatter {
    * By implementing this interface and providing it to the {@link com.ayanahmedov.etl.api.CsvTransformer}
    * the target csv columns can be calculated in a custom way.
    *
-   * @param valueFromCsvMapping contains reduced value as defined by {@link com.ayanahmedov.etl.api.reducer.CsvValueReducer}
+   * @param valueFromCsvMapping contains reduced value as defined by {@link CsvValueReducer}
    *
    *                            defined for the source columns.
    *
