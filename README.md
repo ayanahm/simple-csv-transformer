@@ -2,7 +2,8 @@
 1. [Overview](#overview)
     1. [The Concept](#the-concept)
     2. [Why XML?](#why-xml)
-    3. [How to build?](#how-to-build)
+    3. [IO vs NIO](#io-vs-nio)
+    4. [How to build?](#how-to-build)
 2. [Java Api](#api-usage)
 3. [Dsl](#dsl)
    1. [Types](#types)
@@ -18,6 +19,9 @@
         3. [BigDecimalValueFormatter](#BigDecimalValueFormatter)
         4. [DateTimeFormatter](#DateTimeFormatter)
 4. [Further Work](#further-work)      
+    1. [Alternative DSL](#alternative-dsl)
+    2. [More Features](#more-features)
+    3. [Optimizations](#optimizations)
 
 
 ## Overview
@@ -60,6 +64,13 @@ extend couple of places in the library, so allowing a fast paced adaption to new
 
 Also imagining, there can be a case, where a non technician could create such mappers over a helpful GUI.
 In such case, XML is also friendly to construct automatically. 
+
+### IO vs NIO<a name="io-vs-nio"></a>
+I could not happen to find any CSV library which is providing an API for java.nio types.
+Moreover, buffered streams should perform just fine for most of the time. 
+In case of very big files, the `nio` solutions can be investigated. 
+That would also mean to implement a CSV library using them.
+See also an experimental idea using [FileChannel](#optimizations).
 
 ### How to build?<a name="how-to-build"></a>
 At least JDK-8 needs to be present in the machine to build the code.
@@ -338,7 +349,7 @@ provided date time format.
 
 ## Further Work<a name="further-work"></a>
 
-### Alternative DSL sources
+### Alternative DSL sources<a name="alternative-dsl"></a>
 
 Currently only DSL via XML is supported out of the box.
 Even though XML can be validated via an XSD, and mostly supported very well in Java world. 
@@ -349,13 +360,13 @@ simply by including into the runtime.
 This can be made possible to define only a DSL dependency and ask for clients to provide runtime implementations,
 using standard `maven` | `gradle` functionalities.
 
-### More features
+### More features<a name="more-features"></a>
 
 More built in features can be introduced. Also a Reducer strategy can be implemented.
 The current way only supports mapping between string values. It might be useful to enable access to
 parsed java objects.
 
-## Optimizations
+## Optimizations<a name="optimizations"></a>
 
 Experimental idea:
 In most of the up-to-date operating systems, it should be possible to introduce the speed significantly for huge csv files.
