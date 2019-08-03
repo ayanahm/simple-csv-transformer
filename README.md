@@ -58,6 +58,9 @@ Xml instances are already highlighted in compile time.
 Moreover, the extensions on the Xsd, and then generating java classes, the only remaining is to
 extend couple of places in the library, so allowing a fast paced adaption to new use cases.
 
+Also imagining, there can be a case, where a non technician could create such mappers over a helpful GUI.
+In such case, XML is also friendly to construct automatically. 
+
 ### How to build?<a name="how-to-build"></a>
 At least JDK-8 needs to be present in the machine to build the code.
 Using mvn clean install should produce a jar which can be referenced in other projects.
