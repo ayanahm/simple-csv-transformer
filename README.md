@@ -1,12 +1,22 @@
 ##### Table of Contents  
-* [Overview](#overview)
-* [Java-Api](#api-usage)
-   * [The Concept] (#the-concept)
-* [Dsl](#dsl)
-* [Further Work](#further-work)      
+1. [Overview](#overview)
+2. [Java Api](#api-usage)
+   1. [The Concept](#the-concept)
+3. [Dsl](#dsl)
+   1. [Types](#types)
+       1. [transformation](#transformation)
+       2. [transformation/targetSchemaColumn](#transformation/targetSchemaColumn)
+       3. [transformation/targetStringFormatter](#transformation/targetStringFormatter)
+       4. [transformation/sourceColumn](#transformation/sourceColumn)
+   2. [Built-In formatters](#built-in-formatters)
+        1. [StringValueFormatter](#StringValueFormatter)
+        2. [IntValueFormatter](#IntValueFormatter)
+        3. [BigDecimalValueFormatter](#BigDecimalValueFormatter)
+        4. [DateTimeFormatter](#DateTimeFormatter)
+4. [Further Work](#further-work)      
 
 
-# Overview
+## Overview
 
 This repo, provides a simple CSV transformer, which can be configured by a an external DSL based on validatable XML,
 which produces the target CSV file.
@@ -15,7 +25,7 @@ There is an exception to the CSV standards, it assumes that there must be always
 If not then manually needs to be corrected.
 
 
-# Api Usage<a name="api-usage"></a>
+## Api Usage<a name="api-usage"></a>
 
 A basic usage in Java code looks like the following:
 
@@ -41,7 +51,7 @@ It is up to client to close the streams and flush when needed
 
 It is also up to client, to use correct streams(BufferedReader, BufferedWriter for file system accessing CSV files).
 
-## The Concept<a name="the-concept"></a> 
+### The Concept<a name="the-concept"></a> 
 
 The concept of the mapping from `source-file` -> `target-file` is as follows:
 
@@ -81,7 +91,7 @@ https://github.com/ayanahm/demo-etl/tree/master/src/test/resources
 
 
 
-# DSL<a name="dsl"></a>
+## DSL<a name="dsl"></a>
 
 In most basic form the DSL looks like the following:
 
@@ -118,16 +128,17 @@ In most basic form the DSL looks like the following:
 Next will be explained the specific parts in the DSL.
 Note that, valid DSL is defined by an XSD, which can be analyzed more in detail in [xsd file](https://github.com/ayanahm/demo-etl/blob/master/src/main/resources/csv-transform-schema.xsd).
 
-##  `transformation`
+### Types
+####  `transformation`
 
 This is the main entry point. Specifies how to transform the source CSV row to the target CSV row.
 There can be unlimited number of such transformations defined. Each corresponds to a  `Mapper->Reducer->Formatter` flow.
 
-### `transformation/targetSchemaColumn`
+#### `transformation/targetSchemaColumn`
 
 Defines the name of the target CSV column will be populated.
 
-### `transformation/targetStringFormatter`
+#### `transformation/targetStringFormatter`
 
 The library comes with some built-in formatters. 
 The list of built-in mappers which are declaratively  possible defined in the type `ElementConstructor`.
@@ -137,17 +148,17 @@ The xsd defines the following ones:
 are built in CSV value formatters. But there are also implemented custom formatters present in the package
 `com.ayanahmedov.etl.api.tostringformatter`.
 
-### `transformation/sourceColumn`
+#### `transformation/sourceColumn`
 Defines which rows to reduce.  The number of `sourceColumns` are unbounded. 
 Also note it is allowed to not to provide any.
 That makes sense, when the target csv needs to be populated 
 with a constant value using the `sourceBindPattern` without any placeholder.
 
-### `transformation/sourceColumn/sourceValueMapper`
+#### `transformation/sourceColumn/sourceValueMapper`
 Contains classname of a `Mapper`. The source CSV value
 is read and supplied into this provided implementation.
 
-### `transformation/sourceBindPattern`
+#### `transformation/sourceBindPattern`
 This defines a *template* for the reducer. Currently there is only an implementation for
 placeholders using dollar sign as in `$1-$2`. 
 
@@ -206,9 +217,9 @@ See for example:
     </transformation>
 ```
 
-## Built-In constructors:
+### Built-In Formatters<a name="built-in-formatters"></a>
 
-### StringValueFormatter
+#### StringValueFormatter
 This formatter requires no parameter, and simply returns the reduced string value.
 Useful when no explicit formatting required.
 
@@ -219,7 +230,7 @@ see snippet
         </targetStringFormatter>
 ```
 
-### IntValueFormatter
+#### IntValueFormatter
 Trims the reduced value, and validates the value against integer value.
 
 ```xml
@@ -227,7 +238,7 @@ Trims the reduced value, and validates the value against integer value.
             <intValueFormatter/>
         </targetStringFormatter>
 ```
-### BigDecimalValueFormatter
+#### BigDecimalValueFormatter
 Parses reduced value by a locale
 and prints optionally with a locale.
 Requires parameters:
@@ -255,7 +266,7 @@ Snippet:
 ```
 
  
-### DateTimeFormatter
+#### DateTimeFormatter
 Formats reduced value into the requested format.
 When parsing the reduced value, it defaults hard-coded defaults when missing.
 Example: 2018-01-01, when requested to be parsed to an instant
@@ -304,9 +315,9 @@ which is converting values like `1` to `01` , so they are parsable by the
 provided date time format.
 
 
-# Further Work<a name="further-work"></a>
+## Further Work<a name="further-work"></a>
 
-## Alternative DSL sources
+### Alternative DSL sources
 
 Currently only DSL via XML is supported out of the box.
 Even though XML can be validated via an XSD, and mostly supported very well in Java world. 
@@ -317,7 +328,7 @@ simply by including into the runtime.
 This can be made possible to define only a DSL dependency and ask for clients to provide runtime implementations,
 using standard `maven` | `gradle` functionalities.
 
-## More features
+### More features
 
 More built in features can be introduced. Also a Reducer strategy can be implemented.
 The current way only supports mapping between string values. It might be useful to enable access to
