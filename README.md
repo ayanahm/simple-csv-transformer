@@ -50,8 +50,8 @@ is then written into the output CSV file.
 
 ### Why XML?<a name="why-xml"></a>
 Assuming there will be a lot of extensions to the DSL.
-And guessing, a lot of instances of the DSL, given the source of CSV files very widely, and will be
-required to robustly extend as much as possible.
+And guessing, there will be a lot of instances of the DSL, given the sources of CSV files very very widely.
+Hence there is a need to robustly extend as much as possible.
 
 Xml has really nice help from tools like IDEA. When referencing the DSL, the error-prone
 Xml instances are already highlighted in compile time.
