@@ -30,11 +30,11 @@ class FormatterFactoryTest {
   public void create_custom_constructor() {
     TargetStringFormatter targetStringFormatter = new TargetStringFormatter()
         .withFormatterClass(new CustomFormatter()
-            .withClassName(DummyFormatter.class.getCanonicalName()));
+            .withClassName(DummyFormatter.class.getName()));
 
     DummyFormatter customConstructor = new DummyFormatter();
     ReducedCsvValueToStringFormatter constructor = FormatterFactory.createFormatter(targetStringFormatter,
-        Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor));
+        Collections.singletonMap(customConstructor.getClass().getName(), customConstructor));
 
     assertEquals(constructor, customConstructor);
   }
@@ -43,12 +43,12 @@ class FormatterFactoryTest {
   public void given_unknown_constructor_class_exception_thrown() {
     TargetStringFormatter targetStringFormatter = new TargetStringFormatter()
         .withFormatterClass(new CustomFormatter()
-            .withClassName(String.class.getCanonicalName()));
+            .withClassName(String.class.getName()));
 
     DummyFormatter customConstructor = new DummyFormatter();
 
     assertThrows(DslConfigurationException.class, () ->
         FormatterFactory.createFormatter(targetStringFormatter,
-        Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor)));
+        Collections.singletonMap(customConstructor.getClass().getName(), customConstructor)));
   }
 }

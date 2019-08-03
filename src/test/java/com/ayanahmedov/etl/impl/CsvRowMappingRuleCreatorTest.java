@@ -38,7 +38,7 @@ class CsvRowMappingRuleCreatorTest {
 
             .withTargetStringFormatter(new TargetStringFormatter()
                 .withFormatterClass(new CustomFormatter()
-                    .withClassName(FormattingToStringFormatter.class.getCanonicalName())
+                    .withClassName(FormattingToStringFormatter.class.getName())
                     .withParameter(new FormatterParameter()
                         .withName("string-format")
                         .withValue("%s--%s"))))

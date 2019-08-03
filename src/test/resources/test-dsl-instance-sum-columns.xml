@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+
+    <transformation>
+        <targetSchemaColumn>Sum</targetSchemaColumn>
+        <sourceBindPattern>$1,$2</sourceBindPattern>
+        <targetStringFormatter>
+            <formatterClass>
+                <className>com.ayanahmedov.etl.api.SumColumnsTest$1</className>
+            </formatterClass>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <bindPatternPosition>2</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+</csv-transformation-config>

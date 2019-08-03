@@ -11,8 +11,8 @@ import java.util.List;
 
 public class CsvTransformerBuilder {
   private CsvTransformationConfig dsl;
-  private List<SourceCsvColumnMapper> sourceCsvMappers = new ArrayList<>();
-  private List<ReducedCsvValueToStringFormatter> constructors = new ArrayList<>();
+  private List<SourceCsvColumnMapper> mappers = new ArrayList<>();
+  private List<ReducedCsvValueToStringFormatter> formatters = new ArrayList<>();
 
   public static CsvTransformerBuilder builder() {
     return new CsvTransformerBuilder();
@@ -30,32 +30,31 @@ public class CsvTransformerBuilder {
   }
 
 
-  public CsvTransformerBuilder withSourceCsvValueMappers(List<SourceCsvColumnMapper> mappers) {
-    this.sourceCsvMappers.addAll(mappers);
+  public CsvTransformerBuilder withMappers(List<SourceCsvColumnMapper> mappers) {
+    this.mappers.addAll(mappers);
     return this;
   }
 
-  public CsvTransformerBuilder withSourceCsvValueMapper(SourceCsvColumnMapper mapper) {
-    sourceCsvMappers.add(mapper);
+  public CsvTransformerBuilder withMapper(SourceCsvColumnMapper mapper) {
+    mappers.add(mapper);
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructors(List<ReducedCsvValueToStringFormatter> constructors) {
-    this.constructors.addAll(constructors);
+  public CsvTransformerBuilder withFormatters(List<ReducedCsvValueToStringFormatter> formatters) {
+    this.formatters.addAll(formatters);
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructor(ReducedCsvValueToStringFormatter constructor) {
-    this.constructors.add(constructor);
+  public CsvTransformerBuilder withFormatter(ReducedCsvValueToStringFormatter formatter) {
+    this.formatters.add(formatter);
     return this;
   }
-
 
   public CsvTransformer build() {
     return DefaultCsvTransformer.newTransformer(
         dsl,
-        sourceCsvMappers,
-        constructors
+        mappers,
+        formatters
         );
   }
 }

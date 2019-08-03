@@ -93,17 +93,17 @@ public class BigCsvFilesTest {
 
     CsvTransformer transformer1 = new CsvTransformerBuilder()
         .withXmlDsl(configFile1)
-        .withObjectConstructors(Collections.emptyList())
+        .withFormatters(Collections.emptyList())
         .build();
 
     CsvTransformer transformer2 = new CsvTransformerBuilder()
         .withXmlDsl(configFile2)
-        .withObjectConstructors(Collections.emptyList())
+        .withFormatters(Collections.emptyList())
         .build();
 
     CsvTransformer transformer3 = new CsvTransformerBuilder()
         .withXmlDsl(configFile3)
-        .withObjectConstructors(Collections.emptyList())
+        .withFormatters(Collections.emptyList())
         .build();
 
 

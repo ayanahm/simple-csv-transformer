@@ -108,7 +108,7 @@ public class CsvRowMappingRuleCreator {
       String mapperClass = sourceCsvColumn.getSourceValueMapper();
       if (null != mapperClass) {
         SourceCsvColumnMapper mapper = mappers.stream()
-            .filter(m -> m.getClass().getCanonicalName().equals(mapperClass))
+            .filter(m -> m.getClass().getName().equals(mapperClass))
             .findFirst()
             .orElseThrow(() ->
                 DslConfigurationException.UNKNOWN_MAPPER_IN_DSL

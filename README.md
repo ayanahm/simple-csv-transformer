@@ -35,9 +35,35 @@ is then written into the output CSV file.
  For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
 
 
+A basic usage in Java code looks like the following:
+
+```java
+
+  void writeToFile(Path sourceCsv, Path outputCsv, Path configFile) throws IOException {
+      CsvTransformer transformer = new CsvTransformerBuilder()
+          .withXmlDsl(configFile)
+          .build();
+  
+      try (BufferedReader csvReader = Files.newBufferedReader(sourceCsv);
+           BufferedWriter csvWriter = Files.newBufferedWriter(outputCsv)) {
+  
+  
+        transformer.transform(csvReader, csvWriter);
+      }
+    }
+```
+
 There are some examples for the usage, which are also happen to be the actual test suite used for the library.
 Those can be found under:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/java/com/ayanahmedov/etl/api
+
+This test shows basic CSVTransformer usage, where in actual code.
+Note , that test are using temporary files which are deleted on exit. 
+
+https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/SimpleCsvTransformerTest.java
+
+Ax example of introducing a custom formatter:
+
 
 which are also including DSL configurations for those tests:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/resources 

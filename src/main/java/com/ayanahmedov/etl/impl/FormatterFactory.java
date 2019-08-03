@@ -38,12 +38,12 @@ public class FormatterFactory {
     } else if (targetStringFormatter.getIntValueFormatter() != null) {
       return SimpleIntFormatter.get();
     } else if (targetStringFormatter.getFormatterClass() != null) {
-      String constructorClassName = targetStringFormatter.getFormatterClass().getClassName();
+      String formatterClassName = targetStringFormatter.getFormatterClass().getClassName();
       ReducedCsvValueToStringFormatter customFormatter =
-          formattersByClassName.get(constructorClassName);
+          formattersByClassName.get(formatterClassName);
 
       if (null == customFormatter) {
-        throw new DslConfigurationException("Unknown custom Constructor provided. (" + constructorClassName + ") " +
+        throw new DslConfigurationException("Unknown custom Formatter provided. (" + formatterClassName + ") " +
             "Make sure there is no type in configuration. " +
             "And the class is actually on classpath. " +
             "And provided to the transformer correctly.");
@@ -74,7 +74,7 @@ public class FormatterFactory {
       return result;
     }
     for (ReducedCsvValueToStringFormatter formatter : constructors) {
-      result.put(formatter.getClass().getCanonicalName(), formatter);
+      result.put(formatter.getClass().getName(), formatter);
     }
     return result;
   }

@@ -39,4 +39,5 @@ public class ColumnAverageFormatterTest {
       assertEquals(expected, outCsv);
     }
   }
+
 }
