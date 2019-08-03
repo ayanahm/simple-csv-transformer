@@ -17,7 +17,7 @@ public class ColumnAverageFormatterTest {
   @DisplayName("Given a csv with 4 columns, then take avarage of specified 2 colums and map into single target column")
   @Test
   public void source_columns_to_avarage_test() throws IOException {
-    Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-column-avarege.xml");
+    Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-column-average.xml");
     Path testCsv = FileSystemUtils.getFileFromResources("source-2.csv");
 
     CsvTransformer transformer = new CsvTransformerBuilder()
