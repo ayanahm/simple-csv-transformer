@@ -5,9 +5,11 @@
 3. [Dsl](#dsl)
    1. [Types](#types)
        1. [transformation](#transformation)
-       2. [transformation/targetSchemaColumn](#transformation/targetSchemaColumn)
+       2. [transformation/targetSchemaColumn](#targetSchemaColumn)
        3. [transformation/targetStringFormatter](#transformation/targetStringFormatter)
        4. [transformation/sourceColumn](#transformation/sourceColumn)
+       5. [transformation/sourceColumn/sourceValueMapper](#sourceValueMapper)
+       6. [transformation/sourceBindPattern](#sourceBindPattern)
    2. [Built-In formatters](#built-in-formatters)
         1. [StringValueFormatter](#StringValueFormatter)
         2. [IntValueFormatter](#IntValueFormatter)
@@ -134,11 +136,11 @@ Note that, valid DSL is defined by an XSD, which can be analyzed more in detail 
 This is the main entry point. Specifies how to transform the source CSV row to the target CSV row.
 There can be unlimited number of such transformations defined. Each corresponds to a  `Mapper->Reducer->Formatter` flow.
 
-#### `transformation/targetSchemaColumn`
+#### `transformation/targetSchemaColumn`<a name="targetSchemaColumn"></a>
 
 Defines the name of the target CSV column will be populated.
 
-#### `transformation/targetStringFormatter`
+#### `transformation/targetStringFormatter`<a name="targetStringFormatter"></a>
 
 The library comes with some built-in formatters. 
 The list of built-in mappers which are declaratively  possible defined in the type `ElementConstructor`.
@@ -148,17 +150,17 @@ The xsd defines the following ones:
 are built in CSV value formatters. But there are also implemented custom formatters present in the package
 `com.ayanahmedov.etl.api.tostringformatter`.
 
-#### `transformation/sourceColumn`
+#### `transformation/sourceColumn`<a name="sourceColumn"></a>
 Defines which rows to reduce.  The number of `sourceColumns` are unbounded. 
 Also note it is allowed to not to provide any.
 That makes sense, when the target csv needs to be populated 
 with a constant value using the `sourceBindPattern` without any placeholder.
 
-#### `transformation/sourceColumn/sourceValueMapper`
+#### `transformation/sourceColumn/sourceValueMapper`<a name="sourceValueMapper"></a>
 Contains classname of a `Mapper`. The source CSV value
 is read and supplied into this provided implementation.
 
-#### `transformation/sourceBindPattern`
+#### `transformation/sourceBindPattern`<a name="sourceBindPattern">
 This defines a *template* for the reducer. Currently there is only an implementation for
 placeholders using dollar sign as in `$1-$2`. 
 
