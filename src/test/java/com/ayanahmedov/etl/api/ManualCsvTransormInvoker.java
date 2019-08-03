@@ -1,14 +1,14 @@
 package com.ayanahmedov.etl.api;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import com.ayanahmedov.etl.TestUtils;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 /**
@@ -16,9 +16,9 @@ import java.util.stream.Stream;
  * Not meant as an automated build test.
  */
 public class ManualCsvTransormInvoker {
-  private static int NUM_CSV_ROWS = 1_000_000;
+  private static int NUM_CSV_ROWS = 15_000_000;
 
-  public static void main(String[] args) {
+  public static void __main(String[] args) {
     Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter-out.xml");
     Path csv = FileSystemUtils.getFileFromResources("output2.csv");
     Path output = Paths.get("output2.csv");
@@ -37,6 +37,42 @@ public class ManualCsvTransormInvoker {
     }
     System.out.println("done");
   }
+
+  public static void main(String[] args) {
+//    createHugeCsvFile(Paths.get("huge_csv.csv"));
+
+    long seconds = TestUtils.timed(TimeUnit.SECONDS, () -> {
+      Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
+      Path csv = FileSystemUtils.getFileFromResources("huge_csv.csv");
+      Path output = Paths.get("output2.csv");
+//
+
+
+      CsvTransformer transformer = CsvTransformerBuilder.builder()
+          .withXmlDsl(dsl)
+          .build();
+
+      try (
+          BufferedReader reader = new BufferedReader(new FileReader(csv.toFile()), 16 * 1_048_576);
+          BufferedWriter writer = new BufferedWriter(new FileWriter(output.toFile()), 16 * 1_048_576)) {
+
+        transformer.transform(reader, writer);
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
+      System.out.println("done");
+    });
+
+    System.out.printf("Seconds:%d", seconds);
+  }
+
+  public static long timed(Runnable runnable) {
+    long start = System.currentTimeMillis();
+    runnable.run();
+    long end = System.currentTimeMillis();
+    return end - start;
+  }
+
 
   public static void _main(String[] args) {
     Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
@@ -67,6 +103,29 @@ public class ManualCsvTransormInvoker {
         });
 
     System.out.println("done");
+  }
+
+
+  private static void createHugeCsvFile(Path path) {
+    try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(path))) {
+      writer.printf("Order Number,Year,Month,Day,Product Number,Product Name   ,Count     ,Extra Col1,Extra Col2,Empty Column%n");
+
+      //an invalid record
+      writer.printf("a,a,a,a,a,a,a,a,a");
+
+      Map<Integer, String> records = new HashMap<Integer, String>() {{
+        put(0, "1000,2018,1,1,P-1000,Arugola,\"5,250.50\",Lorem,Ipsum");
+        put(1, "1001,2016,10,1,1001-P2,Lettuce,\"500.0\",Lorem,Ipsum");
+        put(2, "1002,2017,1,12,P-1002,Tomato,\"367.5\",Lorem,Ipsum");
+      }};
+
+      for (int i = 0; i < NUM_CSV_ROWS; i++) {
+        writer.printf("%s%n", records.get(i % 3));
+      }
+
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
   }
 
   private static Path createTemporaryHugeCsvFile() {
