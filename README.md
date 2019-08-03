@@ -1,7 +1,8 @@
 ##### Table of Contents  
 1. [Overview](#overview)
     1. [The Concept](#the-concept)
-    1. [why XML?](#why-xml)
+    2. [Why XML?](#why-xml)
+    3. [How to build?](#how-to-build)
 2. [Java Api](#api-usage)
 3. [Dsl](#dsl)
    1. [Types](#types)
@@ -48,9 +49,22 @@ is then written into the output CSV file.
  For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
 
 ### Why XML?<a name="why-xml"></a>
+Assuming there will be a lot of extensions to the DSL.
+And guessing, a lot of instances of the DSL, given the source of CSV files very widely, and will be
+required to robustly extend as much as possible.
 
+Xml has really nice help from tools like IDEA. When referencing the DSL, the error-prone
+Xml instances are already highlighted in compile time.
+Moreover, the extensions on the Xsd, and then generating java classes, the only remaining is to
+extend couple of places in the library, so allowing a fast paced adaption to new use cases.
 
+### How to build?<a name="how-to-build></a>
+At least JDK-8 needs to be present in the machine to build the code.
+Using mvn clean install should produce a jar which can be referenced in other projects.
+This lib, does not provide a standalone executable jar.
 
+And of course, using intellij and importing as maven project should work out of the box. 
+(I haven't tested it for Eclipse, but assumption it should be the same.)
 
 
 ## Api Usage<a name="api-usage"></a>
