@@ -22,27 +22,32 @@ public class FormattingToStringFormatter implements MappedCsvValueToStringFormat
   private FormattingToStringFormatter() {
   }
 
-  public static FormattingToStringFormatter get() {
+  public static FormattingToStringFormatter getUninitialized() {
     return new FormattingToStringFormatter();
   }
 
 
   @Override
-  public void init(Map<String, String> parameters) {
-    stringFormat = parameters.get(PARAM_TARGET_STRING_FORMAT);
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    FormattingToStringFormatter instance = getUninitialized();
+    instance.stringFormat = parameters.get(PARAM_TARGET_STRING_FORMAT);
+    if (null == instance.stringFormat) {
+      throw DslConfigurationException.STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT;
+    }
+    return instance;
   }
 
   @Override
   public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
     String[] split = valueFromCsvMapping.split(",");
-    if (null == stringFormat) {
-      throw DslConfigurationException.STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT;
-    }
+
     try {
       String result = String.format(stringFormat, (Object[]) split);
       return CsvValueToJavaMappingResult.ofValue(result);
     } catch (IllegalFormatException e) {
-      throw DslConfigurationException.STRING_FORMATTER_INCORRECT.withException(e);
+      throw DslConfigurationException.STRING_FORMATTER_INCORRECT
+          .withAdditionalMessage("String format was " + stringFormat + ". ")
+          .withException(e);
     }
   }
 

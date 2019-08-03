@@ -17,28 +17,31 @@ public class BigDecimalByLocaleFormatter implements MappedCsvValueToStringFormat
       ThreadLocal.withInitial(HashMap::new);
 
   private String sourceNumberLocale = null;
+  private NumberFormat numberFormat = null;
 
   private BigDecimalByLocaleFormatter() {
   }
 
-  public static BigDecimalByLocaleFormatter get() {
+  public static BigDecimalByLocaleFormatter getUninitialized() {
     return new BigDecimalByLocaleFormatter();
   }
 
   @Override
-  public void init(Map<String, String> parameters) {
-    this.sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
-    if (sourceNumberLocale == null) {
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    BigDecimalByLocaleFormatter instance = getUninitialized();
+    instance.sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
+    if (null == instance.sourceNumberLocale) {
       throw DslConfigurationException.BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE;
     }
+    Locale locale = Locale.forLanguageTag(instance.sourceNumberLocale);
+    instance.numberFormat = getNumberFormat(locale);
+    return instance;
   }
 
   @Override
   public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
-    Locale locale = Locale.forLanguageTag(sourceNumberLocale);
-    NumberFormat nf = getNumberFormat(locale);
     try {
-      Number parsedNum = nf.parse(valueFromCsvMapping);
+      Number parsedNum = numberFormat.parse(valueFromCsvMapping);
       BigDecimal result = new BigDecimal(parsedNum.toString());
       return CsvValueToJavaMappingResult.ofValue(result.toString());
     } catch (ParseException e) {

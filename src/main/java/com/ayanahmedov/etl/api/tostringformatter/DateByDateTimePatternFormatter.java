@@ -40,12 +40,8 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
   }
 
   @Override
-  public void init(Map<String, String> parameters) {
-    //do nothing since initialized by of(parameters) method
-  }
-
-  public static DateByDateTimePatternFormatter of(Map<String, String> parameters) {
-    DateByDateTimePatternFormatter c = new DateByDateTimePatternFormatter();
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    DateByDateTimePatternFormatter instance = new DateByDateTimePatternFormatter();
 
     String sourceParsePattern = parameters.get(PARAM_SOURCE_PARSE_PATTERN);
     String formatPattern = parameters.get(PARAM_TARGET_FORMAT_PATTER);
@@ -54,12 +50,12 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
     if (zone == null) {
       zoneId = ZoneId.systemDefault();
     } else {
-      zoneId= ZoneId.of(zone);
+      zoneId = ZoneId.of(zone);
     }
 
     try {
 
-      c.sourceFmt = new DateTimeFormatterBuilder()
+      instance.sourceFmt = new DateTimeFormatterBuilder()
           .appendPattern(sourceParsePattern)
           .parseDefaulting(ChronoField.YEAR_OF_ERA, ZonedDateTime.now().getYear())
           .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1L)
@@ -68,7 +64,7 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
           .toFormatter()
           .withZone(zoneId);
 
-      c.targetFmt = new DateTimeFormatterBuilder()
+      instance.targetFmt = new DateTimeFormatterBuilder()
           .appendPattern(formatPattern)
           .toFormatter()
           .withZone(zoneId);
@@ -77,7 +73,11 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
       throw DslConfigurationException.WRONG_DATE_TIME_DSL.withException(e);
     }
 
-    return c;
+    return instance;
+  }
+
+  public static DateByDateTimePatternFormatter getUninitialized() {
+    return new DateByDateTimePatternFormatter();
   }
 
 

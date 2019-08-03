@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -14,10 +15,30 @@ import java.util.stream.Stream;
  * For manual execution.
  * Not meant as an automated build test.
  */
-public class HugeCsvTester {
+public class ManualCsvTransormInvoker {
   private static int NUM_CSV_ROWS = 1_000_000;
 
   public static void main(String[] args) {
+    Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter.xml");
+    Path csv = FileSystemUtils.getFileFromResources("source-2.csv");
+    Path output = Paths.get("output2.csv");
+
+    CsvTransformer transformer = CsvTransformerBuilder.builder()
+        .withXmlDsl(dsl)
+        .build();
+
+    try (
+        BufferedReader reader = Files.newBufferedReader(csv);
+        BufferedWriter writer = Files.newBufferedWriter(output)) {
+
+      transformer.transform(reader, writer);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+    System.out.println("done");
+  }
+
+  public static void _main(String[] args) {
     Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
     Path bigCsvFile1 = createTemporaryHugeCsvFile();
     Path bigCsvFile2 = createTemporaryHugeCsvFile();

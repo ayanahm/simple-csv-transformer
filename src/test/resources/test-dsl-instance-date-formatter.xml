@@ -17,16 +17,16 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>
@@ -45,21 +45,21 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-5</name>
-            <constructorPosition>5</constructorPosition>
+            <bindPatternPosition>5</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>
@@ -78,21 +78,21 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-4</name>
-            <constructorPosition>4</constructorPosition>
+            <bindPatternPosition>4</bindPatternPosition>
         </sourceColumn>
     </transformation>
 
@@ -112,25 +112,25 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-4</name>
-            <constructorPosition>4</constructorPosition>
+            <bindPatternPosition>4</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-5</name>
-            <constructorPosition>5</constructorPosition>
+            <bindPatternPosition>5</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>
@@ -150,30 +150,30 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-4</name>
-            <constructorPosition>4</constructorPosition>
+            <bindPatternPosition>4</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-5</name>
-            <constructorPosition>5</constructorPosition>
+            <bindPatternPosition>5</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-6</name>
-            <constructorPosition>6</constructorPosition>
+            <bindPatternPosition>6</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>

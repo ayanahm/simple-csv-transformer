@@ -41,12 +41,14 @@ public class CsvRowMappingRuleCreator {
 
     public MappingRuleImpl(List<Integer> sourceColumnIndexes,
                            Map<Integer, SourceColumnMapper> mappersByIndex,
-                           MappedCsvValueToStringFormatter formatter, CsvValueReducer reducer, List<Integer> sourceColumnConstructorPositions) {
+                           MappedCsvValueToStringFormatter formatter,
+                           CsvValueReducer reducer,
+                           List<Integer> bindPatternPositions) {
       this.sourceColumnIndexes = sourceColumnIndexes;
       this.mappersByIndex = mappersByIndex;
       this.formatter = formatter;
       this.reducer = reducer;
-      this.sourceColumnConstructorPositions = sourceColumnConstructorPositions;
+      this.sourceColumnConstructorPositions = bindPatternPositions;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class CsvRowMappingRuleCreator {
     }
 
     @Override
-    public List<Integer> getSourceColumnConstructorPositions() {
+    public List<Integer> getBindPatternPositions() {
       return sourceColumnConstructorPositions;
     }
 
@@ -84,10 +86,10 @@ public class CsvRowMappingRuleCreator {
     String dollarSignBindPattern = transformation.getSourceBindPattern();
     DollarSignBindPatternReducer reducer = DollarSignBindPatternReducer.get(dollarSignBindPattern);
 
-    MappedCsvValueToStringFormatter formatter = TargetStringFormatterFactory.createFormatter(transformation.getTargetStringFormatter(), formatters);
+    MappedCsvValueToStringFormatter formatter = FormatterFactory.createFormatter(transformation.getTargetStringFormatter(), formatters);
 
-    List<Integer> sourceColumnConstructorPositions = transformation.getSourceColumn().stream()
-        .map(SourceCsvColumn::getConstructorPosition)
+    List<Integer> bindPatternPositions = transformation.getSourceColumn().stream()
+        .map(SourceCsvColumn::getBindPatternPosition)
         .collect(Collectors.toList());
 
     return new MappingRuleImpl(
@@ -95,7 +97,7 @@ public class CsvRowMappingRuleCreator {
         sourceMappers,
         formatter,
         reducer,
-        sourceColumnConstructorPositions);
+        bindPatternPositions);
   }
 
 

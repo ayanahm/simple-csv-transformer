@@ -89,11 +89,11 @@ class DefaultCsvTransformerTest {
         savedCsv,
         Arrays.asList(
             new String[]{"formatted"},
-            new String[]{"   a$:$a.  a$"},
-            new String[]{"    $:$1.  $"},
-            new String[]{"    a:$.  a"},
-            new String[]{"    $:a.  $"},
-            new String[]{"    a:a.  a"}
+            new String[]{"   a$:$a. a$"},
+            new String[]{"    $:$1. $"},
+            new String[]{"    a:$. a"},
+            new String[]{"    $:a. $"},
+            new String[]{"    a:a. a"}
         ));
   }
 }

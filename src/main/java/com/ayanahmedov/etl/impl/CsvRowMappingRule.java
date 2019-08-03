@@ -16,7 +16,7 @@ public interface CsvRowMappingRule {
   /**
    * Positions from DSL to be replaced in the reducer {@link CsvValueReducer}.
    */
-  List<Integer> getSourceColumnConstructorPositions();
+  List<Integer> getBindPatternPositions();
 
   /**
    * Mappers applicable to the column identifiable by the returned maps key.

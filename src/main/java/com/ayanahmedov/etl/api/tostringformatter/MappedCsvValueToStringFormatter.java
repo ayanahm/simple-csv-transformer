@@ -7,7 +7,15 @@ import java.util.Map;
 
 public interface MappedCsvValueToStringFormatter {
 
-  void init(Map<String, String> parameters);
+  /**
+   * Returns a new instance initialized with parameters.
+   * In case no parameter is expected, it is thread-safe to simply return this or a singleton.
+   * <p>
+   * In case when there are fields stored, this must return a new instance and not a cached instance.
+   * <p>
+   * Otherwise there is no guarantee for thread-safety.
+   */
+  MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters);
 
   /**
    *

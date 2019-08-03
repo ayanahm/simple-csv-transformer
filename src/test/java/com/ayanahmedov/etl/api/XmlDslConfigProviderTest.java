@@ -26,7 +26,7 @@ class XmlDslConfigProviderTest {
                         .withZoneId("Europe/Vienna"))))
           .withSourceColumn(new SourceCsvColumn()
             .withName("source-csv-col-1")
-            .withConstructorPosition(1)));
+              .withBindPatternPosition(1)));
 
     Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-2.xml");
     XmlDslConfigProvider xmlDslConfigProvider = new XmlDslConfigProvider(configFile);

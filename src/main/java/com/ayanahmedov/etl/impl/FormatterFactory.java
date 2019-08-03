@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TargetStringFormatterFactory {
+public class FormatterFactory {
   public static MappedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
                                                                 List<MappedCsvValueToStringFormatter> formatters) {
     return createFormatter(targetStringFormatter, createFormattersByClassName(formatters));
@@ -30,12 +30,13 @@ public class TargetStringFormatterFactory {
       params.put(DateByDateTimePatternFormatter.PARAM_TARGET_FORMAT_PATTER, dateFormatter.getTargetDateFormat().getFormatPattern());
       params.put(DateByDateTimePatternFormatter.PARAM_TARGET_ZONE_ID, dateFormatter.getTargetDateFormat().getZoneId());
 
-      return DateByDateTimePatternFormatter.of(params);
+      DateByDateTimePatternFormatter formatter = DateByDateTimePatternFormatter.getUninitialized();
+      return formatter.newInstance(params);
 
     } else if (targetStringFormatter.getStringValueFormatter() != null) {
-      return IdenticalToStringFormatter.of();
+      return IdenticalToStringFormatter.get();
     } else if (targetStringFormatter.getIntValueFormatter() != null) {
-      return SimpleIntFormatter.of();
+      return SimpleIntFormatter.get();
     } else if (targetStringFormatter.getFormatterClass() != null) {
       String constructorClassName = targetStringFormatter.getFormatterClass().getClassName();
       MappedCsvValueToStringFormatter customFormatter =
@@ -55,7 +56,10 @@ public class TargetStringFormatterFactory {
                 FormatterParameter::getValue
             ));
 
-        customFormatter.init(customFormatterParameters);
+        // This is done for thread-safety.
+        // if the existing instance used, then there is no guarantee for thread-safety
+        // since the parameters saved in the instances may conflict across different DSL instances.
+        customFormatter = customFormatter.newInstance(customFormatterParameters);
       }
 
       return customFormatter;

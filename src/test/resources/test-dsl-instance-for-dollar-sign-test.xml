@@ -17,11 +17,11 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
         </sourceColumn>
     </transformation>
 </csv-transformation-config>

@@ -12,12 +12,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TargetStringFormatterFactoryTest {
+class FormatterFactoryTest {
   static class DummyFormatter implements MappedCsvValueToStringFormatter {
 
     @Override
-    public void init(Map<String, String> parameters) {
-
+    public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+      return this;
     }
 
     @Override
@@ -33,7 +33,7 @@ class TargetStringFormatterFactoryTest {
             .withClassName(DummyFormatter.class.getCanonicalName()));
 
     DummyFormatter customConstructor = new DummyFormatter();
-    MappedCsvValueToStringFormatter constructor = TargetStringFormatterFactory.createFormatter(targetStringFormatter,
+    MappedCsvValueToStringFormatter constructor = FormatterFactory.createFormatter(targetStringFormatter,
         Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor));
 
     assertEquals(constructor, customConstructor);
@@ -48,7 +48,7 @@ class TargetStringFormatterFactoryTest {
     DummyFormatter customConstructor = new DummyFormatter();
 
     assertThrows(DslConfigurationException.class, () ->
-        TargetStringFormatterFactory.createFormatter(targetStringFormatter,
+        FormatterFactory.createFormatter(targetStringFormatter,
         Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor)));
   }
 }

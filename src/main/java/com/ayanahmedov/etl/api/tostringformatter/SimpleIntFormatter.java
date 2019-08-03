@@ -9,14 +9,14 @@ public class SimpleIntFormatter implements MappedCsvValueToStringFormatter {
   private static final SimpleIntFormatter instance = new SimpleIntFormatter();
   private static final Pattern intPattern = Pattern.compile("\\d+");
 
-  public static SimpleIntFormatter of() {
+  public static SimpleIntFormatter get() {
 
     return instance;
   }
 
   @Override
-  public void init(Map<String, String> parameters) {
-    //no params required
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    return this;
   }
 
   @Override

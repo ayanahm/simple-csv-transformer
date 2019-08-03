@@ -27,7 +27,7 @@ public class CsvRecordMapper {
     for (int i = 0; i < rules.size(); i++) {
       CsvRowMappingRule rule = rules.get(i);
       List<Integer> relevantColumnIndexes = rule.getSourceColumnIndexes();
-      List<Integer> sourceColumnConstructorPositions = rule.getSourceColumnConstructorPositions();
+      List<Integer> bindPatternPositions = rule.getBindPatternPositions();
       Map<Integer, SourceColumnMapper> mappersByIndex = rule.getMappersByIndex();
 
       List<String> mappedValues = new ArrayList<>();
@@ -42,7 +42,7 @@ public class CsvRecordMapper {
       }
 
       CsvValueReducer reducer = rule.getReducer();
-      String reducedVal = reducer.reduce(mappedValues, sourceColumnConstructorPositions);
+      String reducedVal = reducer.reduce(mappedValues, bindPatternPositions);
 
       MappedCsvValueToStringFormatter formatter = rule.getFormatter();
       CsvValueToJavaMappingResult formatted = formatter.formatToString(reducedVal);

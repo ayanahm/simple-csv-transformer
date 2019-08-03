@@ -12,8 +12,9 @@ public class ColumnAverageFormatter implements MappedCsvValueToStringFormatter {
   }
 
   @Override
-  public void init(Map<String, String> parameters) {
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     //no params required
+    return this;
   }
 
   @Override

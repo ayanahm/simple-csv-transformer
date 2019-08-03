@@ -13,7 +13,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Order Number</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 
@@ -31,16 +31,16 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Year</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Month</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Day</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>
@@ -57,7 +57,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Product Number</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 
@@ -69,7 +69,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Product Name</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 
@@ -88,7 +88,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Count</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 

@@ -21,7 +21,7 @@ public class FormattingToStringFormatterTest {
 
   @DisplayName("Given a csv with 2 columns, then take format 2 colums and map into single target column")
   @Test
-  public void source_columns_to_avarage_test() throws IOException {
+  public void format_source_value_test() throws IOException {
     Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter.xml");
     Path testCsv = FileSystemUtils.getFileFromResources("source-3.csv");
 

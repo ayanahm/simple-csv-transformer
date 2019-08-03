@@ -17,7 +17,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 </csv-transformation-config>

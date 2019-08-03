@@ -97,10 +97,10 @@
         <xs:annotation>
             <xs:documentation>
 
-                Example: $1-$2-$3 where the parameters identified by $[0-9],
-                are bound from the enclosing element constructor.
+                Example: $1-$2-$3 where the parameters identified by $[0-9]+,
+                are bound from source columns.
                 sourceColumn/constructorPosition==1 maps to $1. And
-                sourceColumn/constructorPosition==3 maps to $3
+                sourceColumn/constructorPosition==3 maps to $3 etc.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string"/>
@@ -109,7 +109,7 @@
     <xs:complexType name="SourceCsvColumn">
         <xs:sequence>
             <xs:element type="xs:string" name="name"/>
-            <xs:element type="xs:int" name="constructorPosition">
+            <xs:element type="xs:int" name="bindPatternPosition">
                 <xs:annotation>
                     <xs:documentation>
                         By default this maps to $1. Unless a element constructor used which requires more then 1 backing

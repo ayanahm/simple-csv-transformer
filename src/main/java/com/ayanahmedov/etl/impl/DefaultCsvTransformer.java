@@ -33,9 +33,9 @@ public final class DefaultCsvTransformer implements CsvTransformer {
   );
 
   private final static List<MappedCsvValueToStringFormatter> builtInFormatters = Arrays.asList(
-      BigDecimalByLocaleFormatter.get(),
+      BigDecimalByLocaleFormatter.getUninitialized(),
       ColumnAverageFormatter.get(),
-      FormattingToStringFormatter.get()
+      FormattingToStringFormatter.getUninitialized()
   );
 
   private final CsvTransformationConfig csvTransformationDslConfig;

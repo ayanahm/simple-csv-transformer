@@ -12,7 +12,7 @@
         </targetStringFormatter>
         <sourceColumn>
             <name>THIS DOES NOT EXISTS</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
     </transformation>
 </csv-transformation-config>

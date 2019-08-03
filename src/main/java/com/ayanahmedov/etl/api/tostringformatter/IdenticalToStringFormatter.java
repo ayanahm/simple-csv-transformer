@@ -7,13 +7,13 @@ import java.util.Map;
 public class IdenticalToStringFormatter implements MappedCsvValueToStringFormatter {
   private static final IdenticalToStringFormatter instance = new IdenticalToStringFormatter();
 
-  public static IdenticalToStringFormatter of() {
+  public static IdenticalToStringFormatter get() {
     return instance;
   }
 
   @Override
-  public void init(Map<String, String> parameters) {
-    //no params required
+  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    return this;
   }
 
   @Override
