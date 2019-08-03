@@ -9,6 +9,8 @@ public class SimpleIntFormatter implements ReducedCsvValueToStringFormatter {
   private static final SimpleIntFormatter instance = new SimpleIntFormatter();
   private static final Pattern intPattern = Pattern.compile("\\d+");
 
+  private SimpleIntFormatter(){}
+
   public static SimpleIntFormatter get() {
 
     return instance;

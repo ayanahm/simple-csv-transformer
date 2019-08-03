@@ -31,7 +31,7 @@ public class CsvRowMapper {
       List<Integer> bindPatternPositions = rule.getBindPatternPositions();
       Map<Integer, SourceCsvColumnMapper> mappersByIndex = rule.getMappersByIndex();
 
-      List<String> mappedValues = new ArrayList<>();
+      List<String> mappedValues = new ArrayList<>(relevantColumnIndexes.size());
 
       for (Integer index : relevantColumnIndexes) {
         SourceCsvColumnMapper mapper = mappersByIndex.get(index);

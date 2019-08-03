@@ -7,6 +7,8 @@ import java.util.Map;
 public class ColumnAverageFormatter implements ReducedCsvValueToStringFormatter {
   private final static ColumnAverageFormatter instance = new ColumnAverageFormatter();
 
+  private ColumnAverageFormatter(){}
+
   public static ColumnAverageFormatter get() {
     return instance;
   }

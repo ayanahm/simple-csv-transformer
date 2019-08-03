@@ -234,7 +234,7 @@ Requires parameters:
 
 `source-locale` the locale to use when parsing the big decimal
 `target-locale` optional. the locale to use when printing the parsed big decimal
-If not provided, default .toString implementation is used.
+If not provided, default .toString implementation is used which will print in scientific notation.
 
 Snippet:
 ```xml
@@ -322,3 +322,12 @@ using standard `maven` | `gradle` functionalities.
 More built in features can be introduced. Also a Reducer strategy can be implemented.
 The current way only supports mapping between string values. It might be useful to enable access to
 parsed java objects.
+
+## Optimizations
+
+Experimental idea:
+In most of the up-to-date operating systems, it should be possible to introduce the speed significantly for huge csv files.
+With the idea being, the some chunks of rows can be transformed in parallel. Where each job working on a single chunk,
+can write into a temporary file. Using FileChannel#transferFrom, the files can be joined into the final CSV file. 
+The point in this is the transferFrom delegates to operating system, and modern systems use memory caches for actively used files which is significantly faster. 
+Hence ,though experimental, would worth trying.

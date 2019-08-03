@@ -7,6 +7,8 @@ public class CsvValueToJavaMappingResult {
   private String value;
   private Exception exception;
 
+  private CsvValueToJavaMappingResult(){}
+
   public static CsvValueToJavaMappingResult ofMappingError(Exception e) {
     CsvValueToJavaMappingResult r = new CsvValueToJavaMappingResult();
     r.exception = e;

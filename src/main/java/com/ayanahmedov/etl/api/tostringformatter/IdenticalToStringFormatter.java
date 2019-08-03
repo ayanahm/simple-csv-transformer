@@ -7,6 +7,8 @@ import java.util.Map;
 public class IdenticalToStringFormatter implements ReducedCsvValueToStringFormatter {
   private static final IdenticalToStringFormatter instance = new IdenticalToStringFormatter();
 
+  private IdenticalToStringFormatter(){}
+
   public static IdenticalToStringFormatter get() {
     return instance;
   }
