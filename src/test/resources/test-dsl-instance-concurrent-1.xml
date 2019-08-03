@@ -6,8 +6,8 @@
 
     <transformation>
         <targetSchemaColumn>OrderDate</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
@@ -35,13 +35,9 @@
 
     <transformation>
         <targetSchemaColumn>Unit</targetSchemaColumn>
+        <sourceBindPattern>gram</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1</sourceBindPattern>
             <stringValueFormatter/>
         </targetStringFormatter>
-        <constantSource>
-            <value>gram</value>
-            <constructorPosition>1</constructorPosition>
-        </constantSource>
     </transformation>
 </csv-transformation-config>

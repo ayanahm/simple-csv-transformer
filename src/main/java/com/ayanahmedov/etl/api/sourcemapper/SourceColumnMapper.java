@@ -4,7 +4,7 @@ package com.ayanahmedov.etl.api.sourcemapper;
  * The mapper of the source CSV value
  * before applied into the formatters .
  */
-public interface SourceValueMapper {
+public interface SourceColumnMapper {
 
   /**
    * Applied on the source csv value

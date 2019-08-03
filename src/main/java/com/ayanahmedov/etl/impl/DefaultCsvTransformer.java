@@ -4,9 +4,9 @@ import com.ayanahmedov.etl.api.CsvTransformationDslConfigProvider;
 import com.ayanahmedov.etl.api.CsvTransformer;
 import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
-import com.ayanahmedov.etl.api.dsl.SourceCsvColumn;
 import com.ayanahmedov.etl.api.dsl.SourceTransformation;
-import com.ayanahmedov.etl.api.sourcemapper.SourceValueMapper;
+import com.ayanahmedov.etl.api.sourcemapper.LeadingAndTrailingWhiteSpaceTrimmer;
+import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
 import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import com.ayanahmedov.etl.api.tostringformatter.BigDecimalByLocaleFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter;
@@ -20,8 +20,6 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -29,10 +27,9 @@ import java.util.stream.Collectors;
  * as defined per {@link CsvTransformationDslConfigProvider}.
  */
 public final class DefaultCsvTransformer implements CsvTransformer {
-  private final static Logger log = Logger.getLogger(DefaultCsvTransformer.class.getName());
-
-  private final static List<SourceValueMapper> builtInMappers = Arrays.asList(
-      TwoDigitsNormalizer.get()
+  private final static List<SourceColumnMapper> builtInMappers = Arrays.asList(
+      TwoDigitsNormalizer.get(),
+      LeadingAndTrailingWhiteSpaceTrimmer.get()
   );
 
   private final static List<MappedCsvValueToStringFormatter> builtInFormatters = Arrays.asList(
@@ -42,11 +39,11 @@ public final class DefaultCsvTransformer implements CsvTransformer {
   );
 
   private final CsvTransformationConfig csvTransformationDslConfig;
-  private final List<SourceValueMapper> mappers;
+  private final List<SourceColumnMapper> mappers;
   private final List<MappedCsvValueToStringFormatter> formatters;
 
   private DefaultCsvTransformer(CsvTransformationConfig config,
-                                List<SourceValueMapper> mappers,
+                                List<SourceColumnMapper> mappers,
                                 List<MappedCsvValueToStringFormatter> formatters) {
     this.csvTransformationDslConfig = config;
     this.mappers = mappers;
@@ -54,13 +51,13 @@ public final class DefaultCsvTransformer implements CsvTransformer {
   }
 
   public static DefaultCsvTransformer newTransformer(CsvTransformationConfig config,
-                                                     List<SourceValueMapper> mappers,
+                                                     List<SourceColumnMapper> mappers,
                                                      List<MappedCsvValueToStringFormatter> constructors) {
 
     List<MappedCsvValueToStringFormatter> constructorsWithBuiltIns = new ArrayList<>(constructors);
     constructorsWithBuiltIns.addAll(builtInFormatters);
 
-    List<SourceValueMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
+    List<SourceColumnMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
     mappersWithBuiltIns.addAll(builtInMappers);
 
     return new DefaultCsvTransformer(config, mappersWithBuiltIns, constructorsWithBuiltIns);
@@ -92,21 +89,27 @@ public final class DefaultCsvTransformer implements CsvTransformer {
       throw new UncheckedIOException(e);
     }
 
+    SourceHeaderRowAccessor headerRowAccessor = new SourceHeaderRowAccessorImpl(sourceHeaderToIndex);
+    CsvRowMappingRuleCreator ruleCreator = new CsvRowMappingRuleCreator(headerRowAccessor, mappers, formatters);
+    List<CsvRowMappingRule> rules = ruleCreator.createRules(csvTransformationDslConfig);
+    CsvRecordMapper mapper = new CsvRecordMapper(rules, targetHeaderToIndex.size());
+
     while (true) {
       try {
         String[] sourceRow = csvReader.readNext();
         if (null == sourceRow) {
           break;
         } else {
-          SourceCsvValueAccessor sourceCsvValueAccessor = new SourceValueAccessByMap(sourceHeaderToIndex, sourceRow);
-          String[] newRow = mapRow(sourceCsvValueAccessor, targetHeaderToIndex);
-          csvWriter.writeNext(newRow);
+          String[] targetRow = mapper.mapRow(sourceRow);
+          csvWriter.writeNext(targetRow);
         }
       } catch (IOException e) {
         throw new UncheckedIOException(e);
       }
     }
   }
+
+
   private String[] generateTargetHeaderRow(Map<String, Integer> targetHeaderToIndex) {
     String[] header = new String[targetHeaderToIndex.size()];
     Set<Map.Entry<String, Integer>> entrySet = targetHeaderToIndex.entrySet();
@@ -141,61 +144,21 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     return res;
   }
 
-  private String[] mapRow(SourceCsvValueAccessor sourceCsvValueAccessor, Map<String, Integer> targetHeaderToIndex) {
-    String[] newRow = new String[targetHeaderToIndex.size()];
-    CsvSourceToJavaObjectMapper csvSourceToJavaObjectMapper = new CsvSourceToJavaObjectMapper(sourceCsvValueAccessor, mappers, formatters);
-    List<SourceTransformation> transformations = csvTransformationDslConfig.getTransformation();
+  static class SourceHeaderRowAccessorImpl implements SourceHeaderRowAccessor {
+    private Map<String, Integer> sourceHeaderToIndex;
 
-    for (SourceTransformation sourceTransformation : transformations) {
-      if (sourceTransformation.getSourceColumn().isEmpty() && sourceTransformation.getConstantSource() == null) {
-        throw new DslConfigurationException(
-            "Either sourceColumn must be non-empty or constantSource must be present.");
-      }
-
-      CsvValueToJavaMappingResult mappingResult;
-      if (!sourceTransformation.getSourceColumn().isEmpty()) {
-        mappingResult = csvSourceToJavaObjectMapper.map(sourceTransformation.getSourceColumn(), sourceTransformation.getTargetStringFormatter());
-      } else {
-        mappingResult = csvSourceToJavaObjectMapper.map(sourceTransformation.getConstantSource(), sourceTransformation.getTargetStringFormatter());
-      }
-      final int index = targetHeaderToIndex.get(sourceTransformation.getTargetSchemaColumn());
-      mappingResult.getValue().ifPresent(mapped -> newRow[index] = mapped);
-
-      mappingResult.getException().ifPresent(exp -> {
-        newRow[index] = "";
-        log.log(Level.WARNING,
-            "the transformation could not be applied on SourceColumns:[{0}]. With exception {1}",
-            new Object[]{
-                sourceTransformation.getSourceColumn().stream().map(SourceCsvColumn::getName).collect(Collectors.joining(",")),
-                exp
-            });
-      });
-    }
-
-    return newRow;
-  }
-
-  static class SourceValueAccessByMap implements SourceCsvValueAccessor {
-    private final Map<String, Integer> headerToIndex;
-    private final String[] record;
-
-    SourceValueAccessByMap(Map<String, Integer> headerToIndex, String[] record) {
-      this.headerToIndex = headerToIndex;
-      this.record = record;
+    SourceHeaderRowAccessorImpl(Map<String, Integer> sourceHeaderToIndex) {
+      this.sourceHeaderToIndex = sourceHeaderToIndex;
     }
 
     @Override
-    public String getValueForHeader(String header) {
-      Integer index = headerToIndex.get(header.trim());
+    public int getIndexByHeaderName(String header) {
+      Integer index = sourceHeaderToIndex.get(header);
       if (null == index) {
-        throw new IllegalArgumentException(
-            "The header " + header + " , is unknown. Is the CSV well formed? " +
-                "Possibly the number of the columns in row exceeds the numbers of columns in the header." +
-                "Invalid record was= " + Arrays.toString(record) +
-                "Also note, that the CSV without header row is not supported for the moment. ");
+        throw DslConfigurationException.UNKNOWN_SOURCE_HEADER
+            .withAdditionalMessage("The header [" + header + "] is unknown.");
       }
-      return record[index];
+      return index;
     }
   }
-
 }

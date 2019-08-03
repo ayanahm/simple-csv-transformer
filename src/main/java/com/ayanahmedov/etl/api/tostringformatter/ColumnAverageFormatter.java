@@ -12,10 +12,15 @@ public class ColumnAverageFormatter implements MappedCsvValueToStringFormatter {
   }
 
   @Override
-  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
-    String[] vals = valueFromCsvMapping.split(",");
-    int val1 = Integer.parseInt(vals[0].trim());
-    int val2 = Integer.parseInt(vals[1].trim());
+  public void init(Map<String, String> parameters) {
+    //no params required
+  }
+
+  @Override
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
+    String[] values = valueFromCsvMapping.split(",");
+    int val1 = Integer.parseInt(values[0].trim());
+    int val2 = Integer.parseInt(values[1].trim());
 
     int result = (val1 + val2) / 2;
     return CsvValueToJavaMappingResult.ofValue("" + result);

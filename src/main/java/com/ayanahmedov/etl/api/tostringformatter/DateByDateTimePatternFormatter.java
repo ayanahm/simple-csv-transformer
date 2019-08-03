@@ -1,7 +1,6 @@
 package com.ayanahmedov.etl.api.tostringformatter;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
-import com.ayanahmedov.etl.api.dsl.DateValueFormatter;
 import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 
 import java.time.Instant;
@@ -30,30 +29,37 @@ import java.util.Map;
  *
  */
 public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFormatter {
-  private DateValueFormatter dateValueFormatter;
+  public static final String PARAM_SOURCE_PARSE_PATTERN = "source-parse-pattern";
+  public static final String PARAM_TARGET_FORMAT_PATTER = "target-format-pattern";
+  public static final String PARAM_TARGET_ZONE_ID = "target-zone-id";
 
-  public static DateByDateTimePatternFormatter of(DateValueFormatter constructor) {
-    DateByDateTimePatternFormatter c = new DateByDateTimePatternFormatter();
-    c.dateValueFormatter = constructor;
-    return c;
+  private DateTimeFormatter sourceFmt;
+  private DateTimeFormatter targetFmt;
+
+  private DateByDateTimePatternFormatter() {
   }
 
   @Override
-  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
-    String sourceParsePattern = dateValueFormatter.getSourceFormatPattern();
-    String formatPattern = dateValueFormatter.getTargetDateFormat().getFormatPattern();
-    String zone = dateValueFormatter.getTargetDateFormat().getZoneId();
+  public void init(Map<String, String> parameters) {
+    //do nothing since initialized by of(parameters) method
+  }
+
+  public static DateByDateTimePatternFormatter of(Map<String, String> parameters) {
+    DateByDateTimePatternFormatter c = new DateByDateTimePatternFormatter();
+
+    String sourceParsePattern = parameters.get(PARAM_SOURCE_PARSE_PATTERN);
+    String formatPattern = parameters.get(PARAM_TARGET_FORMAT_PATTER);
+    String zone = parameters.get(PARAM_TARGET_ZONE_ID);
     ZoneId zoneId;
     if (zone == null) {
       zoneId = ZoneId.systemDefault();
     } else {
       zoneId= ZoneId.of(zone);
     }
-    DateTimeFormatter sourceFmt;
-    DateTimeFormatter targetFmt;
+
     try {
 
-      sourceFmt = new DateTimeFormatterBuilder()
+      c.sourceFmt = new DateTimeFormatterBuilder()
           .appendPattern(sourceParsePattern)
           .parseDefaulting(ChronoField.YEAR_OF_ERA, ZonedDateTime.now().getYear())
           .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1L)
@@ -62,7 +68,7 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
           .toFormatter()
           .withZone(zoneId);
 
-      targetFmt = new DateTimeFormatterBuilder()
+      c.targetFmt = new DateTimeFormatterBuilder()
           .appendPattern(formatPattern)
           .toFormatter()
           .withZone(zoneId);
@@ -71,6 +77,12 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
       throw DslConfigurationException.WRONG_DATE_TIME_DSL.withException(e);
     }
 
+    return c;
+  }
+
+
+  @Override
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
     try {
       Instant instantWithDefaultingZeroes = sourceFmt.parse(valueFromCsvMapping, Instant::from);
       String result = targetFmt.format(instantWithDefaultingZeroes);

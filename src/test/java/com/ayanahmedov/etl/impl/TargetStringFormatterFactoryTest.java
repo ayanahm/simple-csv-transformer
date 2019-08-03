@@ -16,8 +16,13 @@ class TargetStringFormatterFactoryTest {
   static class DummyFormatter implements MappedCsvValueToStringFormatter {
 
     @Override
-    public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
-      return null;
+    public void init(Map<String, String> parameters) {
+
+    }
+
+    @Override
+    public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
+      return CsvValueToJavaMappingResult.ofValue("");
     }
   }
 
@@ -42,7 +47,8 @@ class TargetStringFormatterFactoryTest {
 
     DummyFormatter customConstructor = new DummyFormatter();
 
-    assertThrows(DslConfigurationException.class, () -> TargetStringFormatterFactory.createFormatter(targetStringFormatter,
+    assertThrows(DslConfigurationException.class, () ->
+        TargetStringFormatterFactory.createFormatter(targetStringFormatter,
         Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor)));
   }
 }

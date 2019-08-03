@@ -5,8 +5,8 @@
 
     <transformation>
         <targetSchemaColumn>formatted</targetSchemaColumn>
+        <sourceBindPattern>$1,$2,$1</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1,$2,$1</sourceBindPattern>
             <formatterClass>
                 <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
                 <parameter>

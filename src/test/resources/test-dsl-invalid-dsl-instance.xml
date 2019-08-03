@@ -5,8 +5,8 @@
 
     <transformation>
         <targetSchemaColumn>average</targetSchemaColumn>
+        <sourceBindPattern>$1,$2</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1,$2</sourceBindPattern>
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-3</name>

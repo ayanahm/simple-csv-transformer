@@ -15,6 +15,12 @@ public abstract class JaxbUtils {
   private static ConcurrentHashMap<Class<?>, JAXBContext> JAXB_CONTEXTS = new ConcurrentHashMap<>();
 
   @SuppressWarnings("unchecked")
+  public static <T> T parseObject(String xml, Class<T> type) {
+    return parseObjectValidatingSchema(xml, type, null);
+  }
+
+
+  @SuppressWarnings("unchecked")
   public static <T> T parseObjectValidatingSchema(String xml, Class<T> type, Schema schema) {
     try {
       JAXBContext jaxbContext = getContext(type);
@@ -23,7 +29,7 @@ public abstract class JaxbUtils {
       return (T) unmarshaller.unmarshal(new StringReader(xml));
     } catch (JAXBException e) {
       if (e.getCause() instanceof SAXParseException) {
-        throw DslConfigurationException.INVALID_XML_INSTANCE_EXECPTION.withException(e.getCause());
+        throw DslConfigurationException.INVALID_XML_INSTANCE_AGAINST_SCHEMA.withException(e.getCause());
       }
       throw new RuntimeException(e);
     }

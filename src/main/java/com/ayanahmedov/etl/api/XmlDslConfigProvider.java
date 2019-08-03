@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class XmlDslConfigProvider implements CsvTransformationDslConfigProvider {
+  private static final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
   private final Path configXmlFilePath;
 
   public XmlDslConfigProvider(Path configXmlFilePath) {
@@ -23,9 +24,11 @@ public final class XmlDslConfigProvider implements CsvTransformationDslConfigPro
   public CsvTransformationConfig provide() {
     try {
       String xml = new String(Files.readAllBytes(configXmlFilePath), StandardCharsets.UTF_8);
-      SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       Path xsdFile = FileSystemUtils.getFileFromResources("csv-transform-schema.xsd");
-      Schema schema = schemaFactory.newSchema(xsdFile.toFile());
+      Schema schema;
+      synchronized (schemaFactory) {
+        schema = schemaFactory.newSchema(xsdFile.toFile());
+      }
       return JaxbUtils.parseObjectValidatingSchema(xml, CsvTransformationConfig.class, schema);
     } catch (IOException e) {
       throw new UncheckedIOException(e);

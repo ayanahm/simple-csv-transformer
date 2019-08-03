@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class InvalidRowsTest {
+public class IncorrectCsvColumnValuesTest {
   static Path csv;
 
   @BeforeAll

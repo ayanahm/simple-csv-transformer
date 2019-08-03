@@ -3,20 +3,15 @@
                            xmlns="http://www.ayanahmedov.com/CsvTransform"
                            xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
 
+
     <transformation>
-        <targetSchemaColumn>target-col-1</targetSchemaColumn>
+        <targetSchemaColumn>OrderId</targetSchemaColumn>
         <sourceBindPattern>$1</sourceBindPattern>
         <targetStringFormatter>
-            <dateValueFormatter>
-                <sourceFormatPattern>yyyy-dd-MM</sourceFormatPattern>
-                <targetDateFormat>
-                    <formatPattern>yyyy:LL:dd</formatPattern>
-                    <zoneId>Europe/Vienna</zoneId>
-                </targetDateFormat>
-            </dateValueFormatter>
+            <intValueFormatter/>
         </targetStringFormatter>
         <sourceColumn>
-            <name>source-csv-col-1</name>
+            <name>THIS DOES NOT EXISTS</name>
             <constructorPosition>1</constructorPosition>
         </sourceColumn>
     </transformation>

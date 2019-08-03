@@ -4,19 +4,23 @@
                            xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
 
     <transformation>
-        <targetSchemaColumn>average</targetSchemaColumn>
-        <sourceBindPattern>$1,$2</sourceBindPattern>
+        <targetSchemaColumn>formatted</targetSchemaColumn>
+        <sourceBindPattern>$1,$6,$1</sourceBindPattern>
         <targetStringFormatter>
             <formatterClass>
-                <className>com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter</className>
+                <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
+                <parameter>
+                    <name>string-format</name>
+                    <value>%5s:%s. %s</value>
+                </parameter>
             </formatterClass>
         </targetStringFormatter>
         <sourceColumn>
-            <name>Col-3</name>
+            <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
         </sourceColumn>
         <sourceColumn>
-            <name>Col-4</name>
+            <name>Col-2</name>
             <constructorPosition>2</constructorPosition>
         </sourceColumn>
     </transformation>

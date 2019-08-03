@@ -5,8 +5,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
@@ -33,8 +33,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3:$5</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3:$5</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH</sourceFormatPattern>
                 <targetDateFormat>
@@ -66,8 +66,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd zz</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3 $4</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3 $4</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd zz</sourceFormatPattern>
                 <targetDateFormat>
@@ -99,8 +99,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH zz</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3:$5 $4</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3:$5 $4</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH zz</sourceFormatPattern>
                 <targetDateFormat>
@@ -138,8 +138,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH:mm zz</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3:$5:$6:$6 $4</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3:$5:$6:$6 $4</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH:mm:ss VV</sourceFormatPattern>
                 <targetDateFormat>

@@ -1,19 +1,37 @@
 package com.ayanahmedov.etl.impl;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
+import com.ayanahmedov.etl.api.dsl.DateValueFormatter;
+import com.ayanahmedov.etl.api.dsl.FormatterParameter;
 import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.IdenticalToStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.SimpleIntFormatter;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TargetStringFormatterFactory {
   public static MappedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
+                                                                List<MappedCsvValueToStringFormatter> formatters) {
+    return createFormatter(targetStringFormatter, createFormattersByClassName(formatters));
+  }
+
+  public static MappedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
                                                                 Map<String, MappedCsvValueToStringFormatter> formattersByClassName) {
     if (targetStringFormatter.getDateValueFormatter() != null) {
-      return DateByDateTimePatternFormatter.of(targetStringFormatter.getDateValueFormatter());
+      DateValueFormatter dateFormatter = targetStringFormatter.getDateValueFormatter();
+
+      Map<String, String> params = new HashMap<>();
+      params.put(DateByDateTimePatternFormatter.PARAM_SOURCE_PARSE_PATTERN, dateFormatter.getSourceFormatPattern());
+      params.put(DateByDateTimePatternFormatter.PARAM_TARGET_FORMAT_PATTER, dateFormatter.getTargetDateFormat().getFormatPattern());
+      params.put(DateByDateTimePatternFormatter.PARAM_TARGET_ZONE_ID, dateFormatter.getTargetDateFormat().getZoneId());
+
+      return DateByDateTimePatternFormatter.of(params);
+
     } else if (targetStringFormatter.getStringValueFormatter() != null) {
       return IdenticalToStringFormatter.of();
     } else if (targetStringFormatter.getIntValueFormatter() != null) {
@@ -30,9 +48,30 @@ public class TargetStringFormatterFactory {
             "And provided to the transformer correctly.");
       }
 
+      if (targetStringFormatter.getFormatterClass() != null) {
+        Map<String, String> customFormatterParameters = targetStringFormatter.getFormatterClass().getParameter().stream()
+            .collect(Collectors.toMap(
+                FormatterParameter::getName,
+                FormatterParameter::getValue
+            ));
+
+        customFormatter.init(customFormatterParameters);
+      }
+
       return customFormatter;
     } else {
-      throw DslConfigurationException.UNKNOWN_ELEMENT_CONSTRUCTOR_IN_DSL;
+      throw DslConfigurationException.UNKNOWN_FORMATTER_IN_DSL;
     }
+  }
+
+  private static Map<String, MappedCsvValueToStringFormatter> createFormattersByClassName(List<MappedCsvValueToStringFormatter> constructors) {
+    Map<String, MappedCsvValueToStringFormatter> result = new HashMap<>();
+    if (constructors == null) {
+      return result;
+    }
+    for (MappedCsvValueToStringFormatter formatter : constructors) {
+      result.put(formatter.getClass().getCanonicalName(), formatter);
+    }
+    return result;
   }
 }

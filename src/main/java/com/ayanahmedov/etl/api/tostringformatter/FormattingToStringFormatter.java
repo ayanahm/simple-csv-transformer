@@ -15,16 +15,26 @@ import java.util.Map;
  * They are simply passed as Strings.
  */
 public class FormattingToStringFormatter implements MappedCsvValueToStringFormatter {
-  private static final FormattingToStringFormatter instance = new FormattingToStringFormatter();
+  public static final String PARAM_TARGET_STRING_FORMAT = "string-format";
+
+  private String stringFormat;
+
+  private FormattingToStringFormatter() {
+  }
 
   public static FormattingToStringFormatter get() {
-    return instance;
+    return new FormattingToStringFormatter();
+  }
+
+
+  @Override
+  public void init(Map<String, String> parameters) {
+    stringFormat = parameters.get(PARAM_TARGET_STRING_FORMAT);
   }
 
   @Override
-  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
     String[] split = valueFromCsvMapping.split(",");
-    String stringFormat = parameters.get("string-format");
     if (null == stringFormat) {
       throw DslConfigurationException.STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT;
     }
@@ -35,4 +45,5 @@ public class FormattingToStringFormatter implements MappedCsvValueToStringFormat
       throw DslConfigurationException.STRING_FORMATTER_INCORRECT.withException(e);
     }
   }
+
 }

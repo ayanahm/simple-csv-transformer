@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ColumnAverageConstructorTest {
+public class ColumnAverageFormatterTest {
 
   @DisplayName("Given a csv with 4 columns, then take avarage of specified 2 colums and map into single target column")
   @Test

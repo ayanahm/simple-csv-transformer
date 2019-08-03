@@ -5,8 +5,8 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
+        <sourceBindPattern>$1-$1-$1</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$1-$1</sourceBindPattern>
             <dateValueFormatter>
                 <sourceFormatPattern>abc</sourceFormatPattern>
                 <targetDateFormat>

@@ -66,4 +66,34 @@ class DefaultCsvTransformerTest {
         ));
   }
 
+  @DisplayName("given a csv with dollar sign as value in it then dont confuse the pattern")
+  @Test
+  void dolar_sign_as_value() throws IOException {
+    Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-for-dollar-sign-test.xml");
+    Path csvFile = FileSystemUtils.getFileFromResources("csv-with-dollar-sign-as-value.csv");
+    Path outputFile = FileSystemUtils.createTemporaryCsvFile(PrintWriter::flush/*do nothing*/);
+
+    CsvTransformer transformer = new CsvTransformerBuilder()
+        .withXmlDsl(configFile)
+        .build();
+
+    try (BufferedReader csvReader = Files.newBufferedReader(csvFile);
+         BufferedWriter csvWriter = Files.newBufferedWriter(outputFile)) {
+
+      transformer.transform(csvReader, csvWriter);
+    }
+
+    String savedCsv = new String(Files.readAllBytes(outputFile));
+
+    TestUtils.assertStringEqualsCsv(
+        savedCsv,
+        Arrays.asList(
+            new String[]{"formatted"},
+            new String[]{"   a$:$a.  a$"},
+            new String[]{"    $:$1.  $"},
+            new String[]{"    a:$.  a"},
+            new String[]{"    $:a.  $"},
+            new String[]{"    a:a.  a"}
+        ));
+  }
 }

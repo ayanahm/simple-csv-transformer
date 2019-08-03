@@ -3,6 +3,8 @@ package com.ayanahmedov.etl.impl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DollarSignPatternToStringCombinerTest {
@@ -23,7 +25,9 @@ class DollarSignPatternToStringCombinerTest {
     String[] sourceValues = pipeSeparatedSources.split("\\|", -1);
     expected = expected == null ? "" : expected;
 
-    String out = DollarSignPatternToStringCombiner.combineByPattern(pattern, sourceValues, new int[]{1, 2});
+    CsvValueReducer dollarSignBindPatternReducer = DollarSignBindPatternReducer.get(pattern);
+    String out = dollarSignBindPatternReducer.reduce(Arrays.asList(sourceValues), Arrays.asList(1, 2));
+
 
     assertEquals(expected, out);
   }

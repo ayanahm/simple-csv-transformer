@@ -20,11 +20,26 @@ public class DslConfigurationException extends RuntimeException {
           "Since all values are passed as String.");
 
   public static final DslConfigurationException
-      UNKNOWN_ELEMENT_CONSTRUCTOR_IN_DSL = new DslConfigurationException(
-      "Unknown element constructor. Make sure configuration is correct. If so extend with new types as needed");
+      UNKNOWN_FORMATTER_IN_DSL = new DslConfigurationException(
+      "Unknown formatter. Make sure configuration is correct. If so extend with new types as needed");
 
-  public static final DslConfigurationException INVALID_XML_INSTANCE_EXECPTION = new DslConfigurationException(
-      "Invalid DSL instance defined in XML which is violating the XSD validation.");;
+  public static final DslConfigurationException
+      UNKNOWN_MAPPER_IN_DSL = new DslConfigurationException(
+      "Unknown mapper. Make sure configuration is correct. If so extend with new types as needed.");
+
+  public static final DslConfigurationException INVALID_XML_INSTANCE_AGAINST_SCHEMA = new DslConfigurationException(
+      "Invalid DSL instance defined in XML which is violating the XSD validation.");
+
+  public static final DslConfigurationException UNKNOWN_SOURCE_HEADER = new DslConfigurationException(
+      "Is the DSL well formed? " +
+          "Make sure to reference only the existing headers in the source CSV."
+  );
+
+  public static final DslConfigurationException UNRESOLVED_BIND_PATTERN = new DslConfigurationException(
+      "Is the DSL well formed? " +
+          "Make sure to construct bind pattern correctly."
+  );
+
 
   public DslConfigurationException(String message) {
     super(message);
@@ -36,4 +51,9 @@ public class DslConfigurationException extends RuntimeException {
   public DslConfigurationException withException(Throwable e) {
     return new DslConfigurationException(message + "See exception message:" + e.getMessage() );
   }
+
+  public DslConfigurationException withAdditionalMessage(String additional) {
+    return new DslConfigurationException(message + " " + additional);
+  }
+
 }

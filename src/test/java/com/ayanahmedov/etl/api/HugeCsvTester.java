@@ -3,6 +3,7 @@ package com.ayanahmedov.etl.api;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -16,12 +17,12 @@ import java.util.stream.Stream;
 public class HugeCsvTester {
   private static int NUM_CSV_ROWS = 1_000_000;
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
-    Path bigCsvFile1 = createTemporaryCsvFileAbout10Megabytes();
-    Path bigCsvFile2 = createTemporaryCsvFileAbout10Megabytes();
-    Path bigCsvFile3 = createTemporaryCsvFileAbout10Megabytes();
-    Path bigCsvFile4 = createTemporaryCsvFileAbout10Megabytes();
+    Path bigCsvFile1 = createTemporaryHugeCsvFile();
+    Path bigCsvFile2 = createTemporaryHugeCsvFile();
+    Path bigCsvFile3 = createTemporaryHugeCsvFile();
+    Path bigCsvFile4 = createTemporaryHugeCsvFile();
 
     CsvTransformer transformer = CsvTransformerBuilder.builder()
         .withXmlDsl(dsl)
@@ -40,14 +41,14 @@ public class HugeCsvTester {
 
             transformer.transform(reader, writer);
           } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
           }
         });
 
     System.out.println("done");
   }
 
-  private static Path createTemporaryCsvFileAbout10Megabytes() {
+  private static Path createTemporaryHugeCsvFile() {
     return FileSystemUtils.createTemporaryCsvFile(writer -> {
         writer.printf("Order Number,Year,Month,Day,Product Number,Product Name   ,Count     ,Extra Col1,Extra Col2,Empty Column%n");
 

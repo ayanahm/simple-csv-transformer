@@ -12,7 +12,12 @@ public class IdenticalToStringFormatter implements MappedCsvValueToStringFormatt
   }
 
   @Override
-  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
+  public void init(Map<String, String> parameters) {
+    //no params required
+  }
+
+  @Override
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
     return CsvValueToJavaMappingResult.ofValue(valueFromCsvMapping);
   }
 }
