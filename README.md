@@ -16,24 +16,6 @@ If not then manually needs to be corrected.
 
 # Api Usage
 
-The concept of the mapping from `source-file` -> `target-file` is as follows:
-
-Each row ,except the header, in the source CSV is applied by three step modification.
-
-`Mapper -> Reducer -> Formatter`
-
-For each row, and for each column, the `Mapper` is applied.
-
-Then `Reducer` reduces the mapped column values into a single `String` value.
-Which may `reduce` more then 1 mapped value.
- 
-The reduced `String` value is then applied to `Formatter`. 
-The output of the `Formatter` 
-is then written into the output CSV file.
-
- `Mapper` and `Formatter` are extensible by providing custom implementations. 
- For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
-
 
 A basic usage in Java code looks like the following:
 
@@ -53,49 +35,50 @@ A basic usage in Java code looks like the following:
     }
 ```
 
-There are some examples for the usage, which are also happen to be the actual test suite used for the library.
+**Note:** The CsvTransformer does not handle the lifecycle of the buffers at all.
+It is up to client to close the streams and flush when needed 
+(Note the example above will close+flush when try-with-resource completes.)
+
+It is also up to client, to use correct streams(BufferedReader, BufferedWriter for file system accessing CSV files).
+
+## The Concept 
+
+The concept of the mapping from `source-file` -> `target-file` is as follows:
+
+Each row ,except the header, in the source CSV is applied by three step modification.
+
+`Mapper -> Reducer -> Formatter`
+
+For each row, and for each column, the `Mapper` is applied.
+
+Then `Reducer` reduces the mapped column values into a single `String` value.
+Which may `reduce` more then 1 mapped value.
+ 
+The reduced `String` value is then applied to `Formatter`. 
+The output of the `Formatter` 
+is then written into the output CSV file.
+
+ `Mapper` and `Formatter` are extensible by providing custom implementations. 
+ For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
+
+
+
+There are some other examples of the usage, which are also happen to be the actual test suite used for the library.
 Those can be found under:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/java/com/ayanahmedov/etl/api
 
-This test shows basic CSVTransformer usage, where in actual code.
+This test shows basic CSVTransformer usage.
 Note , that test are using temporary files which are deleted on exit. 
 
 https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/SimpleCsvTransformerTest.java
 
-Ax example of introducing a custom formatter:
+Ax example of introducing a custom formatter.
+https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/SumColumnsTest.java
 
-
-which are also including DSL configurations for those tests:
+DSL configurations for those tests can be viewed here:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/resources 
 
-In basic form it looks like this:
 
-```java
-    Path config = ...path to xml-dsl instance...
-    Path csv = .. path to csv to transform ...
-    Path output = .. path to target csv file ... 
-
-    CsvTransformer transformer = new CsvTransformerBuilder()
-        .withXmlDsl(config)
-        .build();
-
-     try (
-            BufferedWriter writer = Files.newBufferedWriter(outputTemp);
-            BufferedReader reader = Files.newBufferedReader(csv)) {
-    
-          transformer.transform(reader, writer);
-        }
-
-    
-```
-
-Api is meant to be kept minimalistic.
-As a result, note that,
-The CsvTransformer does not handle the lifecycle of the buffers at all.
-It is up to client to close the streams and flush when needed 
-(note the example above will close+flush on try-with-resource block finish.)
-
-It is also up to client, to use correct streams(BufferedReader, BufferedWriter for FileSystem accessing streams).
 
 
 # DSL
@@ -109,20 +92,24 @@ In most basic form the DSL looks like the following:
                            xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
 
     <transformation>
-        <targetSchemaColumn>average</targetSchemaColumn>
+        <targetSchemaColumn>formatted</targetSchemaColumn>
+        <sourceBindPattern>$1,$2,$1</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1,$2</sourceBindPattern>
-            <constructorClass>
-                <className>com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter</className>
-            </constructorClass>
+            <formatterClass>
+                <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
+                <parameter>
+                    <name>string-format</name>
+                    <value>%5s:%s.  %s</value>
+                </parameter>
+            </formatterClass>
         </targetStringFormatter>
         <sourceColumn>
-            <name>Col-3</name>
-            <constructorPosition>1</constructorPosition>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
-            <name>Col-4</name>
-            <constructorPosition>2</constructorPosition>
+            <name>Col-2</name>
+            <bindPatternPosition>2</bindPatternPosition>
         </sourceColumn>
     </transformation>
 </csv-transformation-config>
@@ -133,174 +120,163 @@ Note that, valid DSL is defined by an XSD, which can be analyzed more in detail 
 
 ##  `transformation`
 
-
 This is the main entry point. Specifies how to transform the source CSV row to the target CSV row.
+There can be unlimited number of such transformations defined. Each corresponds to a  `Mapper->Reducer->Formatter` flow.
 
-## `targetSchemaColumn`
+### `transformation/targetSchemaColumn`
 
-defines the name of the target CSV column will be populated.
+Defines the name of the target CSV column will be populated.
 
-# `targetStringFormatter`
+### `transformation/targetStringFormatter`
 
-The library comes with some built-in mappers. 
+The library comes with some built-in formatters. 
 The list of built-in mappers which are declaratively  possible defined in the type `ElementConstructor`.
 The xsd defines the following ones:
 
-```$xml
-    <xs:complexType name="ElementConstructor">
-        <xs:sequence>
-            <xs:element type="SourceBindPattern" name="sourceBindPattern">
-                <xs:annotation>
-                    <xs:documentation>
-                        Indicates the pattern, variables are interpolated by $1, $2 etc.
-                        The final string value is used for the actual creation of the target object.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:choice>
-                <xs:element name="constructorClass" type="CustomConstructor">
-                    <xs:annotation>
-                        <xs:documentation>custom value constructor</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
+`DateValueFormatter`, `StringValueFormatter` and `IntValueFormatter`
+are built in CSV value formatters. But there are also implemented custom formatters present in the package
+`com.ayanahmedov.etl.api.tostringformatter`.
 
-                <!--                build in formatters-->
-                <xs:element name="dateValueConstructor" type="DateValueConstructor"/>
-                <xs:element name="stringValueConstructor" type="StringValueConstructor"/>
-                <xs:element name="intValueConstructor" type="IntValueConstructor"/>
-                <!--            extend as needed. and also make sure to extend backing java.-->
-            </xs:choice>
-        </xs:sequence>
-    </xs:complexType>
+### `transformation/sourceColumn`
+Defines which rows to reduce.  The number of `sourceColumns` are unbounded. 
+Also note it is allowed to not to provide any.
+That makes sense, when the target csv needs to be populated 
+with a constant value using the `sourceBindPattern` without any placeholder.
+
+### `transformation/sourceColumn/sourceValueMapper`
+Contains classname of a `Mapper`. The source CSV value
+is read and supplied into this provided implementation.
+
+### `transformation/sourceBindPattern`
+This defines a *template* for the reducer. Currently there is only an implementation for
+placeholders using dollar sign as in `$1-$2`. 
+
+The place holders will be replaced by the value from the CSV value *after* applying the mapper, if there is any mapper.
+
+Imagine a CSV with following values:
+
 ```
- 
-As can be seen, `DateValueConstructor`, `StringValueConstructor` and `IntValueConstructor`
-are build in CSV value formatters.
+Col-1,Col-2
+a,b
+b,c
+d,c
+```
 
-## `sourceBindPattern`
-
-This is how the source CSV value or multiple CSV values are bound together and passed into the formatters.
-
-Best would be to demonstrate with an example:
-
-```$xml
+And a snippet from the DSL instance:
+```
     <transformation>
-        <targetSchemaColumn>Date</targetSchemaColumn>
+        <targetSchemaColumn>Col-X</targetSchemaColumn>
+        <sourceBindPattern>[$1,$2]</sourceBindPattern>
         <targetStringFormatter>
-            <sourceBindPattern>$1-$2-$3</sourceBindPattern>
-            <dateValueConstructor>
+            <stringValueFormatter/>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>2</bindPatternPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+```
+
+The output CSV will contain the following:
+
+```
+"Col-X"
+"[b,a]"
+"[c,b]"
+"[c,d]"
+```
+
+Note the **bindPatternPosition** which defines, how the source column is mean to be replaced in
+*sourceBindPattern*.  
+
+The `sourceBindPattern` must not necessarily contain a placeholder. This is useful when there are no
+source columns to map from. So a constant value can be mapped.
+See for example:
+```
+<transformation>
+        <targetSchemaColumn>Col-X</targetSchemaColumn>
+        <sourceBindPattern>kg</sourceBindPattern>
+        <targetStringFormatter>
+            <stringValueFormatter/>
+        </targetStringFormatter>
+    </transformation>
+```
+
+## Built-In constructors:
+
+### StringValueFormatter
+This formatter requires no parameter, and simply returns the reduced string value.
+Useful when no explicit formatting required.
+
+see snippet
+```xml
+        <targetStringFormatter>
+            <stringValueFormatter/>
+        </targetStringFormatter>
+```
+
+### IntValueFormatter
+Trims the reduced value, and validates the value against integer value.
+
+```xml
+        <targetStringFormatter>
+            <intValueFormatter/>
+        </targetStringFormatter>
+```
+
+ 
+### DateTimeFormatter
+Formats reduced value into the requested format.
+When parsing the reduced value, it defaults hard-coded defaults when missing.
+Example: 2018-01-01, when requested to be parsed to an instant
+ 2018-01-01:00:00 is used, using `targetDateFormat/zoneId` or system default if that is not present.
+ 
+ `sourceFormatPattern` : defines how to parse the reduced value. Note that
+ not all possible java patterns are possible. For details please refer to javadoc of: com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter
+ 
+ `targetDateFormat/formatPattern`: defines the pattern in the target output csv.
+ `targetDateFormat/zoneId`: the target zoneId to use when formatting into string. In case not provided, System default is used.
+
+```xml
+    <transformation>
+        <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
+        <sourceBindPattern>$1-$2-$3</sourceBindPattern>
+        <targetStringFormatter>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy:LL:dd</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
+            </dateValueFormatter>
         </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
+            <bindPatternPosition>1</bindPatternPosition>
         </sourceColumn>
         <sourceColumn>
             <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
+            <bindPatternPosition>2</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
         <sourceColumn>
             <name>Col-3</name>
-            <constructorPosition>3</constructorPosition>
+            <bindPatternPosition>3</bindPatternPosition>
             <sourceValueMapper>com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer</sourceValueMapper>
         </sourceColumn>
     </transformation>
-``` 
 
-In this sample,
-the target CSV will be created with a column named `Date` 
-and the value inside each column will be mapped from the source CSV,
-via the `sourceBindPattern` interpolated with `$` signed placeholders.
-
-
-for each of the source CSV record, 
-* the value of which is under the header column `Col-1` will bind itself into placeholder `$1`
-* the value of which is under the header column `Col-2` will bind itself into placeholder `$2` after performing `sourceValueMapper`
-* the value of which is under the header column `Col-3` will bind itself into placeholder `$3` after performing `sourceValueMapper`
-
-Imagine a CSV with following values:
-
-```$xslt
-    Col-1,Col2,Col3
-    2019,7,31
-    2019,8,1
 ```
 
-The mentioned DSL will first transform `Col-2` and `Col-3` by a customer `sourceValueMapper`
-which happens to normalize two digits to be friendly with DateTimeFormatter.
 
-After normalizing the month values `7` -> `07` and `8` -> `08`, also for `Col-3`, 
-normalizing `1` -> `01`,
-the effective value of the bind value will be for the rows:
-* row-1: `2019-07-31`
-* row-2: `2019-08-1`
+See also the usage of `source/column/sourceValueMapper` using a `TwoDigitsNormalizer`
+which is converting values like `1` to `01` , so they are parsable by the
+provided date time format.
 
-Note the dashes are preserved, simply because, 
-the pattern can define any constant, only replaced values are those identified by `$<position>`
-
-Note also that, `sourceColumn` may be multiple columns, and even not, 
-they must all point to the  placeholder they are meant to be mapped.
-
-Forcing to provide constructor positions and not allowing default semantics is intentional. 
-With the idea to prevent unnecessary complexity both on DSL level and in Java level.
-
-
-## Custom implementation of `MappedCsvValueStringConstructor`
-
-In case the formatters embedded in DSL is not enough(probably most of the time not),
-then library is allowing the implementations of `MappedCsvValueStringConstructor`  to be registered
-and then configured in the DSL.
-
-Some such plugins are within the library also present. An example is: https://github.com/ayanahm/demo-etl/blob/master/src/main/java/com/ayanahmedov/etl/api/objectconstructor/FormattingStringConstructor.java
-Such plugins can be embedded like this:
-
-
-```$xslt
-<?xml version="1.0" encoding="utf-8"?>
-<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                           xmlns="http://www.ayanahmedov.com/CsvTransform"
-                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
-
-    <transformation>
-        <targetSchemaColumn>formatted</targetSchemaColumn>
-        <targetStringFormatter>
-            <sourceBindPattern>$1,$2,$1</sourceBindPattern>
-            <constructorClass>
-                <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
-                <parameter>
-                    <name>string-format</name>
-                    <value>%5s:%s.  %s</value>
-                </parameter>
-            </constructorClass>
-        </targetStringFormatter>
-        <sourceColumn>
-            <name>Col-1</name>
-            <constructorPosition>1</constructorPosition>
-        </sourceColumn>
-        <sourceColumn>
-            <name>Col-2</name>
-            <constructorPosition>2</constructorPosition>
-        </sourceColumn>
-    </transformation>
-</csv-transformation-config>
-```
-
-This example also demonstres, 
-the `sourceBindPattern` can reference multiple source CSV columns.
-
-*  `Col-1` is replaced in the pattern `$1,$2,$1` twice.
-*  `Col-2` is replaced in the pattern `$1,$2,$1` in the middle.
-
-Custom mappers can also have parameters defined in the DSL.
-Which is visible in this case, which is providing a list of `parameter` objects.
-Those parameters are passed as usual `java.util.Map` on source CSV row map time.
-see also: https://github.com/ayanahm/demo-etl/blob/master/src/main/java/com/ayanahmedov/etl/api/objectconstructor/MappedCsvValueStringConstructor.java
 
 # improvements
 
@@ -323,8 +299,7 @@ intermediate calculations and what more.
 
 ## GC tuning
 
-running https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/BigCsvFilesTest.java
-with VM arguments `-gc:verbose -XX:+PrintGCDetails -Xmx32m`
+running some files with VM arguments `-gc:verbose -XX:+PrintGCDetails -Xmx64m`
 show that GC is struggling with 10megabyte of data to be transformed. Due to intermediate objects created
 during the mapping of individual CSV rows. Which can be mostly mitigated by optimizing the implementation
 to cache the instance.

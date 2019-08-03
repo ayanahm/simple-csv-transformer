@@ -21,4 +21,21 @@
             <bindPatternPosition>2</bindPatternPosition>
         </sourceColumn>
     </transformation>
+
+    <transformation>
+        <targetSchemaColumn>Sum</targetSchemaColumn>
+        <sourceBindPattern>$1,$2</sourceBindPattern>
+        <targetStringFormatter>
+            <stringValueFormatter/>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+        <sourceColumn>
+            <name>Col-2</name>
+            <bindPatternPosition>2</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+
 </csv-transformation-config>

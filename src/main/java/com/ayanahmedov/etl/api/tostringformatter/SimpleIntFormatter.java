@@ -25,6 +25,6 @@ public class SimpleIntFormatter implements ReducedCsvValueToStringFormatter {
     if (!intPattern.matcher(trimmed).matches()) {
       return CsvValueToJavaMappingResult.ofMappingError(new NumberFormatException("Cannot parse to int. The value=" + trimmed));
     }
-    return CsvValueToJavaMappingResult.ofValue("" + Integer.parseInt(trimmed));
+    return CsvValueToJavaMappingResult.ofValue(trimmed);
   }
 }

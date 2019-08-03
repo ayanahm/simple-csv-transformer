@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CsvRecordMapper {
-  private final static Logger log = Logger.getLogger(CsvRecordMapper.class.getName());
+public class CsvRowMapper {
+  private final static Logger log = Logger.getLogger(CsvRowMapper.class.getName());
 
   private final List<CsvRowMappingRule> rules;
   private final int targetRowLength;
 
-  public CsvRecordMapper(List<CsvRowMappingRule> rules, int targetRowLength) {
+  public CsvRowMapper(List<CsvRowMappingRule> rules, int targetRowLength) {
     this.rules = rules;
     this.targetRowLength = targetRowLength;
   }

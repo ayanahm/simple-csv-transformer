@@ -80,7 +80,7 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     SourceHeaderRowAccessor headerRowAccessor = new SourceHeaderRowAccessorImpl(sourceHeaderToIndex);
     CsvRowMappingRuleCreator ruleCreator = new CsvRowMappingRuleCreator(headerRowAccessor, mappers, formatters);
     List<CsvRowMappingRule> rules = ruleCreator.createRules(csvTransformationDslConfig);
-    CsvRecordMapper mapper = new CsvRecordMapper(rules, targetHeaderToIndex.size());
+    CsvRowMapper mapper = new CsvRowMapper(rules, targetHeaderToIndex.size());
 
     //first write header
     csvWriter.writeNext(header);
