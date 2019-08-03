@@ -30,10 +30,6 @@ public class DollarSignBindPatternReducer implements CsvValueReducer {
     return new DollarSignBindPatternReducer(sourceBindPattern, expectedPlaceHolders);
   }
 
-  public String getSourceBindPattern() {
-    return sourceBindPattern;
-  }
-
 
   @Override
   public String reduce(List<String> mappedValues, List<Integer> positions) {
