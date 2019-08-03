@@ -1,9 +1,6 @@
-package com.ayanahmedov.etl.impl;
+package com.ayanahmedov.etl.api;
 
 import com.ayanahmedov.etl.TestUtils;
-import com.ayanahmedov.etl.api.CsvTransformer;
-import com.ayanahmedov.etl.api.CsvTransformerBuilder;
-import com.ayanahmedov.etl.api.FileSystemUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-class DefaultCsvTransformerTest {
+class SimpleCsvTransformerTest {
 
   @DisplayName("given well formed csv, then output contains all rows correctly mapped by given dsl. ")
   @Test

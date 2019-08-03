@@ -17,13 +17,18 @@ If not then manually needs to be corrected.
 # Api Usage
 
 The concept of the mapping from `source-file` -> `target-file` is as follows:
-Each row in the source CSV are applied by three step modification.
+
+Each row ,except the header, in the source CSV is applied by three step modification.
 
 `Mapper -> Reducer -> Formatter`
 
 For each row, and for each column, the `Mapper` is applied.
-Then `Reducer` reduces the mapped column values into a single `String` value. 
-The reduced `String` value is then applied to `Formatter`. The output of the `Formatter` 
+
+Then `Reducer` reduces the mapped column values into a single `String` value.
+Which may `reduce` more then 1 mapped value.
+ 
+The reduced `String` value is then applied to `Formatter`. 
+The output of the `Formatter` 
 is then written into the output CSV file.
 
  `Mapper` and `Formatter` are extensible by providing custom implementations. 
