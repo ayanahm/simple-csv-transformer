@@ -73,26 +73,17 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     CSVReader csvReader = new CSVReader(reader);
     CSVWriter csvWriter = new CSVWriter(writer);
 
-    Map<String, Integer> sourceHeaderToIndex;
     Map<String, Integer> targetHeaderToIndex = calculateTargetHeaderFromDsl();
-
-    try {
-      String[] sourceHeaderRow = csvReader.readNext();
-      if (null == sourceHeaderRow) {
-        throw new RuntimeException("Could not get the first line(header) from the CSV file.");
-      }
-      sourceHeaderToIndex = parseSourceHeaderRow(sourceHeaderRow);
-      String[] header = generateTargetHeaderRow(targetHeaderToIndex);
-      csvWriter.writeNext(header);
-
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
-    }
+    String[] header = generateTargetHeaderRow(targetHeaderToIndex);
+    Map<String, Integer> sourceHeaderToIndex = parseSourceHeader(csvReader);
 
     SourceHeaderRowAccessor headerRowAccessor = new SourceHeaderRowAccessorImpl(sourceHeaderToIndex);
     CsvRowMappingRuleCreator ruleCreator = new CsvRowMappingRuleCreator(headerRowAccessor, mappers, formatters);
     List<CsvRowMappingRule> rules = ruleCreator.createRules(csvTransformationDslConfig);
     CsvRecordMapper mapper = new CsvRecordMapper(rules, targetHeaderToIndex.size());
+
+    //first write header
+    csvWriter.writeNext(header);
 
     while (true) {
       try {
@@ -107,6 +98,21 @@ public final class DefaultCsvTransformer implements CsvTransformer {
         throw new UncheckedIOException(e);
       }
     }
+  }
+
+  private Map<String, Integer> parseSourceHeader(CSVReader csvReader) {
+    Map<String, Integer> sourceHeaderToIndex;
+    try {
+      String[] sourceHeaderRow = csvReader.readNext();
+      if (null == sourceHeaderRow) {
+        throw new RuntimeException("Could not get the first line(header) from the CSV file.");
+      }
+      sourceHeaderToIndex = parseSourceHeaderRow(sourceHeaderRow);
+
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+    return sourceHeaderToIndex;
   }
 
 

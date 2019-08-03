@@ -19,8 +19,8 @@ public class ManualCsvTransormInvoker {
   private static int NUM_CSV_ROWS = 1_000_000;
 
   public static void main(String[] args) {
-    Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter.xml");
-    Path csv = FileSystemUtils.getFileFromResources("source-2.csv");
+    Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-string-formatter-out.xml");
+    Path csv = FileSystemUtils.getFileFromResources("output2.csv");
     Path output = Paths.get("output2.csv");
 
     CsvTransformer transformer = CsvTransformerBuilder.builder()
