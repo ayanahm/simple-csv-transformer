@@ -227,6 +227,32 @@ Trims the reduced value, and validates the value against integer value.
             <intValueFormatter/>
         </targetStringFormatter>
 ```
+### BigDecimalValueFormatter
+Parses reduced value by a locale
+and prints optionally with a locale.
+Requires parameters:
+
+`source-locale` the locale to use when parsing the big decimal
+`target-locale` optional. the locale to use when printing the parsed big decimal
+If not provided, default .toString implementation is used.
+
+Snippet:
+```xml
+    <transformation>
+        <targetSchemaColumn>locale_DE</targetSchemaColumn>
+        <sourceBindPattern>$1</sourceBindPattern>
+        <targetStringFormatter>
+            <bigDecimalValueFormatter>
+                <source-locale>en-US</source-locale>
+                <target-locale>de-DE</target-locale>
+            </bigDecimalValueFormatter>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+```
 
  
 ### DateTimeFormatter
@@ -284,22 +310,15 @@ provided date time format.
 
 Currently only DSL via XML is supported out of the box.
 Even though XML can be validated via an XSD, and mostly supported very well in Java world. 
-Also easy use tools to generated it(i.e a WebPage where the tranformation files are created via a GUI), 
+Also would be friendly for the tools to generate it(i.e a WebPage where the tranformation files are created via a GUI), 
 it is  not strictly necessary. 
 Client could get to chose to provide an DSL provider, 
 simply by including into the runtime.
 This can be made possible to define only a DSL dependency and ask for clients to provide runtime implementations,
 using standard `maven` | `gradle` functionalities.
 
-## More flexibility
+## More features
 
-The library is opinionated. 
-More extensions can be enabled, per source CSV row basic,
-intermediate calculations and what more.
-
-## GC tuning
-
-running some files with VM arguments `-gc:verbose -XX:+PrintGCDetails -Xmx64m`
-show that GC is struggling with 10megabyte of data to be transformed. Due to intermediate objects created
-during the mapping of individual CSV rows. Which can be mostly mitigated by optimizing the implementation
-to cache the instance.
+More built in features can be introduced. Also a Reducer strategy can be implemented.
+The current way only supports mapping between string values. It might be useful to enable access to
+parsed java objects.
