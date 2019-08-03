@@ -67,7 +67,7 @@ class SimpleCsvTransformerTest {
   @Test
   void dolar_sign_as_value() throws IOException {
     Path configFile = FileSystemUtils.getFileFromResources("test-dsl-instance-for-dollar-sign-test.xml");
-    Path csvFile = FileSystemUtils.getFileFromResources("csv-with-dollar-sign-as-value.csv");
+    Path csvFile = FileSystemUtils.getFileFromResources("source-csv-with-dollar-sign-as-value.csv");
     Path outputFile = FileSystemUtils.createTemporaryCsvFile(PrintWriter::flush/*do nothing*/);
 
     CsvTransformer transformer = new CsvTransformerBuilder()
