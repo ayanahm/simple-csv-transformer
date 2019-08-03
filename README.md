@@ -67,12 +67,12 @@ In most basic form the DSL looks like the following:
 
     <transformation>
         <targetSchemaColumn>average</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1,$2</sourceBindPattern>
             <constructorClass>
-                <className>com.ayanahmedov.etl.api.objectconstructor.ColumnAverageConstructor</className>
+                <className>com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter</className>
             </constructorClass>
-        </elementConstructor>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-3</name>
             <constructorPosition>1</constructorPosition>
@@ -97,7 +97,7 @@ This is the main entry point. Specifies how to transform the source CSV row to t
 
 defines the name of the target CSV column will be populated.
 
-# `elementConstructor`
+# `targetStringFormatter`
 
 The library comes with some built-in mappers. 
 The list of built-in mappers which are declaratively  possible defined in the type `ElementConstructor`.
@@ -121,7 +121,7 @@ The xsd defines the following ones:
                     </xs:annotation>
                 </xs:element>
 
-                <!--                build in constructors-->
+                <!--                build in formatters-->
                 <xs:element name="dateValueConstructor" type="DateValueConstructor"/>
                 <xs:element name="stringValueConstructor" type="StringValueConstructor"/>
                 <xs:element name="intValueConstructor" type="IntValueConstructor"/>
@@ -132,18 +132,18 @@ The xsd defines the following ones:
 ```
  
 As can be seen, `DateValueConstructor`, `StringValueConstructor` and `IntValueConstructor`
-are build in CSV value constructors.
+are build in CSV value formatters.
 
 ## `sourceBindPattern`
 
-This is how the source CSV value or multiple CSV values are bound together and passed into the constructors.
+This is how the source CSV value or multiple CSV values are bound together and passed into the formatters.
 
 Best would be to demonstrate with an example:
 
 ```$xml
     <transformation>
         <targetSchemaColumn>Date</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3</sourceBindPattern>
             <dateValueConstructor>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
@@ -152,7 +152,7 @@ Best would be to demonstrate with an example:
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
             </dateValueConstructor>
-        </elementConstructor>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
@@ -210,7 +210,7 @@ With the idea to prevent unnecessary complexity both on DSL level and in Java le
 
 ## Custom implementation of `MappedCsvValueStringConstructor`
 
-In case the constructors embedded in DSL is not enough(probably most of the time not),
+In case the formatters embedded in DSL is not enough(probably most of the time not),
 then library is allowing the implementations of `MappedCsvValueStringConstructor`  to be registered
 and then configured in the DSL.
 
@@ -226,16 +226,16 @@ Such plugins can be embedded like this:
 
     <transformation>
         <targetSchemaColumn>formatted</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1,$2,$1</sourceBindPattern>
             <constructorClass>
-                <className>com.ayanahmedov.etl.api.objectconstructor.FormattingStringConstructor</className>
+                <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
                 <parameter>
                     <name>string-format</name>
                     <value>%5s:%s.  %s</value>
                 </parameter>
             </constructorClass>
-        </elementConstructor>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>

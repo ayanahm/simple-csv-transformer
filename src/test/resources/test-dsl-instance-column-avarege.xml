@@ -5,12 +5,12 @@
 
     <transformation>
         <targetSchemaColumn>average</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1,$2</sourceBindPattern>
-            <constructorClass>
-                <className>com.ayanahmedov.etl.api.objectconstructor.ColumnAverageConstructor</className>
-            </constructorClass>
-        </elementConstructor>
+            <formatterClass>
+                <className>com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter</className>
+            </formatterClass>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-3</name>
             <constructorPosition>1</constructorPosition>

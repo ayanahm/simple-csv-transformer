@@ -1,7 +1,7 @@
-package com.ayanahmedov.etl.api.objectconstructor;
+package com.ayanahmedov.etl.api.tostringformatter;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
-import com.ayanahmedov.etl.api.dsl.DateValueConstructor;
+import com.ayanahmedov.etl.api.dsl.DateValueFormatter;
 import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 
 import java.time.Instant;
@@ -29,20 +29,20 @@ import java.util.Map;
  * </pre>
  *
  */
-public class DateByDateTimePatternConstructor implements MappedCsvValueStringConstructor {
-  private DateValueConstructor dateValueConstructor;
+public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFormatter {
+  private DateValueFormatter dateValueFormatter;
 
-  public static DateByDateTimePatternConstructor of(DateValueConstructor constructor) {
-    DateByDateTimePatternConstructor c = new DateByDateTimePatternConstructor();
-    c.dateValueConstructor = constructor;
+  public static DateByDateTimePatternFormatter of(DateValueFormatter constructor) {
+    DateByDateTimePatternFormatter c = new DateByDateTimePatternFormatter();
+    c.dateValueFormatter = constructor;
     return c;
   }
 
   @Override
-  public CsvValueToJavaMappingResult constructString(String valueFromCsvMapping, Map<String, String> parameters) {
-    String sourceParsePattern = dateValueConstructor.getSourceFormatPattern();
-    String formatPattern = dateValueConstructor.getTargetDateFormat().getFormatPattern();
-    String zone = dateValueConstructor.getTargetDateFormat().getZoneId();
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
+    String sourceParsePattern = dateValueFormatter.getSourceFormatPattern();
+    String formatPattern = dateValueFormatter.getTargetDateFormat().getFormatPattern();
+    String zone = dateValueFormatter.getTargetDateFormat().getZoneId();
     ZoneId zoneId;
     if (zone == null) {
       zoneId = ZoneId.systemDefault();

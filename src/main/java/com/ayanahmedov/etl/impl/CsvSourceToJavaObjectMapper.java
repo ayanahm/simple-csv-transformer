@@ -1,12 +1,12 @@
 package com.ayanahmedov.etl.impl;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
-import com.ayanahmedov.etl.api.dsl.ConstructorParameter;
-import com.ayanahmedov.etl.api.dsl.ElementConstructor;
+import com.ayanahmedov.etl.api.dsl.FormatterParameter;
 import com.ayanahmedov.etl.api.dsl.SourceConstantValue;
 import com.ayanahmedov.etl.api.dsl.SourceCsvColumn;
-import com.ayanahmedov.etl.api.objectconstructor.MappedCsvValueStringConstructor;
+import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
 import com.ayanahmedov.etl.api.sourcemapper.SourceValueMapper;
+import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,24 +17,24 @@ import java.util.stream.Collectors;
 public final class CsvSourceToJavaObjectMapper {
 
   private final SourceCsvValueAccessor sourceCsvValueAccessor;
-  private final Map<String, MappedCsvValueStringConstructor> objectConstructorsByClassName;
+  private final Map<String, MappedCsvValueToStringFormatter> formattersByClassName;
   private final Map<String, SourceValueMapper> mappersByClassName;
 
-  public CsvSourceToJavaObjectMapper(SourceCsvValueAccessor sourceCsvValueAccessor,
-                                     List<SourceValueMapper> mappers,
-                                     List<MappedCsvValueStringConstructor> constructors) {
+  CsvSourceToJavaObjectMapper(SourceCsvValueAccessor sourceCsvValueAccessor,
+                              List<SourceValueMapper> mappers,
+                              List<MappedCsvValueToStringFormatter> formatters) {
     this.sourceCsvValueAccessor = sourceCsvValueAccessor;
-    this.objectConstructorsByClassName = initConstructors(constructors);
+    this.formattersByClassName = initFormatters(formatters);
     this.mappersByClassName = initMappers(mappers);
   }
 
-  private Map<String, MappedCsvValueStringConstructor> initConstructors(List<MappedCsvValueStringConstructor> constructors) {
-    Map<String, MappedCsvValueStringConstructor> result = new HashMap<>();
+  private Map<String, MappedCsvValueToStringFormatter> initFormatters(List<MappedCsvValueToStringFormatter> constructors) {
+    Map<String, MappedCsvValueToStringFormatter> result = new HashMap<>();
     if (constructors == null) {
       return result;
     }
-    for (MappedCsvValueStringConstructor constructor : constructors) {
-      result.put(constructor.getClass().getCanonicalName(), constructor);
+    for (MappedCsvValueToStringFormatter formatter : constructors) {
+      result.put(formatter.getClass().getCanonicalName(), formatter);
     }
     return result;
   }
@@ -50,32 +50,32 @@ public final class CsvSourceToJavaObjectMapper {
     return result;
   }
 
-  public CsvValueToJavaMappingResult map(List<SourceCsvColumn> sources, ElementConstructor elementConstructor) {
-    String boundCsvValue = bindCsvValues(elementConstructor.getSourceBindPattern(), sources);
-    return doMap(boundCsvValue, elementConstructor);
+  public CsvValueToJavaMappingResult map(List<SourceCsvColumn> sources, TargetStringFormatter targetStringFormatter) {
+    String boundCsvValue = bindCsvValues(targetStringFormatter.getSourceBindPattern(), sources);
+    return doMap(boundCsvValue, targetStringFormatter);
   }
 
-  public CsvValueToJavaMappingResult map(SourceConstantValue constantValue, ElementConstructor elementConstructor) {
+  public CsvValueToJavaMappingResult map(SourceConstantValue constantValue, TargetStringFormatter targetStringFormatter) {
     String boundCsvValue = constantValue.getValue();
-    return doMap(boundCsvValue, elementConstructor);
+    return doMap(boundCsvValue, targetStringFormatter);
   }
 
-  private CsvValueToJavaMappingResult doMap(String param, ElementConstructor elementConstructor) {
-    MappedCsvValueStringConstructor objectConstructor = ObjectConstructorFactory.createObjectConstructor(elementConstructor, objectConstructorsByClassName);
+  private CsvValueToJavaMappingResult doMap(String param, TargetStringFormatter targetStringFormatter) {
+    MappedCsvValueToStringFormatter formatter = TargetStringFormatterFactory.createFormatter(targetStringFormatter, formattersByClassName);
 
-    Map<String, String> customConstructorParams = Collections.emptyMap();
-    if (elementConstructor.getConstructorClass() != null) {
-      customConstructorParams = elementConstructor.getConstructorClass().getParameter().stream()
+    Map<String, String> customFormatterParameters = Collections.emptyMap();
+    if (targetStringFormatter.getFormatterClass() != null) {
+      customFormatterParameters = targetStringFormatter.getFormatterClass().getParameter().stream()
           .collect(Collectors.toMap(
-              ConstructorParameter::getName,
-              ConstructorParameter::getValue
+              FormatterParameter::getName,
+              FormatterParameter::getValue
           ));
     }
-    CsvValueToJavaMappingResult object = objectConstructor.constructString(param, customConstructorParams);
-    if (object == null) {
-      throw new DslConfigurationException("Object constructor returned null. This is a wrong implementation." + objectConstructor.getClass().getCanonicalName());
+    CsvValueToJavaMappingResult result = formatter.formatToString(param, customFormatterParameters);
+    if (result == null) {
+      throw new DslConfigurationException("Object constructor returned null. This is a wrong implementation." + formatter.getClass().getCanonicalName());
     }
-    return object;
+    return result;
   }
 
   /**

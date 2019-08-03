@@ -5,9 +5,9 @@
 
     <transformation>
         <targetSchemaColumn>average</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1,$2</sourceBindPattern>
-        </elementConstructor>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-3</name>
             <constructorPosition>1</constructorPosition>

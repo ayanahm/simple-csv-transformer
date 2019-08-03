@@ -1,6 +1,5 @@
 package com.ayanahmedov.etl.api;
 
-import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,6 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -47,8 +45,6 @@ public class InvalidRowsTest {
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(dsl)
-        .withSourceCsvValueMappers(Collections.singletonList(new TwoDigitsNormalizer()))
-        .withObjectConstructors(Collections.emptyList())
         .build();
 
 

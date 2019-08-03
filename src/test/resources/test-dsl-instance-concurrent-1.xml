@@ -6,16 +6,16 @@
 
     <transformation>
         <targetSchemaColumn>OrderDate</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>MM-dd-YYYY</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Year</name>
             <constructorPosition>1</constructorPosition>
@@ -35,10 +35,10 @@
 
     <transformation>
         <targetSchemaColumn>Unit</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
-            <stringValueConstructor/>
-        </elementConstructor>
+            <stringValueFormatter/>
+        </targetStringFormatter>
         <constantSource>
             <value>gram</value>
             <constructorPosition>1</constructorPosition>

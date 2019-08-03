@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TwoDigitsNormalizerTest {
-  TwoDigitsNormalizer normalizer = new TwoDigitsNormalizer();
+  TwoDigitsNormalizer normalizer = TwoDigitsNormalizer.get();
 
   @ParameterizedTest
   @ValueSource(strings =

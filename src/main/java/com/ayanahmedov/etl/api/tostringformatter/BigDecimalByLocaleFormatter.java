@@ -1,4 +1,4 @@
-package com.ayanahmedov.etl.api.objectconstructor;
+package com.ayanahmedov.etl.api.tostringformatter;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
@@ -10,17 +10,17 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class BigDecimalByLocaleConstructor implements MappedCsvValueStringConstructor {
-  private static final BigDecimalByLocaleConstructor instance = new BigDecimalByLocaleConstructor();
+public class BigDecimalByLocaleFormatter implements MappedCsvValueToStringFormatter {
+  private static final BigDecimalByLocaleFormatter instance = new BigDecimalByLocaleFormatter();
   private static final ThreadLocal<Map<Locale, NumberFormat>> numberFormatPerLocale =
       ThreadLocal.withInitial(HashMap::new);
 
-  public static BigDecimalByLocaleConstructor get() {
+  public static BigDecimalByLocaleFormatter get() {
     return instance;
   }
 
   @Override
-  public CsvValueToJavaMappingResult constructString(String valueFromCsvMapping, Map<String, String> parameters) {
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
     String localeParameter = parameters.get("locale");
     if (localeParameter == null) {
       throw DslConfigurationException.BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE;

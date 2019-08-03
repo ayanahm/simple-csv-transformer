@@ -7,10 +7,10 @@
 
     <transformation>
         <targetSchemaColumn>OrderId</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
-            <intValueConstructor/>
-        </elementConstructor>
+            <intValueFormatter/>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Order Number</name>
             <constructorPosition>1</constructorPosition>
@@ -19,16 +19,16 @@
 
     <transformation>
         <targetSchemaColumn>OrderDate</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>YYYY-MM-dd</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Year</name>
             <constructorPosition>1</constructorPosition>
@@ -48,13 +48,13 @@
 
     <transformation>
         <targetSchemaColumn>ProductId</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
             <!-- camel casing as described in the take-home test PDF,-->
             <!-- is not really necessary. Since we map simply to the name
     <transformation>we want at the end.-->
-            <stringValueConstructor/>
-        </elementConstructor>
+            <stringValueFormatter/>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Product Number</name>
             <constructorPosition>1</constructorPosition>
@@ -63,10 +63,10 @@
 
     <transformation>
         <targetSchemaColumn>ProductName</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
-            <stringValueConstructor/>
-        </elementConstructor>
+            <stringValueFormatter/>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Product Name</name>
             <constructorPosition>1</constructorPosition>
@@ -75,17 +75,17 @@
 
     <transformation>
         <targetSchemaColumn>Quantity</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
-            <constructorClass>
-                <className>com.ayanahmedov.etl.api.objectconstructor.BigDecimalByLocaleConstructor</className>
+            <formatterClass>
+                <className>com.ayanahmedov.etl.api.tostringformatter.BigDecimalByLocaleFormatter</className>
                 <parameter>
                     <name>locale</name>
 <!--                    see java.util.Locale#forLanguageTag for possible values-->
                     <value>en-US</value>
                 </parameter>
-            </constructorClass>
-        </elementConstructor>
+            </formatterClass>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Count</name>
             <constructorPosition>1</constructorPosition>
@@ -94,10 +94,10 @@
 
     <transformation>
         <targetSchemaColumn>Unit</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1</sourceBindPattern>
-            <stringValueConstructor/>
-        </elementConstructor>
+            <stringValueFormatter/>
+        </targetStringFormatter>
         <constantSource>
             <value>kg</value>
             <constructorPosition>1</constructorPosition>

@@ -2,12 +2,7 @@ package com.ayanahmedov.etl.api;
 
 import com.opencsv.CSVWriter;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.io.StringWriter;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -16,8 +11,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class FileSystemUtils {
+  private final static Logger log = Logger.getLogger(FileSystemUtils.class.getName());
+
   public static Path getFileFromResources(String resourcePath) {
     URL configUrl = FileSystemUtils.class.getClassLoader()
         .getResource(resourcePath);
@@ -30,7 +29,6 @@ public abstract class FileSystemUtils {
       throw new RuntimeException(e);
     }
   }
-
 
   public static String readLastLineOfFile(Path outputTemp) {
     RandomAccessFile raf = null;
@@ -68,7 +66,9 @@ public abstract class FileSystemUtils {
           raf.close();
         }
       } catch (IOException e) {
-        throw new UncheckedIOException(e);
+        log.log(Level.WARNING,
+            "Cannot close the RandomAccessFile handler on the temporary file. {0}",
+            outputTemp.toString());
       }
     }
   }

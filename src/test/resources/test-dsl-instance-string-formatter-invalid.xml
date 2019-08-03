@@ -5,16 +5,16 @@
 
     <transformation>
         <targetSchemaColumn>formatted</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1,$2,$1</sourceBindPattern>
-            <constructorClass>
-                <className>com.ayanahmedov.etl.api.objectconstructor.FormattingStringConstructor</className>
+            <formatterClass>
+                <className>com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter</className>
                 <parameter>
                     <name>string-format</name>
                     <value>%5d:%s.  %s</value>
                 </parameter>
-            </constructorClass>
-        </elementConstructor>
+            </formatterClass>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>

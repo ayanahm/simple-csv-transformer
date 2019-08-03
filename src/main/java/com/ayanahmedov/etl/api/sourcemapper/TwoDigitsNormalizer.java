@@ -18,7 +18,10 @@ public final class TwoDigitsNormalizer implements SourceValueMapper {
 
   private static final Pattern SINGLE_DIGIT_PATTERN = Pattern.compile("^(\\s*)(\\d)(\\s*)$");
 
-  public static TwoDigitsNormalizer of() {
+  private TwoDigitsNormalizer() {
+  }
+
+  public static TwoDigitsNormalizer get() {
     return instance;
   }
 

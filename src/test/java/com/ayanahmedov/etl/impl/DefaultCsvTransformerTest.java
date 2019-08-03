@@ -4,19 +4,13 @@ import com.ayanahmedov.etl.TestUtils;
 import com.ayanahmedov.etl.api.CsvTransformer;
 import com.ayanahmedov.etl.api.CsvTransformerBuilder;
 import com.ayanahmedov.etl.api.FileSystemUtils;
-import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
 
 class DefaultCsvTransformerTest {
 
@@ -28,8 +22,6 @@ class DefaultCsvTransformerTest {
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
-        .withSourceCsvValueMappers(Collections.singletonList(new TwoDigitsNormalizer()))
-        .withObjectConstructors(Collections.emptyList())
         .build();
 
     try (BufferedReader csvReader = Files.newBufferedReader(csvFile)) {
@@ -55,8 +47,6 @@ class DefaultCsvTransformerTest {
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
-        .withSourceCsvValueMappers(Collections.singletonList(new TwoDigitsNormalizer()))
-        .withObjectConstructors(Collections.emptyList())
         .build();
 
     try (BufferedReader csvReader = Files.newBufferedReader(csvFile);

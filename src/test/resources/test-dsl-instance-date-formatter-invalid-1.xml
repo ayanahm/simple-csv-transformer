@@ -5,16 +5,16 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$1-$1</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>abc</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy:LL:dd</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>

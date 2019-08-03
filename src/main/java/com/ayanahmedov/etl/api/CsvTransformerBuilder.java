@@ -1,8 +1,8 @@
 package com.ayanahmedov.etl.api;
 
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
-import com.ayanahmedov.etl.api.objectconstructor.MappedCsvValueStringConstructor;
 import com.ayanahmedov.etl.api.sourcemapper.SourceValueMapper;
+import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
 import com.ayanahmedov.etl.impl.DefaultCsvTransformer;
 
 import java.nio.file.Path;
@@ -12,7 +12,7 @@ import java.util.List;
 public class CsvTransformerBuilder {
   private CsvTransformationConfig dsl;
   private List<SourceValueMapper> sourceCsvMappers = new ArrayList<>();
-  private List<MappedCsvValueStringConstructor> constructors = new ArrayList<>();
+  private List<MappedCsvValueToStringFormatter> constructors = new ArrayList<>();
 
   public static CsvTransformerBuilder builder() {
     return new CsvTransformerBuilder();
@@ -40,12 +40,12 @@ public class CsvTransformerBuilder {
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructors(List<MappedCsvValueStringConstructor> constructors) {
+  public CsvTransformerBuilder withObjectConstructors(List<MappedCsvValueToStringFormatter> constructors) {
     this.constructors.addAll(constructors);
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructor(MappedCsvValueStringConstructor constructor) {
+  public CsvTransformerBuilder withObjectConstructor(MappedCsvValueToStringFormatter constructor) {
     this.constructors.add(constructor);
     return this;
   }

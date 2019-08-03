@@ -20,14 +20,14 @@
 
     </xs:element>
 
-    <xs:complexType name="CustomConstructor">
+    <xs:complexType name="CustomFormatter">
         <xs:sequence>
             <xs:element name="className" type="JavaClassName"/>
-            <xs:element name="parameter" type="ConstructorParameter" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="parameter" type="FormatterParameter" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="ConstructorParameter">
+    <xs:complexType name="FormatterParameter">
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="value" type="xs:string"/>
@@ -44,18 +44,18 @@
     </xs:simpleType>
 
 
-    <xs:complexType name="DateValueConstructor">
+    <xs:complexType name="DateValueFormatter">
         <xs:sequence>
             <xs:element type="xs:string" name="sourceFormatPattern">
                 <xs:annotation>
                     <xs:documentation>
-                        see com.ayanahmedov.etl.api.objectconstructor.DateByDateTimePatternConstructor
+                        see com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter
                         for constraints.
 
                         defaulting to zero for all missing fields. Meaning 0 is used for chrono fields not present(such
                         that, second, minute etc.).
                         And using Zone of the System default.
-                        consider to extend element constructors with a LocalDate, ZonedDateTime, DateTime etc.
+                        consider to extend element formatters with a LocalDate, ZonedDateTime, DateTime etc.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -86,10 +86,10 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="StringValueConstructor">
+    <xs:complexType name="StringValueFormatter">
     </xs:complexType>
 
-    <xs:complexType name="IntValueConstructor">
+    <xs:complexType name="IntValueFormatter">
     </xs:complexType>
 
 
@@ -173,7 +173,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="targetSchemaColumn" type="xs:string"/>
-            <xs:element name="elementConstructor" type="ElementConstructor"/>
+            <xs:element name="targetStringFormatter" type="TargetStringFormatter"/>
             <xs:choice>
                 <xs:element type="SourceCsvColumn" name="sourceColumn" maxOccurs="unbounded"/>
                 <xs:element type="SourceConstantValue" name="constantSource"/>
@@ -194,7 +194,7 @@
 
     </xs:complexType>
 
-    <xs:complexType name="ElementConstructor">
+    <xs:complexType name="TargetStringFormatter">
         <xs:sequence>
             <xs:element type="SourceBindPattern" name="sourceBindPattern">
                 <xs:annotation>
@@ -205,16 +205,16 @@
                 </xs:annotation>
             </xs:element>
             <xs:choice>
-                <xs:element name="constructorClass" type="CustomConstructor">
+                <xs:element name="formatterClass" type="CustomFormatter">
                     <xs:annotation>
-                        <xs:documentation>custom value constructor</xs:documentation>
+                        <xs:documentation>custom formatter class.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
 
-                <!--                build in constructors-->
-                <xs:element name="dateValueConstructor" type="DateValueConstructor"/>
-                <xs:element name="stringValueConstructor" type="StringValueConstructor"/>
-                <xs:element name="intValueConstructor" type="IntValueConstructor"/>
+                <!--                build in formatters-->
+                <xs:element name="dateValueFormatter" type="DateValueFormatter"/>
+                <xs:element name="stringValueFormatter" type="StringValueFormatter"/>
+                <xs:element name="intValueFormatter" type="IntValueFormatter"/>
                 <!--            extend as needed. and also make sure to extend backing java.-->
             </xs:choice>
         </xs:sequence>

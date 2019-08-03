@@ -28,14 +28,13 @@ import java.util.stream.Collectors;
  * Default implementation of the CsvTransformer working with the backing configuration provider
  * as defined per {@link CsvTransformationDslConfigProvider}.
  */
-public final class DefaultCsvTransformer implements CsvTransformer {
-  private final static Logger log = Logger.getLogger(DefaultCsvTransformer.class.getName());
-
+public final class ParallelCsvTransformer implements CsvTransformer {
+  private final static Logger log = Logger.getLogger(ParallelCsvTransformer.class.getName());
   private final static List<SourceValueMapper> builtInMappers = Arrays.asList(
       TwoDigitsNormalizer.get()
   );
 
-  private final static List<MappedCsvValueToStringFormatter> builtInFormatters = Arrays.asList(
+  private final static List<MappedCsvValueToStringFormatter> builtInConstructors = Arrays.asList(
       BigDecimalByLocaleFormatter.get(),
       ColumnAverageFormatter.get(),
       FormattingToStringFormatter.get()
@@ -43,27 +42,24 @@ public final class DefaultCsvTransformer implements CsvTransformer {
 
   private final CsvTransformationConfig csvTransformationDslConfig;
   private final List<SourceValueMapper> mappers;
-  private final List<MappedCsvValueToStringFormatter> formatters;
+  private final List<MappedCsvValueToStringFormatter> constructors;
 
-  private DefaultCsvTransformer(CsvTransformationConfig config,
-                                List<SourceValueMapper> mappers,
-                                List<MappedCsvValueToStringFormatter> formatters) {
+  private ParallelCsvTransformer(CsvTransformationConfig config,
+                                 List<SourceValueMapper> mappers,
+                                 List<MappedCsvValueToStringFormatter> constructors) {
     this.csvTransformationDslConfig = config;
-    this.mappers = mappers;
-    this.formatters = formatters;
+    this.mappers = new ArrayList<>(mappers);
+    this.constructors = new ArrayList<>(constructors);
+
+    // include built-in implementations
+    this.constructors.addAll(builtInConstructors);
+    this.mappers.addAll(builtInMappers);
   }
 
-  public static DefaultCsvTransformer newTransformer(CsvTransformationConfig config,
-                                                     List<SourceValueMapper> mappers,
-                                                     List<MappedCsvValueToStringFormatter> constructors) {
-
-    List<MappedCsvValueToStringFormatter> constructorsWithBuiltIns = new ArrayList<>(constructors);
-    constructorsWithBuiltIns.addAll(builtInFormatters);
-
-    List<SourceValueMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
-    mappersWithBuiltIns.addAll(builtInMappers);
-
-    return new DefaultCsvTransformer(config, mappersWithBuiltIns, constructorsWithBuiltIns);
+  public static ParallelCsvTransformer newTransformer(CsvTransformationConfig config,
+                                                      List<SourceValueMapper> mappers,
+                                                      List<MappedCsvValueToStringFormatter> constructors) {
+    return new ParallelCsvTransformer(config, mappers, constructors);
   }
 
 
@@ -77,7 +73,7 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     CSVWriter csvWriter = new CSVWriter(writer);
 
     Map<String, Integer> sourceHeaderToIndex;
-    Map<String, Integer> targetHeaderToIndex = calculateTargetHeaderFromDsl();
+    Map<String, Integer> targetHeaderToIndex = parseTargetHeader();
 
     try {
       String[] sourceHeaderRow = csvReader.readNext();
@@ -107,6 +103,7 @@ public final class DefaultCsvTransformer implements CsvTransformer {
       }
     }
   }
+
   private String[] generateTargetHeaderRow(Map<String, Integer> targetHeaderToIndex) {
     String[] header = new String[targetHeaderToIndex.size()];
     Set<Map.Entry<String, Integer>> entrySet = targetHeaderToIndex.entrySet();
@@ -119,7 +116,7 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     return header;
   }
 
-  private Map<String, Integer> calculateTargetHeaderFromDsl() {
+  private Map<String, Integer> parseTargetHeader() {
     Map<String, Integer> res = new HashMap<>();
 
     List<String> targetColumns = csvTransformationDslConfig.getTransformation().stream()
@@ -143,7 +140,7 @@ public final class DefaultCsvTransformer implements CsvTransformer {
 
   private String[] mapRow(SourceCsvValueAccessor sourceCsvValueAccessor, Map<String, Integer> targetHeaderToIndex) {
     String[] newRow = new String[targetHeaderToIndex.size()];
-    CsvSourceToJavaObjectMapper csvSourceToJavaObjectMapper = new CsvSourceToJavaObjectMapper(sourceCsvValueAccessor, mappers, formatters);
+    CsvSourceToJavaObjectMapper csvSourceToJavaObjectMapper = new CsvSourceToJavaObjectMapper(sourceCsvValueAccessor, mappers, constructors);
     List<SourceTransformation> transformations = csvTransformationDslConfig.getTransformation();
 
     for (SourceTransformation sourceTransformation : transformations) {

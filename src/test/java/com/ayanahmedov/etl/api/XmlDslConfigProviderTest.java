@@ -1,12 +1,7 @@
 package com.ayanahmedov.etl.api;
 
 import com.ayanahmedov.etl.TestUtils;
-import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
-import com.ayanahmedov.etl.api.dsl.DateValueConstructor;
-import com.ayanahmedov.etl.api.dsl.ElementConstructor;
-import com.ayanahmedov.etl.api.dsl.SourceCsvColumn;
-import com.ayanahmedov.etl.api.dsl.SourceTransformation;
-import com.ayanahmedov.etl.api.dsl.TargetDateFormat;
+import com.ayanahmedov.etl.api.dsl.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,9 +17,9 @@ class XmlDslConfigProviderTest {
     CsvTransformationConfig expect = new CsvTransformationConfig()
         .withTransformation(new SourceTransformation()
           .withTargetSchemaColumn("target-col-1")
-          .withElementConstructor(new ElementConstructor()
+            .withTargetStringFormatter(new TargetStringFormatter()
             .withSourceBindPattern("$1")
-            .withDateValueConstructor(new DateValueConstructor()
+                .withDateValueFormatter(new DateValueFormatter()
               .withSourceFormatPattern("yyyy-dd-MM")
               .withTargetDateFormat(new TargetDateFormat()
                 .withFormatPattern("yyyy:LL:dd")

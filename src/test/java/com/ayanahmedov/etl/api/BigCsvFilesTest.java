@@ -1,17 +1,12 @@
 package com.ayanahmedov.etl.api;
 
 import com.ayanahmedov.etl.TestUtils;
-import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Timeout;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -62,8 +57,6 @@ public class BigCsvFilesTest {
 
     CsvTransformer transformer = new CsvTransformerBuilder()
         .withXmlDsl(configFile)
-        .withSourceCsvValueMappers(Collections.singletonList(new TwoDigitsNormalizer()))
-        .withObjectConstructors(Collections.emptyList())
         .build();
 
     Path outputTemp = FileSystemUtils.createTemporaryCsvFile(printer -> {

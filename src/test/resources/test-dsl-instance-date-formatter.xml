@@ -5,16 +5,16 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy:LL:dd</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
@@ -33,16 +33,16 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3:$5</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy-dd-mm:hh</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
@@ -66,16 +66,16 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd zz</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3 $4</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd zz</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy-MM-dd VV</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
@@ -99,17 +99,17 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH zz</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3:$5 $4</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH zz</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy-MM-dd:HH VV</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-                
-            </dateValueConstructor>
-        </elementConstructor>
+
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>
@@ -138,16 +138,16 @@
 
     <transformation>
         <targetSchemaColumn>yyyy-MM-dd:HH:mm zz</targetSchemaColumn>
-        <elementConstructor>
+        <targetStringFormatter>
             <sourceBindPattern>$1-$2-$3:$5:$6:$6 $4</sourceBindPattern>
-            <dateValueConstructor>
+            <dateValueFormatter>
                 <sourceFormatPattern>yyyy-MM-dd:HH:mm:ss VV</sourceFormatPattern>
                 <targetDateFormat>
                     <formatPattern>yyyy-MM-dd:HH VV</formatPattern>
                     <zoneId>Europe/Vienna</zoneId>
                 </targetDateFormat>
-            </dateValueConstructor>
-        </elementConstructor>
+            </dateValueFormatter>
+        </targetStringFormatter>
         <sourceColumn>
             <name>Col-1</name>
             <constructorPosition>1</constructorPosition>

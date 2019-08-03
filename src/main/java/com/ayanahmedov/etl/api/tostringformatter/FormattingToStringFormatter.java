@@ -1,4 +1,4 @@
-package com.ayanahmedov.etl.api.objectconstructor;
+package com.ayanahmedov.etl.api.tostringformatter;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
@@ -7,20 +7,22 @@ import java.util.IllegalFormatException;
 import java.util.Map;
 
 /**
+ * Formats the input string values by standard java formatter.
+ *
  * The pattern for this must contain only %s place holders.
  * using %d, for example, would fail.
- * since currently, no conversion from csv values are done.
+ * since currently, no conversion other then string from csv values are done.
  * They are simply passed as Strings.
  */
-public class FormattingStringConstructor implements MappedCsvValueStringConstructor {
-  private static final FormattingStringConstructor instance = new FormattingStringConstructor();
+public class FormattingToStringFormatter implements MappedCsvValueToStringFormatter {
+  private static final FormattingToStringFormatter instance = new FormattingToStringFormatter();
 
-  public static FormattingStringConstructor get() {
+  public static FormattingToStringFormatter get() {
     return instance;
   }
 
   @Override
-  public CsvValueToJavaMappingResult constructString(String valueFromCsvMapping, Map<String, String> parameters) {
+  public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping, Map<String, String> parameters) {
     String[] split = valueFromCsvMapping.split(",");
     String stringFormat = parameters.get("string-format");
     if (null == stringFormat) {
