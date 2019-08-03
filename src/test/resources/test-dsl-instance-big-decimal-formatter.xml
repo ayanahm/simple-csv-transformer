@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<csv-transformation-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xmlns="http://www.ayanahmedov.com/CsvTransform"
+                           xsi:schemaLocation="http://www.ayanahmedov.com/CsvTransform csv-transform-schema.xsd">
+
+    <transformation>
+        <targetSchemaColumn>locale_DE</targetSchemaColumn>
+        <sourceBindPattern>$1</sourceBindPattern>
+        <targetStringFormatter>
+            <bigDecimalValueFormatter>
+                <source-locale>en-US</source-locale>
+                <target-locale>de-DE</target-locale>
+            </bigDecimalValueFormatter>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+
+    <transformation>
+        <targetSchemaColumn>locale_US</targetSchemaColumn>
+        <sourceBindPattern>$1</sourceBindPattern>
+        <targetStringFormatter>
+            <bigDecimalValueFormatter>
+                <source-locale>en-US</source-locale>
+                <target-locale>en-US</target-locale>
+            </bigDecimalValueFormatter>
+        </targetStringFormatter>
+        <sourceColumn>
+            <name>Col-1</name>
+            <bindPatternPosition>1</bindPatternPosition>
+        </sourceColumn>
+    </transformation>
+
+</csv-transformation-config>

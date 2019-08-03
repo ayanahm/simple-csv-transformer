@@ -31,7 +31,7 @@ class DateByDateTimePatternFormatterTest {
       String outCsv = stringWriter.toString();
 
       String expected = FileSystemUtils.createCsvAsString(Arrays.asList(
-          new String[]{"yyyy-MM-dd:HH","yyyy-MM-dd:HH zz","yyyy-MM-dd:HH:mm zz","yyyy-MM-dd","yyyy-MM-dd zz"},
+          new String[]{"yyyy-MM-dd","yyyy-MM-dd:HH","yyyy-MM-dd zz","yyyy-MM-dd:HH zz","yyyy-MM-dd:HH:mm zz"},
           new String[]{"2018:02:06","2018-06-00:10","2018-02-05 Europe/Vienna","2018-02-06:09 Europe/Vienna","2018-02-06:09 Europe/Vienna"},
           new String[]{"2010:01:12","2010-12-00:11","2010-01-11 Europe/Vienna","2010-01-12:22 Europe/Vienna","2010-01-12:22 Europe/Vienna"}
       ));

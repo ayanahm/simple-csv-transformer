@@ -28,7 +28,7 @@ class SimpleCsvTransformerTest {
       TestUtils.assertStringEqualsCsv(
           transformedCsv,
           Arrays.asList(
-              new String[]{"ProductName", "Quantity", "ProductId", "OrderId", "Unit", "OrderDate"},
+              new String[]{"OrderId","OrderDate","ProductId","ProductName","Quantity","Unit"},
               new String[]{"1000", "2018-01-01", "P-10001", "Arugola", "5250.5", "kg"},
               new String[]{"1001", "2017-12-12", "P-10002", "Iceberg lettuce", "500", "kg"}
           ));
@@ -57,7 +57,7 @@ class SimpleCsvTransformerTest {
     TestUtils.assertStringEqualsCsv(
         savedCsv,
         Arrays.asList(
-            new String[]{"ProductName", "Quantity", "ProductId", "OrderId", "Unit", "OrderDate"},
+            new String[]{"OrderId","OrderDate","ProductId","ProductName","Quantity","Unit"},
             new String[]{"1000", "2018-01-01", "P-10001", "Arugola", "5250.5", "kg"},
             new String[]{"1001", "2017-12-12", "P-10002", "Iceberg lettuce", "500", "kg"}
         ));

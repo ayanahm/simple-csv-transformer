@@ -77,14 +77,9 @@
         <targetSchemaColumn>Quantity</targetSchemaColumn>
         <sourceBindPattern>$1</sourceBindPattern>
         <targetStringFormatter>
-            <formatterClass>
-                <className>com.ayanahmedov.etl.api.tostringformatter.BigDecimalByLocaleFormatter</className>
-                <parameter>
-                    <name>locale</name>
-<!--                    see java.util.Locale#forLanguageTag for possible values-->
-                    <value>en-US</value>
-                </parameter>
-            </formatterClass>
+            <bigDecimalValueFormatter>
+                <source-locale>en-US</source-locale>
+            </bigDecimalValueFormatter>
         </targetStringFormatter>
         <sourceColumn>
             <name>Count</name>

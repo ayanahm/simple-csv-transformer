@@ -7,7 +7,7 @@ public class DslConfigurationException extends RuntimeException {
 
   public static final DslConfigurationException
       BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE = new DslConfigurationException(
-      "BigDecimal constructor requires the parameter 'locale'");
+      "BigDecimal constructor requires the parameter 'source-locale'");
 
   public static final DslConfigurationException
       STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT = new DslConfigurationException(

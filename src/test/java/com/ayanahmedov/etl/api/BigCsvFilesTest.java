@@ -75,7 +75,7 @@ public class BigCsvFilesTest {
     String lastLine = FileSystemUtils.readLastLineOfFile(outputTemp);
 
     TestUtils.assertStringEqualsCsv(firstLine, Collections.singletonList(
-        new String[]{"ProductName", "Quantity", "ProductId", "OrderId", "Unit", "OrderDate"}
+        new String[]{"OrderId","OrderDate","ProductId","ProductName","Quantity","Unit"}
     ));
 
     TestUtils.assertStringEqualsCsv(lastLine, Collections.singletonList(
@@ -142,15 +142,15 @@ public class BigCsvFilesTest {
 
     assertAll(Arrays.asList(
         () ->  TestUtils.assertStringEqualsCsv(outputReader1.readLine(), Collections.singletonList(
-            new String[]{"Unit","OrderDate"}
+            new String[]{"OrderDate","Unit"}
         )),
 
         () ->  TestUtils.assertStringEqualsCsv(outputReader2.readLine(), Collections.singletonList(
-            new String[]{"Unit","OrderDate"}
+            new String[]{"OrderDate","Unit"}
         )),
 
         () -> TestUtils.assertStringEqualsCsv(outputReader3.readLine(), Collections.singletonList(
-            new String[]{"Unit","OrderDate"}
+            new String[]{"OrderDate","Unit"}
         )),
 
         () -> TestUtils.assertStringEqualsCsv(FileSystemUtils.readLastLineOfFile(outputTemp1), Collections.singletonList(

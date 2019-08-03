@@ -73,9 +73,9 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     CSVReader csvReader = new CSVReader(reader);
     CSVWriter csvWriter = new CSVWriter(writer);
 
-    Map<String, Integer> targetHeaderToIndex = calculateTargetHeaderFromDsl();
+    LinkedHashMap<String, Integer> targetHeaderToIndex = calculateTargetHeaderFromDsl();
     String[] header = generateTargetHeaderRow(targetHeaderToIndex);
-    Map<String, Integer> sourceHeaderToIndex = parseSourceHeader(csvReader);
+    LinkedHashMap<String, Integer> sourceHeaderToIndex = parseSourceHeader(csvReader);
 
     SourceHeaderRowAccessor headerRowAccessor = new SourceHeaderRowAccessorImpl(sourceHeaderToIndex);
     CsvRowMappingRuleCreator ruleCreator = new CsvRowMappingRuleCreator(headerRowAccessor, mappers, formatters);
@@ -100,8 +100,8 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     }
   }
 
-  private Map<String, Integer> parseSourceHeader(CSVReader csvReader) {
-    Map<String, Integer> sourceHeaderToIndex;
+  private LinkedHashMap<String, Integer> parseSourceHeader(CSVReader csvReader) {
+    LinkedHashMap<String, Integer> sourceHeaderToIndex;
     try {
       String[] sourceHeaderRow = csvReader.readNext();
       if (null == sourceHeaderRow) {
@@ -128,8 +128,8 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     return header;
   }
 
-  private Map<String, Integer> calculateTargetHeaderFromDsl() {
-    Map<String, Integer> res = new HashMap<>();
+  private LinkedHashMap<String, Integer> calculateTargetHeaderFromDsl() {
+    LinkedHashMap<String, Integer> res = new LinkedHashMap<>();
 
     List<String> targetColumns = csvTransformationDslConfig.getTransformation().stream()
         .map(SourceTransformation::getTargetSchemaColumn)
@@ -142,8 +142,8 @@ public final class DefaultCsvTransformer implements CsvTransformer {
     return res;
   }
 
-  private Map<String, Integer> parseSourceHeaderRow(String[] record) {
-    Map<String, Integer> res = new HashMap<>();
+  private LinkedHashMap<String, Integer> parseSourceHeaderRow(String[] record) {
+    LinkedHashMap<String, Integer> res = new LinkedHashMap<>();
     for (int i = 0; i < record.length; i++) {
       res.put(record[i].trim(), i);
     }
@@ -151,9 +151,9 @@ public final class DefaultCsvTransformer implements CsvTransformer {
   }
 
   static class SourceHeaderRowAccessorImpl implements SourceHeaderRowAccessor {
-    private Map<String, Integer> sourceHeaderToIndex;
+    private LinkedHashMap<String, Integer> sourceHeaderToIndex;
 
-    SourceHeaderRowAccessorImpl(Map<String, Integer> sourceHeaderToIndex) {
+    SourceHeaderRowAccessorImpl(LinkedHashMap<String, Integer> sourceHeaderToIndex) {
       this.sourceHeaderToIndex = sourceHeaderToIndex;
     }
 

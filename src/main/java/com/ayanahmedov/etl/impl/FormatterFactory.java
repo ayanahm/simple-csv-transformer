@@ -1,13 +1,11 @@
 package com.ayanahmedov.etl.impl;
 
 import com.ayanahmedov.etl.api.DslConfigurationException;
+import com.ayanahmedov.etl.api.dsl.BigDecimalValueFormatter;
 import com.ayanahmedov.etl.api.dsl.DateValueFormatter;
 import com.ayanahmedov.etl.api.dsl.FormatterParameter;
 import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.IdenticalToStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.SimpleIntFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +33,15 @@ public class FormatterFactory {
 
     } else if (targetStringFormatter.getStringValueFormatter() != null) {
       return IdenticalToStringFormatter.get();
+    } else if (targetStringFormatter.getBigDecimalValueFormatter() != null){
+      BigDecimalValueFormatter bigDecimalFormatter = targetStringFormatter.getBigDecimalValueFormatter();
+      Map<String, String> params = new HashMap<>();
+      params.put(BigDecimalByLocaleFormatter.PARAM_SOURCE_NUMBER_LOCALE, bigDecimalFormatter.getSourceLocale());
+      params.put(BigDecimalByLocaleFormatter.PARAM_TARGET_NUMBER_LOCALE, bigDecimalFormatter.getTargetLocale());
+
+      BigDecimalByLocaleFormatter formatter = BigDecimalByLocaleFormatter.getUninitialized();
+      return formatter.newInstance(params);
+
     } else if (targetStringFormatter.getIntValueFormatter() != null) {
       return SimpleIntFormatter.get();
     } else if (targetStringFormatter.getFormatterClass() != null) {

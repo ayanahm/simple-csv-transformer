@@ -15,17 +15,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for TargetDateFormat complex type.
+ * <p>Java class for BigDecimalValueFormatter complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TargetDateFormat"&gt;
+ * &lt;complexType name="BigDecimalValueFormatter"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="formatPattern" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="zoneId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="source-locale" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="target-locale" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,71 +35,72 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "TargetDateFormat", propOrder = {
-    "formatPattern",
-    "zoneId"
+@XmlType(name = "BigDecimalValueFormatter", propOrder = {
+    "sourceLocale",
+    "targetLocale"
 })
-public class TargetDateFormat {
+public class BigDecimalValueFormatter {
 
-    @XmlElement(required = true)
-    protected String formatPattern;
-    protected String zoneId;
+    @XmlElement(name = "source-locale", required = true)
+    protected String sourceLocale;
+    @XmlElement(name = "target-locale")
+    protected String targetLocale;
 
     /**
-     * Gets the value of the formatPattern property.
+     * Gets the value of the sourceLocale property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getFormatPattern() {
-        return formatPattern;
+    public String getSourceLocale() {
+        return sourceLocale;
     }
 
     /**
-     * Sets the value of the formatPattern property.
+     * Sets the value of the sourceLocale property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setFormatPattern(String value) {
-        this.formatPattern = value;
+    public void setSourceLocale(String value) {
+        this.sourceLocale = value;
     }
 
     /**
-     * Gets the value of the zoneId property.
+     * Gets the value of the targetLocale property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getZoneId() {
-        return zoneId;
+    public String getTargetLocale() {
+        return targetLocale;
     }
 
     /**
-     * Sets the value of the zoneId property.
+     * Sets the value of the targetLocale property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setZoneId(String value) {
-        this.zoneId = value;
+    public void setTargetLocale(String value) {
+        this.targetLocale = value;
     }
 
-    public TargetDateFormat withFormatPattern(String value) {
-        setFormatPattern(value);
+    public BigDecimalValueFormatter withSourceLocale(String value) {
+        setSourceLocale(value);
         return this;
     }
 
-    public TargetDateFormat withZoneId(String value) {
-        setZoneId(value);
+    public BigDecimalValueFormatter withTargetLocale(String value) {
+        setTargetLocale(value);
         return this;
     }
 

@@ -56,7 +56,7 @@ public class IncorrectCsvColumnValuesTest {
 
       String expected = FileSystemUtils.createCsvAsString(
           Arrays.asList(
-              new String[]{ "ProductName","Quantity","ProductId","OrderId","Unit","OrderDate" },
+              new String[]{ "OrderId","OrderDate","ProductId","ProductName","Quantity","Unit" },
               new String[]{ "","2018-01-01","P-1000","Arugola","5250.5","kg" },
               new String[]{ "1000","","P-1000","Arugola","5250.5","kg" },
               new String[]{ "1000","","P-1000","Arugola","5250.5","kg" },

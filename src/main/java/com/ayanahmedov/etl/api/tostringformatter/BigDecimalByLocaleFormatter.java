@@ -11,13 +11,14 @@ import java.util.Locale;
 import java.util.Map;
 
 public class BigDecimalByLocaleFormatter implements ReducedCsvValueToStringFormatter {
-  public static final String PARAM_SOURCE_NUMBER_LOCALE = "locale";
+  public static final String PARAM_SOURCE_NUMBER_LOCALE = "source-locale";
+  public static final String PARAM_TARGET_NUMBER_LOCALE = "target-locale";
 
   private static final ThreadLocal<Map<Locale, NumberFormat>> numberFormatPerLocale =
       ThreadLocal.withInitial(HashMap::new);
 
-  private String sourceNumberLocale = null;
-  private NumberFormat numberFormat = null;
+  private NumberFormat sourceNumberFormat = null;
+  private NumberFormat targetNumberFormat = null;
 
   private BigDecimalByLocaleFormatter() {
   }
@@ -29,21 +30,32 @@ public class BigDecimalByLocaleFormatter implements ReducedCsvValueToStringForma
   @Override
   public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     BigDecimalByLocaleFormatter instance = getUninitialized();
-    instance.sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
-    if (null == instance.sourceNumberLocale) {
+    String sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
+    if (null == sourceNumberLocale) {
       throw DslConfigurationException.BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE;
     }
-    Locale locale = Locale.forLanguageTag(instance.sourceNumberLocale);
-    instance.numberFormat = getNumberFormat(locale);
+    Locale sourceLocale = Locale.forLanguageTag(sourceNumberLocale);
+    instance.sourceNumberFormat = getNumberFormat(sourceLocale);
+
+    String targetNumberLocale = parameters.get(PARAM_TARGET_NUMBER_LOCALE);
+    if (null != targetNumberLocale) {
+      Locale targetLocale = Locale.forLanguageTag(targetNumberLocale);
+      instance.targetNumberFormat = getNumberFormat(targetLocale);
+    }
     return instance;
   }
 
   @Override
   public CsvValueToJavaMappingResult formatToString(String valueFromCsvMapping) {
     try {
-      Number parsedNum = numberFormat.parse(valueFromCsvMapping);
+      Number parsedNum = sourceNumberFormat.parse(valueFromCsvMapping);
       BigDecimal result = new BigDecimal(parsedNum.toString());
-      return CsvValueToJavaMappingResult.ofValue(result.toString());
+
+      if (targetNumberFormat == null) {
+        return CsvValueToJavaMappingResult.ofValue(result.toString());
+      } else {
+        return CsvValueToJavaMappingResult.ofValue(targetNumberFormat.format(result));
+      }
     } catch (ParseException e) {
       return CsvValueToJavaMappingResult.ofMappingError(e);
     }
