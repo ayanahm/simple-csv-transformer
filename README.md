@@ -1,8 +1,9 @@
 ##### Table of Contents  
 * [Overview](#overview)
 * [Java-Api](#api-usage)
+   * [The Concept] (#the-concept)
 * [Dsl](#dsl)
-* [Improvements](#improvements)      
+* [Further Work](#further-work)      
 
 
 # Overview
@@ -14,8 +15,7 @@ There is an exception to the CSV standards, it assumes that there must be always
 If not then manually needs to be corrected.
 
 
-# Api Usage
-
+# Api Usage<a name="api-usage"></a>
 
 A basic usage in Java code looks like the following:
 
@@ -41,7 +41,7 @@ It is up to client to close the streams and flush when needed
 
 It is also up to client, to use correct streams(BufferedReader, BufferedWriter for file system accessing CSV files).
 
-## The Concept 
+## The Concept<a name="the-concept"></a> 
 
 The concept of the mapping from `source-file` -> `target-file` is as follows:
 
@@ -81,7 +81,7 @@ https://github.com/ayanahm/demo-etl/tree/master/src/test/resources
 
 
 
-# DSL
+# DSL<a name="dsl"></a>
 
 In most basic form the DSL looks like the following:
 
@@ -304,7 +304,7 @@ which is converting values like `1` to `01` , so they are parsable by the
 provided date time format.
 
 
-# improvements
+# Further Work<a name="further-work"></a>
 
 ## Alternative DSL sources
 
