@@ -1,5 +1,6 @@
 package com.ayanahmedov.etl.impl;
 
+import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 

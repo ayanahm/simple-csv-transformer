@@ -4,7 +4,7 @@ import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 
 import java.util.Map;
 
-public class IdenticalToStringFormatter implements MappedCsvValueToStringFormatter {
+public class IdenticalToStringFormatter implements ReducedCsvValueToStringFormatter {
   private static final IdenticalToStringFormatter instance = new IdenticalToStringFormatter();
 
   public static IdenticalToStringFormatter get() {
@@ -12,7 +12,7 @@ public class IdenticalToStringFormatter implements MappedCsvValueToStringFormatt
   }
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     return this;
   }
 

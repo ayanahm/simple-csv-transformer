@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * \s10\t is normalized into 10
  * </pre>
  */
-public final class TwoDigitsNormalizer implements SourceColumnMapper {
+public final class TwoDigitsNormalizer implements SourceCsvColumnMapper {
   private static final TwoDigitsNormalizer instance = new TwoDigitsNormalizer();
 
   private static final Pattern SINGLE_DIGIT_PATTERN = Pattern.compile("^(\\s*)(\\d)(\\s*)$");

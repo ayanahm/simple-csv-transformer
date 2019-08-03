@@ -1,24 +1,36 @@
 ##### Table of Contents  
-[Headers](#overview)
-  
-[Java-Api](#api-usage)
-
-[Dsl](#dsl)
-
-[Improvements](#improvements)      
+* [Overview](#overview)
+* [Java-Api](#api-usage)
+* [Dsl](#dsl)
+* [Improvements](#improvements)      
 
 
 # Overview
 
-This repo, provides a simple CSV transformer, which can be configured by a DSL based on validatable XML,
-to a target CSV file.
-In a summary, this provides a glorified function which can be declared as following:
+This repo, provides a simple CSV transformer, which can be configured by a an external DSL based on validatable XML,
+which produces the target CSV file.
 
-from `source-csv-file.csv` -> `target-csv-file.csv`.
+There is an exception to the CSV standards, it assumes that there must be always a header row present in the source CSV file.
+If not then manually needs to be corrected.
+
 
 # Api Usage
 
-There are examples for the usage, which are also happen to be the actual test suite used for the library.
+The concept of the mapping from `source-file` -> `target-file` is as follows:
+Each row in the source CSV are applied by three step modification.
+
+`Mapper -> Reducer -> Formatter`
+
+For each row, and for each column, the `Mapper` is applied.
+Then `Reducer` reduces the mapped column values into a single `String` value. 
+The reduced `String` value is then applied to `Formatter`. The output of the `Formatter` 
+is then written into the output CSV file.
+
+ `Mapper` and `Formatter` are extensible by providing custom implementations. 
+ For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
+
+
+There are some examples for the usage, which are also happen to be the actual test suite used for the library.
 Those can be found under:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/java/com/ayanahmedov/etl/api
 

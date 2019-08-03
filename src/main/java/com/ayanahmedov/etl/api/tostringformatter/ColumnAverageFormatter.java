@@ -4,7 +4,7 @@ import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 
 import java.util.Map;
 
-public class ColumnAverageFormatter implements MappedCsvValueToStringFormatter {
+public class ColumnAverageFormatter implements ReducedCsvValueToStringFormatter {
   private final static ColumnAverageFormatter instance = new ColumnAverageFormatter();
 
   public static ColumnAverageFormatter get() {
@@ -12,7 +12,7 @@ public class ColumnAverageFormatter implements MappedCsvValueToStringFormatter {
   }
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     //no params required
     return this;
   }

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class BigDecimalByLocaleFormatter implements MappedCsvValueToStringFormatter {
+public class BigDecimalByLocaleFormatter implements ReducedCsvValueToStringFormatter {
   public static final String PARAM_SOURCE_NUMBER_LOCALE = "locale";
 
   private static final ThreadLocal<Map<Locale, NumberFormat>> numberFormatPerLocale =
@@ -27,7 +27,7 @@ public class BigDecimalByLocaleFormatter implements MappedCsvValueToStringFormat
   }
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     BigDecimalByLocaleFormatter instance = getUninitialized();
     instance.sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
     if (null == instance.sourceNumberLocale) {

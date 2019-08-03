@@ -14,7 +14,7 @@ import java.util.Map;
  * since currently, no conversion other then string from csv values are done.
  * They are simply passed as Strings.
  */
-public class FormattingToStringFormatter implements MappedCsvValueToStringFormatter {
+public class FormattingToStringFormatter implements ReducedCsvValueToStringFormatter {
   public static final String PARAM_TARGET_STRING_FORMAT = "string-format";
 
   private String stringFormat;
@@ -28,7 +28,7 @@ public class FormattingToStringFormatter implements MappedCsvValueToStringFormat
 
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     FormattingToStringFormatter instance = getUninitialized();
     instance.stringFormat = parameters.get(PARAM_TARGET_STRING_FORMAT);
     if (null == instance.stringFormat) {

@@ -6,12 +6,12 @@ import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
 import com.ayanahmedov.etl.api.dsl.SourceTransformation;
 import com.ayanahmedov.etl.api.sourcemapper.LeadingAndTrailingWhiteSpaceTrimmer;
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
 import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import com.ayanahmedov.etl.api.tostringformatter.BigDecimalByLocaleFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.ColumnAverageFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -27,37 +27,37 @@ import java.util.stream.Collectors;
  * as defined per {@link CsvTransformationDslConfigProvider}.
  */
 public final class DefaultCsvTransformer implements CsvTransformer {
-  private final static List<SourceColumnMapper> builtInMappers = Arrays.asList(
+  private final static List<SourceCsvColumnMapper> builtInMappers = Arrays.asList(
       TwoDigitsNormalizer.get(),
       LeadingAndTrailingWhiteSpaceTrimmer.get()
   );
 
-  private final static List<MappedCsvValueToStringFormatter> builtInFormatters = Arrays.asList(
+  private final static List<ReducedCsvValueToStringFormatter> builtInFormatters = Arrays.asList(
       BigDecimalByLocaleFormatter.getUninitialized(),
       ColumnAverageFormatter.get(),
       FormattingToStringFormatter.getUninitialized()
   );
 
   private final CsvTransformationConfig csvTransformationDslConfig;
-  private final List<SourceColumnMapper> mappers;
-  private final List<MappedCsvValueToStringFormatter> formatters;
+  private final List<SourceCsvColumnMapper> mappers;
+  private final List<ReducedCsvValueToStringFormatter> formatters;
 
   private DefaultCsvTransformer(CsvTransformationConfig config,
-                                List<SourceColumnMapper> mappers,
-                                List<MappedCsvValueToStringFormatter> formatters) {
+                                List<SourceCsvColumnMapper> mappers,
+                                List<ReducedCsvValueToStringFormatter> formatters) {
     this.csvTransformationDslConfig = config;
     this.mappers = mappers;
     this.formatters = formatters;
   }
 
   public static DefaultCsvTransformer newTransformer(CsvTransformationConfig config,
-                                                     List<SourceColumnMapper> mappers,
-                                                     List<MappedCsvValueToStringFormatter> constructors) {
+                                                     List<SourceCsvColumnMapper> mappers,
+                                                     List<ReducedCsvValueToStringFormatter> constructors) {
 
-    List<MappedCsvValueToStringFormatter> constructorsWithBuiltIns = new ArrayList<>(constructors);
+    List<ReducedCsvValueToStringFormatter> constructorsWithBuiltIns = new ArrayList<>(constructors);
     constructorsWithBuiltIns.addAll(builtInFormatters);
 
-    List<SourceColumnMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
+    List<SourceCsvColumnMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
     mappersWithBuiltIns.addAll(builtInMappers);
 
     return new DefaultCsvTransformer(config, mappersWithBuiltIns, constructorsWithBuiltIns);

@@ -1,4 +1,4 @@
-package com.ayanahmedov.etl.impl;
+package com.ayanahmedov.etl.api.reducer;
 
 import java.util.List;
 

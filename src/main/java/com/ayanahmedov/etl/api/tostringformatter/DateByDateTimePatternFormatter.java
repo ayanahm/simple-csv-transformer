@@ -28,7 +28,7 @@ import java.util.Map;
  * </pre>
  *
  */
-public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFormatter {
+public class DateByDateTimePatternFormatter implements ReducedCsvValueToStringFormatter {
   public static final String PARAM_SOURCE_PARSE_PATTERN = "source-parse-pattern";
   public static final String PARAM_TARGET_FORMAT_PATTER = "target-format-pattern";
   public static final String PARAM_TARGET_ZONE_ID = "target-zone-id";
@@ -40,7 +40,7 @@ public class DateByDateTimePatternFormatter implements MappedCsvValueToStringFor
   }
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     DateByDateTimePatternFormatter instance = new DateByDateTimePatternFormatter();
 
     String sourceParsePattern = parameters.get(PARAM_SOURCE_PARSE_PATTERN);

@@ -130,7 +130,7 @@
                         Custom mapper implementations, which are applied when the source csv value is read.
                         The subsequent operations are provided with the output of those mapprs.
                         Provided class must be fully qualified, and must be a subtype of
-                        com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper.
+                        com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper.
 
                     </xs:documentation>
                 </xs:annotation>

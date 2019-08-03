@@ -1,10 +1,10 @@
 package com.ayanahmedov.etl.impl;
 
 import com.ayanahmedov.etl.api.dsl.*;
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
 import com.ayanahmedov.etl.api.sourcemapper.TwoDigitsNormalizer;
 import com.ayanahmedov.etl.api.tostringformatter.FormattingToStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.SimpleIntFormatter;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +22,8 @@ class CsvRowMappingRuleCreatorTest {
 
     return dummy.get(headerName);
   };
-  List<SourceColumnMapper> mappers = Arrays.asList(TwoDigitsNormalizer.get());
-  List<MappedCsvValueToStringFormatter> formatters = Arrays.asList(
+  List<SourceCsvColumnMapper> mappers = Arrays.asList(TwoDigitsNormalizer.get());
+  List<ReducedCsvValueToStringFormatter> formatters = Arrays.asList(
       SimpleIntFormatter.get(),
       FormattingToStringFormatter.getUninitialized());
 

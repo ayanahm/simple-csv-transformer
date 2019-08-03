@@ -1,7 +1,8 @@
 package com.ayanahmedov.etl.impl;
 
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public interface CsvRowMappingRule {
   /**
    * Mappers applicable to the column identifiable by the returned maps key.
    */
-  Map<Integer, SourceColumnMapper> getMappersByIndex();
+  Map<Integer, SourceCsvColumnMapper> getMappersByIndex();
 
   /**
    * Reducer instance constructed from DSL.
@@ -31,5 +32,5 @@ public interface CsvRowMappingRule {
   /**
    * Formatter to apply on the reduced value.
    */
-  MappedCsvValueToStringFormatter getFormatter();
+  ReducedCsvValueToStringFormatter getFormatter();
 }

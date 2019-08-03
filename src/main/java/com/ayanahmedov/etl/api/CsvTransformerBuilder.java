@@ -1,8 +1,8 @@
 package com.ayanahmedov.etl.api;
 
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 import com.ayanahmedov.etl.impl.DefaultCsvTransformer;
 
 import java.nio.file.Path;
@@ -11,8 +11,8 @@ import java.util.List;
 
 public class CsvTransformerBuilder {
   private CsvTransformationConfig dsl;
-  private List<SourceColumnMapper> sourceCsvMappers = new ArrayList<>();
-  private List<MappedCsvValueToStringFormatter> constructors = new ArrayList<>();
+  private List<SourceCsvColumnMapper> sourceCsvMappers = new ArrayList<>();
+  private List<ReducedCsvValueToStringFormatter> constructors = new ArrayList<>();
 
   public static CsvTransformerBuilder builder() {
     return new CsvTransformerBuilder();
@@ -30,22 +30,22 @@ public class CsvTransformerBuilder {
   }
 
 
-  public CsvTransformerBuilder withSourceCsvValueMappers(List<SourceColumnMapper> mappers) {
+  public CsvTransformerBuilder withSourceCsvValueMappers(List<SourceCsvColumnMapper> mappers) {
     this.sourceCsvMappers.addAll(mappers);
     return this;
   }
 
-  public CsvTransformerBuilder withSourceCsvValueMapper(SourceColumnMapper mapper) {
+  public CsvTransformerBuilder withSourceCsvValueMapper(SourceCsvColumnMapper mapper) {
     sourceCsvMappers.add(mapper);
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructors(List<MappedCsvValueToStringFormatter> constructors) {
+  public CsvTransformerBuilder withObjectConstructors(List<ReducedCsvValueToStringFormatter> constructors) {
     this.constructors.addAll(constructors);
     return this;
   }
 
-  public CsvTransformerBuilder withObjectConstructor(MappedCsvValueToStringFormatter constructor) {
+  public CsvTransformerBuilder withObjectConstructor(ReducedCsvValueToStringFormatter constructor) {
     this.constructors.add(constructor);
     return this;
   }

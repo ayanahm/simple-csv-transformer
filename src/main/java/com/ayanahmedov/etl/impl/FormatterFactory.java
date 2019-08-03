@@ -6,7 +6,7 @@ import com.ayanahmedov.etl.api.dsl.FormatterParameter;
 import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.IdenticalToStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 import com.ayanahmedov.etl.api.tostringformatter.SimpleIntFormatter;
 
 import java.util.HashMap;
@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FormatterFactory {
-  public static MappedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
-                                                                List<MappedCsvValueToStringFormatter> formatters) {
+  public static ReducedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
+                                                                 List<ReducedCsvValueToStringFormatter> formatters) {
     return createFormatter(targetStringFormatter, createFormattersByClassName(formatters));
   }
 
-  public static MappedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
-                                                                Map<String, MappedCsvValueToStringFormatter> formattersByClassName) {
+  public static ReducedCsvValueToStringFormatter createFormatter(TargetStringFormatter targetStringFormatter,
+                                                                 Map<String, ReducedCsvValueToStringFormatter> formattersByClassName) {
     if (targetStringFormatter.getDateValueFormatter() != null) {
       DateValueFormatter dateFormatter = targetStringFormatter.getDateValueFormatter();
 
@@ -39,7 +39,7 @@ public class FormatterFactory {
       return SimpleIntFormatter.get();
     } else if (targetStringFormatter.getFormatterClass() != null) {
       String constructorClassName = targetStringFormatter.getFormatterClass().getClassName();
-      MappedCsvValueToStringFormatter customFormatter =
+      ReducedCsvValueToStringFormatter customFormatter =
           formattersByClassName.get(constructorClassName);
 
       if (null == customFormatter) {
@@ -68,12 +68,12 @@ public class FormatterFactory {
     }
   }
 
-  private static Map<String, MappedCsvValueToStringFormatter> createFormattersByClassName(List<MappedCsvValueToStringFormatter> constructors) {
-    Map<String, MappedCsvValueToStringFormatter> result = new HashMap<>();
+  private static Map<String, ReducedCsvValueToStringFormatter> createFormattersByClassName(List<ReducedCsvValueToStringFormatter> constructors) {
+    Map<String, ReducedCsvValueToStringFormatter> result = new HashMap<>();
     if (constructors == null) {
       return result;
     }
-    for (MappedCsvValueToStringFormatter formatter : constructors) {
+    for (ReducedCsvValueToStringFormatter formatter : constructors) {
       result.put(formatter.getClass().getCanonicalName(), formatter);
     }
     return result;

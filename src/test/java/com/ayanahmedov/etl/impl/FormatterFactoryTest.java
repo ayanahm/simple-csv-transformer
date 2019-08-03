@@ -3,7 +3,7 @@ package com.ayanahmedov.etl.impl;
 import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.api.dsl.CustomFormatter;
 import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FormatterFactoryTest {
-  static class DummyFormatter implements MappedCsvValueToStringFormatter {
+  static class DummyFormatter implements ReducedCsvValueToStringFormatter {
 
     @Override
-    public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+    public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
       return this;
     }
 
@@ -33,7 +33,7 @@ class FormatterFactoryTest {
             .withClassName(DummyFormatter.class.getCanonicalName()));
 
     DummyFormatter customConstructor = new DummyFormatter();
-    MappedCsvValueToStringFormatter constructor = FormatterFactory.createFormatter(targetStringFormatter,
+    ReducedCsvValueToStringFormatter constructor = FormatterFactory.createFormatter(targetStringFormatter,
         Collections.singletonMap(customConstructor.getClass().getCanonicalName(), customConstructor));
 
     assertEquals(constructor, customConstructor);

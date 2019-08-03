@@ -5,7 +5,7 @@ import com.ayanahmedov.etl.impl.CsvValueToJavaMappingResult;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class SimpleIntFormatter implements MappedCsvValueToStringFormatter {
+public class SimpleIntFormatter implements ReducedCsvValueToStringFormatter {
   private static final SimpleIntFormatter instance = new SimpleIntFormatter();
   private static final Pattern intPattern = Pattern.compile("\\d+");
 
@@ -15,7 +15,7 @@ public class SimpleIntFormatter implements MappedCsvValueToStringFormatter {
   }
 
   @Override
-  public MappedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
+  public ReducedCsvValueToStringFormatter newInstance(Map<String, String> parameters) {
     return this;
   }
 

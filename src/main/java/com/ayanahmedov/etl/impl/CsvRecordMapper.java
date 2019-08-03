@@ -1,7 +1,8 @@
 package com.ayanahmedov.etl.impl;
 
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,12 +29,12 @@ public class CsvRecordMapper {
       CsvRowMappingRule rule = rules.get(i);
       List<Integer> relevantColumnIndexes = rule.getSourceColumnIndexes();
       List<Integer> bindPatternPositions = rule.getBindPatternPositions();
-      Map<Integer, SourceColumnMapper> mappersByIndex = rule.getMappersByIndex();
+      Map<Integer, SourceCsvColumnMapper> mappersByIndex = rule.getMappersByIndex();
 
       List<String> mappedValues = new ArrayList<>();
 
       for (Integer index : relevantColumnIndexes) {
-        SourceColumnMapper mapper = mappersByIndex.get(index);
+        SourceCsvColumnMapper mapper = mappersByIndex.get(index);
         String value = getColumn(sourceRow, index);
         if (mapper != null) {
           value = mapper.map(value);
@@ -44,7 +45,7 @@ public class CsvRecordMapper {
       CsvValueReducer reducer = rule.getReducer();
       String reducedVal = reducer.reduce(mappedValues, bindPatternPositions);
 
-      MappedCsvValueToStringFormatter formatter = rule.getFormatter();
+      ReducedCsvValueToStringFormatter formatter = rule.getFormatter();
       CsvValueToJavaMappingResult formatted = formatter.formatToString(reducedVal);
 
       final int index = i;

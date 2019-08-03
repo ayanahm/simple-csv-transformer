@@ -4,8 +4,9 @@ import com.ayanahmedov.etl.api.DslConfigurationException;
 import com.ayanahmedov.etl.api.dsl.CsvTransformationConfig;
 import com.ayanahmedov.etl.api.dsl.SourceCsvColumn;
 import com.ayanahmedov.etl.api.dsl.SourceTransformation;
-import com.ayanahmedov.etl.api.sourcemapper.SourceColumnMapper;
-import com.ayanahmedov.etl.api.tostringformatter.MappedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.reducer.CsvValueReducer;
+import com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.stream.Collectors;
 
 public class CsvRowMappingRuleCreator {
   private final SourceHeaderRowAccessor sourceHeaderRowAccessor;
-  private final List<SourceColumnMapper> mappers;
-  private final List<MappedCsvValueToStringFormatter> formatters;
+  private final List<SourceCsvColumnMapper> mappers;
+  private final List<ReducedCsvValueToStringFormatter> formatters;
 
   public CsvRowMappingRuleCreator(SourceHeaderRowAccessor sourceHeaderRowAccessor,
-                                  List<SourceColumnMapper> mappers,
-                                  List<MappedCsvValueToStringFormatter> formatters) {
+                                  List<SourceCsvColumnMapper> mappers,
+                                  List<ReducedCsvValueToStringFormatter> formatters) {
     this.sourceHeaderRowAccessor = sourceHeaderRowAccessor;
     this.mappers = mappers;
     this.formatters = formatters;
@@ -34,14 +35,14 @@ public class CsvRowMappingRuleCreator {
   static final class MappingRuleImpl implements CsvRowMappingRule {
 
     private final List<Integer> sourceColumnIndexes;
-    private final Map<Integer, SourceColumnMapper> mappersByIndex;
-    private final MappedCsvValueToStringFormatter formatter;
+    private final Map<Integer, SourceCsvColumnMapper> mappersByIndex;
+    private final ReducedCsvValueToStringFormatter formatter;
     private final CsvValueReducer reducer;
     private List<Integer> sourceColumnConstructorPositions;
 
     public MappingRuleImpl(List<Integer> sourceColumnIndexes,
-                           Map<Integer, SourceColumnMapper> mappersByIndex,
-                           MappedCsvValueToStringFormatter formatter,
+                           Map<Integer, SourceCsvColumnMapper> mappersByIndex,
+                           ReducedCsvValueToStringFormatter formatter,
                            CsvValueReducer reducer,
                            List<Integer> bindPatternPositions) {
       this.sourceColumnIndexes = sourceColumnIndexes;
@@ -62,7 +63,7 @@ public class CsvRowMappingRuleCreator {
     }
 
     @Override
-    public Map<Integer, SourceColumnMapper> getMappersByIndex() {
+    public Map<Integer, SourceCsvColumnMapper> getMappersByIndex() {
       return mappersByIndex;
     }
 
@@ -72,13 +73,13 @@ public class CsvRowMappingRuleCreator {
     }
 
     @Override
-    public MappedCsvValueToStringFormatter getFormatter() {
+    public ReducedCsvValueToStringFormatter getFormatter() {
       return formatter;
     }
   }
 
   private CsvRowMappingRule createRule(SourceTransformation transformation) {
-    Map<Integer, SourceColumnMapper> sourceMappers = getSourceMappers(transformation);
+    Map<Integer, SourceCsvColumnMapper> sourceMappers = getSourceMappers(transformation);
     List<Integer> sourceColumnIndexes = transformation.getSourceColumn().stream()
         .map(col -> sourceHeaderRowAccessor.getIndexByHeaderName(col.getName()))
         .collect(Collectors.toList());
@@ -86,7 +87,7 @@ public class CsvRowMappingRuleCreator {
     String dollarSignBindPattern = transformation.getSourceBindPattern();
     DollarSignBindPatternReducer reducer = DollarSignBindPatternReducer.get(dollarSignBindPattern);
 
-    MappedCsvValueToStringFormatter formatter = FormatterFactory.createFormatter(transformation.getTargetStringFormatter(), formatters);
+    ReducedCsvValueToStringFormatter formatter = FormatterFactory.createFormatter(transformation.getTargetStringFormatter(), formatters);
 
     List<Integer> bindPatternPositions = transformation.getSourceColumn().stream()
         .map(SourceCsvColumn::getBindPatternPosition)
@@ -101,12 +102,12 @@ public class CsvRowMappingRuleCreator {
   }
 
 
-  private Map<Integer, SourceColumnMapper> getSourceMappers(SourceTransformation transform) {
-    Map<Integer, SourceColumnMapper> r = new HashMap<>();
+  private Map<Integer, SourceCsvColumnMapper> getSourceMappers(SourceTransformation transform) {
+    Map<Integer, SourceCsvColumnMapper> r = new HashMap<>();
     for (SourceCsvColumn sourceCsvColumn : transform.getSourceColumn()) {
       String mapperClass = sourceCsvColumn.getSourceValueMapper();
       if (null != mapperClass) {
-        SourceColumnMapper mapper = mappers.stream()
+        SourceCsvColumnMapper mapper = mappers.stream()
             .filter(m -> m.getClass().getCanonicalName().equals(mapperClass))
             .findFirst()
             .orElseThrow(() ->
