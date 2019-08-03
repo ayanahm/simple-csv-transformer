@@ -1,7 +1,8 @@
 ##### Table of Contents  
 1. [Overview](#overview)
+    1. [The Concept](#the-concept)
+    1. [why XML?](#why-xml)
 2. [Java Api](#api-usage)
-   1. [The Concept](#the-concept)
 3. [Dsl](#dsl)
    1. [Types](#types)
        1. [transformation](#transformation)
@@ -25,6 +26,31 @@ which produces the target CSV file.
 
 There is an exception to the CSV standards, it assumes that there must be always a header row present in the source CSV file.
 If not then manually needs to be corrected.
+
+### The Concept<a name="the-concept"></a> 
+
+The concept of the mapping from `source-file` -> `target-file` is as follows:
+
+Each row ,except the header, in the source CSV is applied by three step modification.
+
+`Mapper -> Reducer -> Formatter`
+
+For each row, and for each column, the `Mapper` is applied.
+
+Then `Reducer` reduces the mapped column values into a single `String` value.
+Which may `reduce` more then 1 mapped value.
+ 
+The reduced `String` value is then applied to `Formatter`. 
+The output of the `Formatter` 
+is then written into the output CSV file.
+
+ `Mapper` and `Formatter` are extensible by providing custom implementations. 
+ For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
+
+### Why XML?<a name="why-xml"></a>
+
+
+
 
 
 ## Api Usage<a name="api-usage"></a>
@@ -53,28 +79,6 @@ It is up to client to close the streams and flush when needed
 
 It is also up to client, to use correct streams(BufferedReader, BufferedWriter for file system accessing CSV files).
 
-### The Concept<a name="the-concept"></a> 
-
-The concept of the mapping from `source-file` -> `target-file` is as follows:
-
-Each row ,except the header, in the source CSV is applied by three step modification.
-
-`Mapper -> Reducer -> Formatter`
-
-For each row, and for each column, the `Mapper` is applied.
-
-Then `Reducer` reduces the mapped column values into a single `String` value.
-Which may `reduce` more then 1 mapped value.
- 
-The reduced `String` value is then applied to `Formatter`. 
-The output of the `Formatter` 
-is then written into the output CSV file.
-
- `Mapper` and `Formatter` are extensible by providing custom implementations. 
- For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
-
-
-
 There are some other examples of the usage, which are also happen to be the actual test suite used for the library.
 Those can be found under:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/java/com/ayanahmedov/etl/api
@@ -89,8 +93,6 @@ https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/et
 
 DSL configurations for those tests can be viewed here:
 https://github.com/ayanahm/demo-etl/tree/master/src/test/resources 
-
-
 
 
 ## DSL<a name="dsl"></a>
