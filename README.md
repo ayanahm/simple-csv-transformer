@@ -63,7 +63,7 @@ Moreover, the extensions on the Xsd, and then generating java classes, the only 
 extend couple of places in the library, so allowing a fast paced adaption to new use cases.
 
 Also imagining, there can be a case, where a non technician could create such mappers over a helpful GUI.
-In such case, XML is also friendly to construct automatically. 
+In such case, XML is also friendly to construct programmatically. 
 
 ### IO vs NIO<a name="io-vs-nio"></a>
 I could not happen to find any CSV library which is providing an API for java.nio types.
