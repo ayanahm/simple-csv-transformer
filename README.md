@@ -1,9 +1,9 @@
 ##### Table of Contents  
 1. [Overview](#overview)
-    1. [The Concept](#the-concept)
-    2. [Why XML?](#why-xml)
-    3. [IO vs NIO](#io-vs-nio)
-    4. [How to build?](#how-to-build)
+    1. [How to build?](#how-to-build)
+    2. [The Concept](#the-concept)
+    3. [Why XML?](#why-xml)
+    4. [IO vs NIO](#io-vs-nio)
 2. [Java Api](#api-usage)
 3. [Dsl](#dsl)
    1. [Types](#types)
@@ -31,6 +31,15 @@ which produces the target CSV file.
 
 There is an exception to the CSV standards, it assumes that there must be always a header row present in the source CSV file.
 If not then manually needs to be corrected.
+
+### How to build?<a name="how-to-build"></a>
+At least JDK-8 needs to be present in the machine to build the code.
+Using mvn clean install should produce a jar which can be referenced in other projects.
+This lib, does not provide a standalone executable jar.
+
+And of course, using intellij and importing as maven project should work out of the box. 
+(I haven't tested it for Eclipse, but assumption it should be the same.)
+
 
 ### The Concept<a name="the-concept"></a> 
 
@@ -66,19 +75,12 @@ Also imagining, there can be a case, where a non technician could create such ma
 In such case, XML is also friendly to construct programmatically. 
 
 ### IO vs NIO<a name="io-vs-nio"></a>
-I could not happen to find any CSV library which is providing an API for java.nio types.
+I could not happen to find any CSV library which is providing an API for java.nio Channels.
 Moreover, buffered streams should perform just fine for most of the time. 
 In case of very big files, the `nio` solutions can be investigated. 
 That would also mean to implement a CSV library using them.
 See also an experimental idea using [FileChannel](#optimizations).
 
-### How to build?<a name="how-to-build"></a>
-At least JDK-8 needs to be present in the machine to build the code.
-Using mvn clean install should produce a jar which can be referenced in other projects.
-This lib, does not provide a standalone executable jar.
-
-And of course, using intellij and importing as maven project should work out of the box. 
-(I haven't tested it for Eclipse, but assumption it should be the same.)
 
 
 ## Api Usage<a name="api-usage"></a>
@@ -173,21 +175,21 @@ Defines the name of the target CSV column will be populated.
 #### `transformation/targetStringFormatter`<a name="targetStringFormatter"></a>
 
 The library comes with some built-in formatters. 
-The list of built-in mappers which are declaratively  possible defined in the type `ElementConstructor`.
-The xsd defines the following ones:
+The list of built-in mappers which are declaratively  possible defined in the XSD.
+The XSD defines the following ones:
 
-`DateValueFormatter`, `StringValueFormatter` and `IntValueFormatter`
+`DateValueFormatter`, `StringValueFormatter`, `IntValueFormatter` and `BigDecimalValueFormatter`
 are built in CSV value formatters. But there are also implemented custom formatters present in the package
 `com.ayanahmedov.etl.api.tostringformatter`.
 
 #### `transformation/sourceColumn`<a name="sourceColumn"></a>
 Defines which rows to reduce.  The number of `sourceColumns` are unbounded. 
 Also note it is allowed to not to provide any.
-That makes sense, when the target csv needs to be populated 
+That makes sense, when the target CSV needs to be populated 
 with a constant value using the `sourceBindPattern` without any placeholder.
 
 #### `transformation/sourceColumn/sourceValueMapper`<a name="sourceValueMapper"></a>
-Contains classname of a `Mapper`. The source CSV value
+Contains classname of a `Mapper` implementation. The source CSV value
 is read and supplied into this provided implementation.
 
 #### `transformation/sourceBindPattern`<a name="sourceBindPattern">
@@ -233,7 +235,7 @@ The output CSV will contain the following:
 "[c,d]"
 ```
 
-Note the **bindPatternPosition** which defines, how the source column is mean to be replaced in
+Note the **bindPatternPosition** which defines, how the source column is meant to be replaced in
 *sourceBindPattern*.  
 
 The `sourceBindPattern` must not necessarily contain a placeholder. This is useful when there are no
@@ -275,9 +277,10 @@ Parses reduced value by a locale
 and prints optionally with a locale.
 Requires parameters:
 
-`source-locale` the locale to use when parsing the big decimal
-`target-locale` optional. the locale to use when printing the parsed big decimal
-If not provided, default .toString implementation is used which will print in scientific notation.
+`Parameters:`
+* `source-locale`: The locale to use when parsing the big decimal
+* `target-locale`: Optional. The locale to use when printing the parsed big decimal.
+If not provided, default `.toString` implementation is used which will print in scientific notation.
 
 Snippet:
 ```xml
@@ -304,11 +307,11 @@ When parsing the reduced value, it defaults hard-coded defaults when missing.
 Example: 2018-01-01, when requested to be parsed to an instant
  2018-01-01:00:00 is used, using `targetDateFormat/zoneId` or system default if that is not present.
  
- `sourceFormatPattern` : defines how to parse the reduced value. Note that
- not all possible java patterns are possible. For details please refer to javadoc of: com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter
- 
- `targetDateFormat/formatPattern`: defines the pattern in the target output csv.
- `targetDateFormat/zoneId`: the target zoneId to use when formatting into string. In case not provided, System default is used.
+ `Parameters:`
+ * `sourceFormatPattern` : Defines how to parse the reduced value. Note that
+ not all possible java patterns are possible. For details please refer to javadoc of: com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter 
+ * `targetDateFormat/formatPattern`: Defines the pattern in the target output csv.
+ * `targetDateFormat/zoneId`: Optional. The target zoneId to use when formatting into string.If not provided, system default is used.
 
 ```xml
     <transformation>
@@ -351,10 +354,9 @@ provided date time format.
 
 ### Alternative DSL sources<a name="alternative-dsl"></a>
 
-Currently only DSL via XML is supported out of the box.
-Even though XML can be validated via an XSD, and mostly supported very well in Java world. 
-Also would be friendly for the tools to generate it(i.e a WebPage where the tranformation files are created via a GUI), 
-it is  not strictly necessary. 
+Currently only DSL via XML is supported out of the box. 
+But using XML is  not strictly necessary. API is working with Java object type inputs,
+but can be auto-generated from an XSD. 
 Client could get to chose to provide an DSL provider, 
 simply by including into the runtime.
 This can be made possible to define only a DSL dependency and ask for clients to provide runtime implementations,
@@ -369,8 +371,8 @@ parsed java objects.
 ## Optimizations<a name="optimizations"></a>
 
 Experimental idea:
-In most of the up-to-date operating systems, it should be possible to introduce the speed significantly for huge csv files.
-With the idea being, the some chunks of rows can be transformed in parallel. Where each job working on a single chunk,
+In most of the up-to-date operating systems, it might be possible to increase the speed significantly for huge csv files.
+With the idea being: Some chunks of rows can be transformed in parallel. Where each job working on a single chunk,
 can write into a temporary file. Using FileChannel#transferFrom, the files can be joined into the final CSV file. 
 The point in this is the transferFrom delegates to operating system, and modern systems use memory caches for actively used files which is significantly faster. 
 Hence ,though experimental, would worth trying.

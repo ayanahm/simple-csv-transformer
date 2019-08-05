@@ -19,7 +19,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -52,15 +57,15 @@ public final class DefaultCsvTransformer implements CsvTransformer {
 
   public static DefaultCsvTransformer newTransformer(CsvTransformationConfig config,
                                                      List<SourceCsvColumnMapper> mappers,
-                                                     List<ReducedCsvValueToStringFormatter> constructors) {
+                                                     List<ReducedCsvValueToStringFormatter> formatters) {
 
-    List<ReducedCsvValueToStringFormatter> constructorsWithBuiltIns = new ArrayList<>(constructors);
-    constructorsWithBuiltIns.addAll(builtInFormatters);
+    List<ReducedCsvValueToStringFormatter> formattersWithBuiltIns = new ArrayList<>(formatters);
+    formattersWithBuiltIns.addAll(builtInFormatters);
 
     List<SourceCsvColumnMapper> mappersWithBuiltIns = new ArrayList<>(mappers);
     mappersWithBuiltIns.addAll(builtInMappers);
 
-    return new DefaultCsvTransformer(config, mappersWithBuiltIns, constructorsWithBuiltIns);
+    return new DefaultCsvTransformer(config, mappersWithBuiltIns, formattersWithBuiltIns);
   }
 
 

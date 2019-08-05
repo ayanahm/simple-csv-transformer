@@ -5,7 +5,11 @@ import com.ayanahmedov.etl.api.dsl.BigDecimalValueFormatter;
 import com.ayanahmedov.etl.api.dsl.DateValueFormatter;
 import com.ayanahmedov.etl.api.dsl.FormatterParameter;
 import com.ayanahmedov.etl.api.dsl.TargetStringFormatter;
-import com.ayanahmedov.etl.api.tostringformatter.*;
+import com.ayanahmedov.etl.api.tostringformatter.BigDecimalByLocaleFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.DateByDateTimePatternFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.IdenticalToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter;
+import com.ayanahmedov.etl.api.tostringformatter.SimpleIntFormatter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,12 +79,12 @@ public class FormatterFactory {
     }
   }
 
-  private static Map<String, ReducedCsvValueToStringFormatter> createFormattersByClassName(List<ReducedCsvValueToStringFormatter> constructors) {
+  private static Map<String, ReducedCsvValueToStringFormatter> createFormattersByClassName(List<ReducedCsvValueToStringFormatter> formatters) {
     Map<String, ReducedCsvValueToStringFormatter> result = new HashMap<>();
-    if (constructors == null) {
+    if (formatters == null) {
       return result;
     }
-    for (ReducedCsvValueToStringFormatter formatter : constructors) {
+    for (ReducedCsvValueToStringFormatter formatter : formatters) {
       result.put(formatter.getClass().getName(), formatter);
     }
     return result;

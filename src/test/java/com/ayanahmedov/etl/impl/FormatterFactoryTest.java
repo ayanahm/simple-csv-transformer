@@ -27,28 +27,28 @@ class FormatterFactoryTest {
   }
 
   @Test
-  public void create_custom_constructor() {
+  public void create_custom_formatter() {
     TargetStringFormatter targetStringFormatter = new TargetStringFormatter()
         .withFormatterClass(new CustomFormatter()
             .withClassName(DummyFormatter.class.getName()));
 
-    DummyFormatter customConstructor = new DummyFormatter();
-    ReducedCsvValueToStringFormatter constructor = FormatterFactory.createFormatter(targetStringFormatter,
-        Collections.singletonMap(customConstructor.getClass().getName(), customConstructor));
+    DummyFormatter dummy = new DummyFormatter();
+    ReducedCsvValueToStringFormatter formatter = FormatterFactory.createFormatter(targetStringFormatter,
+        Collections.singletonMap(dummy.getClass().getName(), dummy));
 
-    assertEquals(constructor, customConstructor);
+    assertEquals(formatter, dummy);
   }
 
   @Test
-  public void given_unknown_constructor_class_exception_thrown() {
+  public void given_unknown_formatter_class_exception_thrown() {
     TargetStringFormatter targetStringFormatter = new TargetStringFormatter()
         .withFormatterClass(new CustomFormatter()
             .withClassName(String.class.getName()));
 
-    DummyFormatter customConstructor = new DummyFormatter();
+    DummyFormatter dummy = new DummyFormatter();
 
     assertThrows(DslConfigurationException.class, () ->
         FormatterFactory.createFormatter(targetStringFormatter,
-        Collections.singletonMap(customConstructor.getClass().getName(), customConstructor)));
+        Collections.singletonMap(dummy.getClass().getName(), dummy)));
   }
 }

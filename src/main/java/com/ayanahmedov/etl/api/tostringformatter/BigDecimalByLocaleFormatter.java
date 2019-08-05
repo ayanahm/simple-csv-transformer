@@ -32,7 +32,7 @@ public class BigDecimalByLocaleFormatter implements ReducedCsvValueToStringForma
     BigDecimalByLocaleFormatter instance = getUninitialized();
     String sourceNumberLocale = parameters.get(PARAM_SOURCE_NUMBER_LOCALE);
     if (null == sourceNumberLocale) {
-      throw DslConfigurationException.BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE;
+      throw DslConfigurationException.BIG_DECIMAL_FORMATTER_REQUIRES_PARAMETER_LOCALE;
     }
     Locale sourceLocale = Locale.forLanguageTag(sourceNumberLocale);
     instance.sourceNumberFormat = getNumberFormat(sourceLocale);

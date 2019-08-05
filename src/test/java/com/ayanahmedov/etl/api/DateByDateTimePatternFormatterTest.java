@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class DateByDateTimePatternFormatterTest {
 
   @Test
-  public void date_constructor_test() throws IOException {
+  public void date_formatter_test() throws IOException {
     Path testConfig = FileSystemUtils.getFileFromResources("test-dsl-instance-date-formatter.xml");
     Path testCsv = FileSystemUtils.getFileFromResources("source-4.csv");
 

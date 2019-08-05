@@ -121,8 +121,8 @@
 
                 Example: $1-$2-$3 where the parameters identified by $[0-9]+,
                 are bound from source columns.
-                sourceColumn/constructorPosition==1 maps to $1. And
-                sourceColumn/constructorPosition==3 maps to $3 etc.
+                sourceColumn/bindPatternPosition==1 maps to $1. And
+                sourceColumn/bindPatternPosition==3 maps to $3 etc.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string"/>
@@ -134,13 +134,10 @@
             <xs:element type="xs:int" name="bindPatternPosition">
                 <xs:annotation>
                     <xs:documentation>
-                        By default this maps to $1. Unless a element constructor used which requires more then 1 backing
-                        csv column to be mapped,
-                        then provide the position to replace in the constructor pattern.
-
-                        Example pattern for the Value constructor:
+                        The position in the bindPattern.
+                        Example pattern:
                         $1-$2:$3
-                        Passing for this element 2, will replace the bound value from CSV, in the position 2 and result
+                        Passing for bindPatternPosition  2, will replace the bound value from CSV, in the position 2 and result
                         in
                         $1-valueFromCsvRecord:$3
                     </xs:documentation>

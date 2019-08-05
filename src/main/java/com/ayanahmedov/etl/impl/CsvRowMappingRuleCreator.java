@@ -37,7 +37,7 @@ public class CsvRowMappingRuleCreator {
     private final Map<Integer, SourceCsvColumnMapper> mappersByIndex;
     private final ReducedCsvValueToStringFormatter formatter;
     private final CsvValueReducer reducer;
-    private List<Integer> sourceColumnConstructorPositions;
+    private List<Integer> bindPatternPositions;
 
     public MappingRuleImpl(List<Integer> sourceColumnIndexes,
                            Map<Integer, SourceCsvColumnMapper> mappersByIndex,
@@ -48,7 +48,7 @@ public class CsvRowMappingRuleCreator {
       this.mappersByIndex = mappersByIndex;
       this.formatter = formatter;
       this.reducer = reducer;
-      this.sourceColumnConstructorPositions = bindPatternPositions;
+      this.bindPatternPositions = bindPatternPositions;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class CsvRowMappingRuleCreator {
 
     @Override
     public List<Integer> getBindPatternPositions() {
-      return sourceColumnConstructorPositions;
+      return bindPatternPositions;
     }
 
     @Override

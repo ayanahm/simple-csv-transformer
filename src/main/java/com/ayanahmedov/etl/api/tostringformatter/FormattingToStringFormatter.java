@@ -32,7 +32,7 @@ public class FormattingToStringFormatter implements ReducedCsvValueToStringForma
     FormattingToStringFormatter instance = getUninitialized();
     instance.stringFormat = parameters.get(PARAM_TARGET_STRING_FORMAT);
     if (null == instance.stringFormat) {
-      throw DslConfigurationException.STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT;
+      throw DslConfigurationException.STRING_FORMATTER_REQUIRES_PARAMETER_FORMAT;
     }
     return instance;
   }

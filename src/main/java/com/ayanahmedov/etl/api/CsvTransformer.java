@@ -6,10 +6,11 @@ import java.io.Writer;
 public interface CsvTransformer{
   /**
    * Reads CSV from the csvReader
-   * and writes the transformed CSV into csvWriter.
+   * and writes the transformed CSV into csvWriter
+   * by a transformation DSL instance.
    *
    *
-   * Note the source CSV is restricted to contain a header, which is not strictly required by CSV specifications.
+   * Note that the source CSV is restricted to contain a header, which is not strictly required by CSV specifications.
    * If csvReader provides a CSV without any header row, then the behaviour is not defined.
    *
    * @param csvReader the reader where the source csv to transform can be read from.

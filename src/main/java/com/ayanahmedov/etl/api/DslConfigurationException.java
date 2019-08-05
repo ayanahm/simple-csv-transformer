@@ -6,11 +6,11 @@ public class DslConfigurationException extends RuntimeException {
       "Wrong DateTimeFormat pattern. Make sure to refer to java supported formats and sourceParsePattern in the dsl. ");
 
   public static final DslConfigurationException
-      BIG_DECIMAL_CONSTRUCTOR_REQUIRES_PARAMETER_LOCALE = new DslConfigurationException(
-      "BigDecimal constructor requires the parameter 'source-locale'");
+      BIG_DECIMAL_FORMATTER_REQUIRES_PARAMETER_LOCALE = new DslConfigurationException(
+      "BigDecimal formatter requires the parameter 'source-locale'");
 
   public static final DslConfigurationException
-      STRING_FORMATTER_CONSTRUCTOR_REQUIRES_PARAMETER_FORMAT = new DslConfigurationException(
+      STRING_FORMATTER_REQUIRES_PARAMETER_FORMAT = new DslConfigurationException(
       "The parameter 'string-format', but be present but was not specified in the dsl.");
 
   public static final DslConfigurationException
