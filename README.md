@@ -1,9 +1,10 @@
 ##### Table of Contents  
 1. [Overview](#overview)
+    0. [Assumptions](#assumptions)
     1. [How to build?](#how-to-build)
     2. [The Concept](#the-concept)
-    3. [Why XML?](#why-xml)
-    4. [IO vs NIO](#io-vs-nio)
+    4. [Why XML?](#why-xml)
+    5. [IO vs NIO](#io-vs-nio)
 2. [Java Api](#api-usage)
 3. [Dsl](#dsl)
    1. [Types](#types)
@@ -29,8 +30,23 @@
 This repo, provides a simple CSV transformer, which can be configured by a an external DSL based on validatable XML,
 which produces the target CSV file.
 
-There is an exception to the CSV standards, it assumes that there must be always a header row present in the source CSV file.
-If not then manually needs to be corrected.
+
+### Assumptions<a name="assumptions"></a>
+
+From my understanding of the product overview, a guess was this:
+
+There are a lot of CSV data coming in possibly in quite many structures. And those somehow
+needs to be fed into a ML algorithm. 
+Hence the library is meant to be a prototype to address this.
+
+Also there are some restrictions for simplicity.
+
+* CSVs must have a header. If not manually corrected before the use. 
+* The only function of the library is: `source-csv` -> `target-csv`. The lib does not intend to enable any API
+for intermediate steps. Or produce something else then a `target-csv`.
+* No CSV parse/write configurations are supported. For the simplicity reasons. That means, no custom CSV separator, every column in the output with quotes `"` etc.
+* In case of bulk number of CSV operations, a new CsvTransformer instance must be generated. And thread-safety is kept in mind. But there is no such guarantee for re-using same instance concurrently.  
+ 
 
 ### How to build?<a name="how-to-build"></a>
 At least JDK-8 needs to be present in the machine to build the code.
@@ -39,6 +55,31 @@ This lib, does not provide a standalone executable jar.
 
 And of course, using intellij and importing as maven project should work out of the box. 
 (I haven't tested it for Eclipse, but assumption it should be the same.)
+
+Can be found under the test source ManualCsvTransormInvoker.java
+ 
+The following will produce a `sample-out.csv` file in the project root.
+The `source-1.csv` corresponds to the sample CSV data from PDF. 
+
+
+```
+public static void main(String[] args) {
+  Path dsl = FileSystemUtils.getFileFromResources("test-dsl-instance-1.xml");
+  Path csv = FileSystemUtils.getFileFromResources("source-1.csv");
+  CsvTransformer transformer = CsvTransformerBuilder.builder()
+      .withXmlDsl(dsl)
+      .build();
+
+  try (
+      BufferedReader reader = Files.newBufferedReader(csv);
+      BufferedWriter writer = Files.newBufferedWriter(Paths.get("sample-out.csv"))) {
+
+    transformer.transform(reader, writer);
+  } catch (IOException e) {
+    throw new UncheckedIOException(e);
+  }
+}
+```
 
 
 ### The Concept<a name="the-concept"></a> 
