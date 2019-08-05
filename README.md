@@ -60,6 +60,13 @@ is then written into the output CSV file.
 
  `Mapper` and `Formatter` are extensible by providing custom implementations. 
  For the simplicity reasons, the reducer is kept with only 1 implementation. But open for later extensions.
+ 
+ In the Java code,
+  
+  * `Mapper` corresponds to `com.ayanahmedov.etl.api.sourcemapper.SourceCsvColumnMapper`
+  * `Reducer` corresponds to `com.ayanahmedov.etl.impl.CsvValueReducer`
+  * `Formatter` corresponds to `com.ayanahmedov.etl.api.tostringformatter.ReducedCsvValueToStringFormatter`
+ 
 
 ### Why XML?<a name="why-xml"></a>
 Assuming there will be a lot of extensions to the DSL.
@@ -111,18 +118,18 @@ It is also up to client, to use correct streams(BufferedReader, BufferedWriter f
 
 There are some other examples of the usage, which are also happen to be the actual test suite used for the library.
 Those can be found under:
-https://github.com/ayanahm/demo-etl/tree/master/src/test/java/com/ayanahmedov/etl/api
+`src/test/java/com/ayanahmedov/etl/api`
 
 This test shows basic CSVTransformer usage.
 Note , that test are using temporary files which are deleted on exit. 
 
-https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/SimpleCsvTransformerTest.java
+`src/test/java/com/ayanahmedov/etl/api/SimpleCsvTransformerTest.java`
 
 Ax example of introducing a custom formatter.
-https://github.com/ayanahm/demo-etl/blob/master/src/test/java/com/ayanahmedov/etl/api/SumColumnsTest.java
+`src/test/java/com/ayanahmedov/etl/api/SumColumnsTest.java`
 
 DSL configurations for those tests can be viewed here:
-https://github.com/ayanahm/demo-etl/tree/master/src/test/resources 
+`src/test/resources` 
 
 
 ## DSL<a name="dsl"></a>
