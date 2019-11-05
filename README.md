@@ -33,13 +33,11 @@ which produces the target CSV file.
 
 ### Assumptions<a name="assumptions"></a>
 
-From my understanding of the product overview, a guess was this:
-
 There are a lot of CSV data coming in possibly in quite many structures. And those somehow
 needs to be fed into a ML algorithm. 
 Hence the library is meant to be a prototype to address this.
 
-Also there are some restrictions for simplicity.
+There are some restrictions for simplicity.
 
 * CSVs must have a header. If not manually corrected before the use. 
 * The only function of the library is: `source-csv` -> `target-csv`. The lib does not intend to enable any API
